@@ -1,0 +1,72 @@
+name: ci
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: sudo apt-get update && sudo apt-get install -y tesseract-ocr
+      - run: pip install -r api/requirements-dev.txt
+      - name: Tests (advisor, money, KYC, privacy, security, 743-case invariant eval)
+        env:
+          # Several OCR processes run together; avoid competing OpenMP thread pools.
+          OMP_THREAD_LIMIT: "1"
+          PYTHONUNBUFFERED: "1"
+        run: cd api && python -m pytest -q
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: cd web && npm ci && npm run build
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Secrets in history (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+      - name: Static analysis (Semgrep)
+        run: pipx run semgrep scan --config p/python --config p/react --config p/secrets --error --quiet api web/src
+      - name: Python dependencies (pip-audit)
+        run: pipx run pip-audit -r api/requirements.txt
+      - name: Filesystem and container scan (Trivy)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with: { scan-type: fs, scan-ref: ".", severity: "CRITICAL,HIGH", exit-code: "1", ignore-unfixed: true }
+
+  deploy-demo:
+    # The judge demo: its own project, deployed from main with Workload Identity Federation (no keys in CI)
+    if: github.ref == 'refs/heads/main' && vars.GCP_PROJECT != ''
+    needs: [api, web, security]
+    runs-on: ubuntu-latest
+    permissions: { contents: read, id-token: write }
+    env:
+      IMAGE: asia-south1-docker.pkg.dev/${{ vars.GCP_PROJECT }}/udyam/app:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SA }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - run: gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
+      - run: docker build -t "$IMAGE" . && docker push "$IMAGE"
+      - name: "Canary: new revision takes no traffic until health passes"
+        run: |
+          gcloud run deploy udyam-demo --image "$IMAGE" --region asia-south1 --no-traffic --tag "c${GITHUB_SHA::7}"
+          URL=$(gcloud run services describe udyam-demo --region asia-south1 --format 'value(status.url)')
+          TAGGED=$(echo "$URL" | sed "s#https://#https://c${GITHUB_SHA::7}---#")
+          curl -fsS "$TAGGED/api/health"
+          gcloud run services update-traffic udyam-demo --region asia-south1 --to-latest

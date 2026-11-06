@@ -1,0 +1,32 @@
+# Render Blueprint (free fallback). Cloud Run in Mumbai is the primary target: see deploy/cloud-run.md
+# This is the judge demo, so ENVIRONMENT=demo (prod refuses to start with judge mode on).
+services:
+  - type: web
+    name: udyam-digital
+    runtime: docker
+    plan: free
+    region: singapore
+    healthCheckPath: /api/health
+    envVars:
+      - key: ENVIRONMENT
+        value: demo
+      - key: JUDGE_MODE
+        value: "true"
+      - key: MASTER_KEY_B64
+        generateValue: true
+      - key: LLM_PROVIDER
+        value: anthropic
+      - key: LLM_API_KEY
+        sync: false        # paste in the Render dashboard; never commit it
+      - key: SARVAM_API_KEY
+        sync: false
+      - key: PUBLIC_URL
+        sync: false        # https://<your-service>.onrender.com
+      - key: CORS_ORIGINS
+        sync: false        # same as PUBLIC_URL
+      - key: DATABASE_URL
+        fromDatabase: { name: udyam-db, property: connectionString }
+databases:
+  - name: udyam-db
+    plan: free
+    region: singapore

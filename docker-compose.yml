@@ -1,0 +1,18 @@
+# Production-like local run: app + Postgres + Redis (event bus across instances).
+services:
+  app:
+    build: .
+    ports: ["8080:8080"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://accel:accel@db:5432/udyam
+      REDIS_URL: redis://redis:6379/0
+    depends_on: [db, redis]
+  db:
+    image: postgres:16-alpine
+    environment: { POSTGRES_USER: accel, POSTGRES_PASSWORD: accel, POSTGRES_DB: udyam }
+    volumes: [pgdata:/var/lib/postgresql/data]
+  redis:
+    image: redis:7-alpine
+volumes:
+  pgdata:

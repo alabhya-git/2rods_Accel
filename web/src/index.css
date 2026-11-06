@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font: 'Baloo 2';
+  --rule: #d5deee;
+  --margin: #c8102e;
+  --row: 36px;
+}
+
+html, body, #root { height: 100%; }
+body {
+  @apply bg-paper-tint text-ink antialiased;
+  font-family: var(--font), system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+:focus-visible { outline: 3px solid #2b4c8c; outline-offset: 2px; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* The khata page: blue ruled lines and a red margin, as in an Indian account book. */
+.khata {
+  position: relative;
+  background-color: #fff;
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--row) - 1px), var(--rule) calc(var(--row) - 1px), var(--rule) var(--row));
+  background-position: 0 14px;
+  padding: 14px 16px 16px 60px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+.khata::before {
+  content: '';
+  position: absolute; top: 0; bottom: 0; left: 44px;
+  border-left: 2px solid var(--margin); opacity: .55;
+}
+.khata .row { height: var(--row); display: flex; align-items: center; position: relative; }
+.khata .row-free { min-height: var(--row); display: flex; align-items: center; }
+/* a tick box sitting in the red margin, like ticking an entry in a ledger */
+.tick { position: absolute; left: -48px; top: 6px; width: 24px; height: 24px; border-radius: 5px; border: 2px solid #afc0de; background: #fff;
+  display: grid; place-items: center; color: #fff; }
+.tick[aria-checked="true"] { background: #1e7b4f; border-color: #1e7b4f; }
+.tick:disabled { opacity: .45; cursor: not-allowed; }
+
+/* Office rubber stamp for verification outcomes. */
+.stamp {
+  display: inline-flex; align-items: center; gap: .4rem;
+  border: 2.5px solid currentColor; border-radius: 8px; padding: .1rem .7rem;
+  font-weight: 800; letter-spacing: .02em; transform: rotate(-4deg);
+  box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 3.5px currentColor;
+  opacity: .92;
+}
+.stamp-in { animation: stamp .38s cubic-bezier(.2,1.6,.4,1) both; }
+@keyframes stamp { from { transform: rotate(-4deg) scale(1.8); opacity: 0; } to { transform: rotate(-4deg) scale(1); opacity: .92; } }
+
+.bubble-me { @apply bg-ledger text-white rounded-2xl rounded-br-md px-4 py-2 max-w-[85%] ml-auto; }
+.bubble-ai { @apply bg-white text-ink rounded-2xl rounded-bl-md px-4 py-3 max-w-[92%] border border-rule; white-space: pre-line; }
+
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-pill font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed; min-height: 48px; padding: 0 1.4rem; }
+.btn-primary { @apply btn bg-kumkum text-white hover:bg-kumkum-dark; }
+.btn-secondary { @apply btn bg-white text-ledger border-2 border-ledger hover:bg-ledger-soft; }
+.btn-quiet { @apply btn text-ledger hover:bg-ledger-soft; min-height: 40px; padding: 0 .9rem; }
+.chip { @apply inline-flex items-center rounded-pill border border-rule bg-white px-3 py-1 text-[15px] text-ink hover:border-ledger; min-height: 36px; }
+.field { @apply w-full rounded-xl border-2 border-rule bg-white px-4 text-ink placeholder:text-ink-faint focus:border-ledger focus:outline-none; min-height: 50px; }
+.money { font-variant-numeric: tabular-nums; font-weight: 700; }
+.dash { @apply bg-white border border-rule rounded-lg; }

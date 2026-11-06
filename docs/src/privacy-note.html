@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Privacy and security note</title>
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --ink:#1B1F3B; --soft:#4A4F6E; --rule:#D5DEEE; --kumkum:#C8102E; --leaf:#1E7B4F; --tint:#F6F8FC; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; }
+  body { font-family: "Baloo 2", sans-serif; color: var(--ink); font-size: 10pt; line-height: 1.28; }
+  .page { width: 210mm; height: 297mm; padding: 11mm 14mm 9mm; display: flex; flex-direction: column; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--kumkum); padding-bottom: 3mm; }
+  h1 { font-size: 21pt; line-height: 1.05; margin: 0; font-weight: 800; }
+  .sub { color: var(--soft); font-size: 10pt; margin-top: 1.5mm; max-width: 125mm; }
+  .tag { text-align: right; font-size: 9pt; color: var(--soft); line-height: 1.3; }
+  .tag b { color: var(--ink); font-size: 10.5pt; }
+  h2 { font-size: 11.2pt; margin: 0 0 0.8mm; font-weight: 700; }
+  p { margin: 0; }
+  table { width: 100%; border-collapse: collapse; margin-top: 3.2mm; font-size: 9.6pt; }
+  th { text-align: left; font-weight: 700; color: var(--soft); border-bottom: 1.5px solid var(--ink); padding: 1mm 2mm 1mm 0; }
+  td { border-bottom: 1px solid var(--rule); padding: 1.2mm 2mm 1.2mm 0; vertical-align: top; }
+  td:first-child { font-weight: 700; width: 20mm; }
+  .never { margin-top: 1.6mm; font-size: 9.6pt; color: var(--soft); }
+  .never b { color: var(--kumkum); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 7mm; row-gap: 2.6mm; margin-top: 3.4mm; }
+  .grid section { border-top: 1px solid var(--rule); padding-top: 2mm; }
+  code { font-family: inherit; font-weight: 600; background: var(--tint); padding: 0 1mm; border-radius: 2px; }
+  .flow { display: flex; align-items: center; gap: 2mm; margin-top: 3mm; font-size: 9.2pt; }
+  .flow span { border: 1px solid var(--rule); border-radius: 2mm; padding: 1mm 2.2mm; white-space: nowrap; }
+  .flow .raw { border-color: var(--kumkum); color: var(--kumkum); font-weight: 700; }
+  .flow .tok { border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
+  .flow i { color: var(--soft); font-style: normal; white-space: nowrap; }
+  footer { margin-top: auto; border-top: 1px solid var(--rule); padding-top: 2mm; font-size: 9pt; color: var(--soft); display: grid; grid-template-columns: 1fr 1fr; column-gap: 7mm; }
+  footer b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div>
+      <h1>Privacy and security note</h1>
+      <div class="sub">Built to the Digital Personal Data Protection Act, 2023 and the DPDP Rules, 2025. The data is synthetic; we treat it as real.</div>
+    </div>
+    <div class="tag"><b>Accel Business, Udyam Digital</b><br>Airtel SYNC, Track A</div>
+  </header>
+
+  <table>
+    <tr><th>Step</th><th>What we collect</th><th>Why we need it</th></tr>
+    <tr><td>Advisor</td><td>Business type, staff, sites, city, pin code; GSTIN if the owner offers it</td><td>Pick an eligible bundle; the GSTIN fills the business details from the registry</td></tr>
+    <tr><td>Order</td><td>Mobile number</td><td>Order updates and the SIM-swap check on the signatory</td></tr>
+    <tr><td>KYC</td><td>GSTIN, Udyam number, four document photos; from the ID only name, ID number and validity</td><td>Verify the business and the person signing</td></tr>
+  </table>
+  <div class="never"><b>Never collected:</b> Aadhaar number, face images, date of birth, bank details (UPI handles payment).</div>
+
+  <div class="flow">
+    <span class="raw">GSTIN 37LDYXK0296F1ZB</span><i>at the API becomes</i>
+    <span class="tok">tok_gstin_k3Q9…</span><i>everywhere else; people see</i>
+    <span class="tok">37LD********1ZB</span>
+  </div>
+
+  <div class="grid">
+    <section>
+      <h2>Consent before processing</h2>
+      <p>A standalone notice in the owner's language with one switch per purpose: verify my business, and install and bill (both needed); updates about this order, and offers (optional; offers off by default). Each choice is stored with notice version, time and channel. Withdrawing takes one tap in the tracker. Nothing is uploaded or detokenised for a purpose without a live consent for it.</p>
+    </section>
+    <section>
+      <h2>Tokens in transit</h2>
+      <p>Orders, tracker, back-office, analytics and the language model see only tokens or masked values. Only Smart KYC and fulfilment may detokenise, each for its own purpose, and every attempt, allowed or refused, is written to the audit log. A keyed hash (HMAC-SHA256) supports lookups and duplicate checks without the raw value.</p>
+    </section>
+    <section>
+      <h2>Encryption at rest</h2>
+      <p>AES-256-GCM envelope encryption: every vault entry and every document has its own data key, wrapped by a key derived from a master key held in Secret Manager or KMS. Databases and buckets hold only ciphertext. TLS on every hop.</p>
+    </section>
+    <section>
+      <h2>The AI boundary</h2>
+      <p>The language model receives masked text and registry results, never a raw GSTIN, phone number or document. OCR runs on our own servers (Tesseract), so documents never reach a third-party AI service. The model cannot set products or prices; a guard checks every reply.</p>
+    </section>
+    <section>
+      <h2>Who sees what</h2>
+      <p>The owner sees everything about their own order. Partners see business name, city, stall reason and score, and call through a masked virtual number. Reviewers see masked identifiers and the failed checks. Engineers see masked logs: a filter redacts GSTIN, PAN, phone, Aadhaar-like and ID patterns.</p>
+    </section>
+    <section>
+      <h2>Retention</h2>
+      <p>Document photos are crypto-shredded (data key destroyed, file deleted) 30 days after upload, unless telecom KYC record-keeping needs longer; the verified fields stay encrypted for the contract. Abandoned conversations are purged after 30 days. An hourly job enforces both.</p>
+    </section>
+    <section>
+      <h2>Rights</h2>
+      <p>From the tracker the owner can see and download their data, withdraw any consent and erase their data; identifiers and documents are crypto-shredded. Grievances are answered within the 90 days the Rules allow; we target 7.</p>
+    </section>
+    <section>
+      <h2>Breach response</h2>
+      <p>Tell affected owners without delay; notify the Data Protection Board without delay and send a detailed report within 72 hours (Rule 7). Per-record keys and audit logs limit what any one breach can expose.</p>
+    </section>
+    <section>
+      <h2>Fraud controls</h2>
+      <p>GSTIN checksum and live registry status (22 customers last quarter held a cancelled or suspended GSTIN), cross-document name and address matching, tamper signals, a SIM swap in the last 72 hours on the signatory's number, and a human review queue.</p>
+    </section>
+    <section>
+      <h2>Tested, not just written</h2>
+      <p>The test suite checks that the advisor never sees a raw identifier, that detokenising for the wrong purpose is refused and audited, that withdrawn consent blocks KYC, and that erasure leaves only ciphertext with no key.</p>
+    </section>
+  </div>
+
+  <footer>
+    <div><b>Mocked in the prototype:</b> registries, DigiLocker, SIM swap and number verification, masked calling, payments.</div>
+    <div><b>In production:</b> India-region hosting (Cloud Run, asia-south1), master key in KMS, processor contracts with every vendor.</div>
+  </footer>
+</div>
+</body>
+</html>

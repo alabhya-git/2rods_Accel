@@ -1,0 +1,147 @@
+1
+00:00:00,000 --> 00:00:05,500
+7 in 100 small-business leads became customers. They waited 17.6 days, and called three times to ask where their order was.
+
+2
+00:00:05,500 --> 00:00:10,500
+7 in 100 small-business leads became customers. They waited 17.6 days, and called three times to ask where their order was. Watch Anita, who runs an insurance agency in Visakhapatnam, do it in one sitting, on her phone.
+
+3
+00:00:10,500 --> 00:00:16,000
+Anita opens Accel Business on her phone. Ten Indian languages; she picks Telugu.
+
+4
+00:00:16,000 --> 00:00:20,900
+She describes her business as she would to a person. Voice works too; here she types.
+
+5
+00:00:20,900 --> 00:00:26,950
+Understood: insurance agency, 25 staff, Visakhapatnam, 1 Gbps internet and email. One question left: her GSTIN.
+
+6
+00:00:26,950 --> 00:00:32,950
+One registry lookup fills in the business. Then one bundle, with a reason for every product, in Telugu.
+
+7
+00:00:32,950 --> 00:00:37,950
+Clinic & Office Pro, Rs 8,758 a month. She asked for 1 Gbps; Biz Fibre 1G is sold only in tier-1 cities, so she gets Biz Fibre 300.
+
+8
+00:00:37,950 --> 00:00:45,950
+What was understood, what the rules engine chose, and the rule behind every refusal. The AI talks; it never picks a product or a price.
+
+9
+00:00:45,950 --> 00:00:50,450
+One monthly price, on a ledger she already knows how to read. Every line says why it is there.
+
+10
+00:00:50,450 --> 00:00:52,950
+Add-ons tick on and off.
+
+11
+00:00:52,950 --> 00:00:56,450
+She adds backup internet. The price updates at once, re-priced on the server.
+
+12
+00:00:56,450 --> 00:01:00,450
+A 24-month contract brings it down to Rs 8,607 a month, plus GST.
+
+13
+00:01:00,450 --> 00:01:01,650
+Her mobile number, for updates. Then: place order.
+
+14
+00:01:01,650 --> 00:01:05,150
+Before any KYC: a notice in her language, with one switch per purpose.
+
+15
+00:01:05,150 --> 00:01:07,150
+Every screen works in all ten languages. Switching to English for the judges.
+
+16
+00:01:07,150 --> 00:01:11,150
+Verifying and installing are needed. Order updates and offers are optional, and offers start off.
+
+17
+00:01:11,150 --> 00:01:14,650
+She allows order updates. Each choice is recorded with its notice version and can be withdrawn in one tap.
+
+18
+00:01:14,650 --> 00:01:18,650
+Registries first. The photos only confirm what the registries say.
+
+19
+00:01:18,650 --> 00:01:22,150
+The GSTIN checks out against the registry: Kaveri Insurance Advisors, Proprietorship, Active.
+
+20
+00:01:22,150 --> 00:01:25,150
+Four document photos, read by OCR on our own servers. For the demo, the official specimen photos of applicant K09.
+
+21
+00:01:25,150 --> 00:01:31,150
+Each document is read and matched: names, address, dates. Identifiers stay masked on screen.
+
+22
+00:01:31,150 --> 00:01:37,150
+14 checks passed: GSTIN checksum and registry status, legal name, a bill from the last 90 days, the signatory's SIM-swap check.
+
+23
+00:01:37,150 --> 00:01:43,650
+Another applicant, Trinity Bake House: the electricity bill is 257 days old. She gets a fix she can do alone, not a rejection.
+
+24
+00:01:43,650 --> 00:01:47,150
+Only that one photo needs retaking; everything else stays verified.
+
+25
+00:01:47,150 --> 00:01:50,650
+Back to Anita. The first month by UPI Autopay.
+
+26
+00:01:50,650 --> 00:01:53,150
+Paid. The mandate covers each month's bill from now on.
+
+27
+00:01:53,150 --> 00:01:55,650
+She picks an installation slot that suits her.
+
+28
+00:01:55,650 --> 00:02:01,150
+Cloud services go live at once; fibre is dated from the catalogue's install times. Customers who chased five times churned at 27.9%.
+
+29
+00:02:01,150 --> 00:02:05,150
+When the engineer finishes, a WhatsApp message: everything is live. No calls needed.
+
+30
+00:02:05,150 --> 00:02:09,150
+From the same screen she can withdraw any consent, or download or erase her data.
+
+31
+00:02:09,150 --> 00:02:15,650
+Leads the journey did not close, ranked by a propensity score (AUC 0.71), with why each stalled and the next action.
+
+32
+00:02:15,650 --> 00:02:19,150
+Calls go through a masked number: partners never see the customer's phone.
+
+33
+00:02:19,150 --> 00:02:22,650
+KYC exceptions land here. Trinity Bake House is already fixing her own bill.
+
+34
+00:02:22,650 --> 00:02:27,150
+Every pilot metric against last quarter's baseline, computed from the data.
+
+35
+00:02:27,150 --> 00:02:32,650
+28 rules-engine scenarios, run live: tier-only products, staff and site minimums, cancelled GSTINs, dependencies, budgets.
+
+36
+00:02:32,650 --> 00:02:39,150
+All 12 specimen applicants through the real OCR: six planted defects caught, six clean applicants passed, no false rejections.
+
+37
+00:02:39,150 --> 00:02:50,150
+One sitting on a phone, in the owner's language.

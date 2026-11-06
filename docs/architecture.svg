@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1000" viewBox="0 0 1920 1000" font-family="&quot;Baloo 2&quot;, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4A4F6E"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C8102E"/></marker><marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E7B4F"/></marker></defs>
+<rect width="1920" height="1000" fill="#fff"/>
+<text x="60" y="78" font-size="42" font-weight="800" fill="#1B1F3B" text-anchor="start">Udyam Digital: solution architecture</text>
+<text x="60" y="118" font-size="22" font-weight="400" fill="#4A4F6E" text-anchor="start">Raw identifiers stop at the gateway. Only Smart KYC and fulfilment detokenise; the language model sees masked text only.</text>
+<text x="60" y="168" font-size="18" font-weight="700" fill="#4A4F6E" text-anchor="start">Channels</text>
+<rect x="60" y="190" width="300" height="108" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="76" y="222" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Phone web app</text>
+<text x="76" y="248" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">PWA, 10 Indian languages</text>
+<text x="76" y="271" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">voice in and read-aloud</text>
+<line x1="360" y1="244" x2="398" y2="244" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<rect x="60" y="314" width="300" height="108" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="76" y="346" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">WhatsApp</text>
+<text x="76" y="372" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">Cloud API webhook</text>
+<text x="76" y="395" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">same advisor, same rules</text>
+<line x1="360" y1="368" x2="398" y2="368" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<rect x="60" y="438" width="300" height="108" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="76" y="470" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Partner assist</text>
+<text x="76" y="496" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">same app under a partner ID</text>
+<text x="76" y="519" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">commission on digital closes</text>
+<line x1="360" y1="492" x2="398" y2="492" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<rect x="60" y="562" width="300" height="108" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="76" y="594" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Partner desk</text>
+<text x="76" y="620" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">callback queue, KYC reviews,</text>
+<text x="76" y="643" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">metrics, masked calls</text>
+<line x1="360" y1="616" x2="398" y2="616" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<rect x="400" y="190" width="210" height="480" rx="10" fill="#C8102E" fill-opacity="0.08" stroke="#C8102E" stroke-width="2.5"/>
+<text x="418" y="226" font-size="21" font-weight="800" fill="#1B1F3B" text-anchor="start">API gateway</text>
+<text x="418" y="252" font-size="21" font-weight="800" fill="#1B1F3B" text-anchor="start">and token vault</text>
+<text x="418" y="296" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">TLS on every hop</text>
+<text x="418" y="335" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">consent checked for</text>
+<text x="418" y="358" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">each purpose</text>
+<text x="418" y="397" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">GSTIN, Udyam no.,</text>
+<text x="418" y="420" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">phone, ID number and</text>
+<text x="418" y="443" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">address become</text>
+<text x="418" y="466" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">random tokens</text>
+<text x="418" y="505" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">keyed-hash index</text>
+<text x="418" y="528" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">for lookups</text>
+<text x="418" y="567" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">rate limits and</text>
+<text x="418" y="590" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">log redaction</text>
+<line x1="610" y1="270" x2="646" y2="270" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<line x1="610" y1="430" x2="646" y2="430" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<line x1="610" y1="590" x2="646" y2="590" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<rect x="648" y="160" width="672" height="520" rx="12" fill="#F6F8FC" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="666" y="190" font-size="18" font-weight="700" fill="#4A4F6E" text-anchor="start">Core services (FastAPI, stateless): see only tokens or masked values</text>
+<rect x="666" y="206" width="298" height="142" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="682" y="238" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Advisor agent</text>
+<text x="682" y="264" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">LLM tool calls: update_profile,</text>
+<text x="682" y="287" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">recommend, explain_product</text>
+<text x="682" y="310" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">rules-only fallback, 10 languages</text>
+<circle cx="942" cy="230" r="12" fill="#C8102E"/>
+<text x="942" y="236" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+<rect x="1004" y="206" width="298" height="142" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="1020" y="238" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Rules engine</text>
+<text x="1020" y="264" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">catalogue as knowledge graph:</text>
+<text x="1020" y="287" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">eligibility, dependencies,</text>
+<text x="1020" y="310" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">quantities, price; guard</text>
+<circle cx="1280" cy="230" r="12" fill="#C8102E"/>
+<text x="1280" y="236" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+<rect x="666" y="362" width="298" height="142" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="682" y="394" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Quote and order</text>
+<text x="682" y="420" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">one monthly price, add-ons,</text>
+<text x="682" y="443" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">re-priced on the server,</text>
+<text x="682" y="466" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">UPI Autopay, install slot</text>
+<circle cx="942" cy="386" r="12" fill="#C8102E"/>
+<text x="942" y="392" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+<rect x="1004" y="362" width="298" height="142" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="1020" y="394" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Smart KYC</text>
+<text x="1020" y="420" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">quality gate, deskew, OCR,</text>
+<text x="1020" y="443" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">checksum self-heal, registry</text>
+<text x="1020" y="466" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">and cross-document checks</text>
+<circle cx="1280" cy="386" r="12" fill="#C8102E"/>
+<text x="1280" y="392" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+<rect x="666" y="518" width="298" height="142" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="682" y="550" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Tracker</text>
+<text x="682" y="576" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">every step an event;</text>
+<text x="682" y="599" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">SSE to the app, WhatsApp push,</text>
+<text x="682" y="622" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">Redis bus across instances</text>
+<circle cx="942" cy="542" r="12" fill="#C8102E"/>
+<text x="942" y="548" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+<rect x="1004" y="518" width="298" height="142" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="1020" y="550" font-size="20" font-weight="700" fill="#1B1F3B" text-anchor="start">Back-office</text>
+<text x="1020" y="576" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">propensity score (AUC 0.71),</text>
+<text x="1020" y="599" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">review queue, masked calling,</text>
+<text x="1020" y="622" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">metrics against baseline</text>
+<circle cx="1280" cy="542" r="12" fill="#C8102E"/>
+<text x="1280" y="548" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+<line x1="966" y1="286" x2="1002" y2="286" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<text x="984" y="274" font-size="14" font-weight="600" fill="#4A4F6E" text-anchor="middle">tools</text>
+<rect x="1360" y="160" width="500" height="520" rx="12" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="1378" y="190" font-size="18" font-weight="700" fill="#4A4F6E" text-anchor="start">Adapters (dashed = mocked in the prototype)</text>
+<rect x="1378" y="206" width="464" height="84" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5" stroke-dasharray="7 6"/>
+<text x="1394" y="233" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">Registries</text>
+<text x="1394" y="257" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">GSTIN and Udyam lookups; DigiLocker</text>
+<text x="1394" y="278" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">for the Udyam certificate</text>
+<circle cx="1820" cy="230" r="12" fill="#C8102E"/>
+<text x="1820" y="236" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+<line x1="1322" y1="248" x2="1376" y2="248" stroke="#C8102E" stroke-width="2.5" marker-end="url(#r)"/>
+<rect x="1378" y="298" width="464" height="84" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5" stroke-dasharray="7 6"/>
+<text x="1394" y="325" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">Network APIs</text>
+<text x="1394" y="349" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">SIM swap and number verification</text>
+<text x="1394" y="370" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">(CAMARA); fibre serviceability</text>
+<circle cx="1820" cy="322" r="12" fill="#C8102E"/>
+<text x="1820" y="328" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+<line x1="1322" y1="340" x2="1376" y2="340" stroke="#C8102E" stroke-width="2.5" marker-end="url(#r)"/>
+<rect x="1378" y="390" width="464" height="84" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5" stroke-dasharray="7 6"/>
+<text x="1394" y="417" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">CPaaS</text>
+<text x="1394" y="441" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">masked virtual numbers for partner</text>
+<text x="1394" y="462" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">calls; WhatsApp updates</text>
+<circle cx="1820" cy="414" r="12" fill="#C8102E"/>
+<text x="1820" y="420" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+<circle cx="1790" cy="414" r="12" fill="#C8102E"/>
+<text x="1790" y="420" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+<line x1="1322" y1="432" x2="1376" y2="432" stroke="#C8102E" stroke-width="2.5" marker-end="url(#r)"/>
+<rect x="1378" y="482" width="464" height="84" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5" stroke-dasharray="7 6"/>
+<text x="1394" y="509" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">Payments and legacy systems</text>
+<text x="1394" y="533" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">UPI Autopay; CRM, billing, order</text>
+<text x="1394" y="554" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">management, field-force scheduling</text>
+<circle cx="1820" cy="506" r="12" fill="#C8102E"/>
+<text x="1820" y="512" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+<line x1="1322" y1="524" x2="1376" y2="524" stroke="#C8102E" stroke-width="2.5" marker-end="url(#r)"/>
+<rect x="1378" y="574" width="464" height="84" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="1394" y="601" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">LLM provider</text>
+<text x="1394" y="625" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">Claude, Gemini or OpenAI-compatible;</text>
+<text x="1394" y="646" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">receives masked text only</text>
+<circle cx="1820" cy="598" r="12" fill="#C8102E"/>
+<text x="1820" y="604" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+<line x1="1322" y1="616" x2="1376" y2="616" stroke="#1E7B4F" stroke-width="2.5" marker-end="url(#g)"/>
+<line x1="1378" y1="700" x2="1408" y2="700" stroke="#C8102E" stroke-width="2.5"/>
+<text x="1416" y="705" font-size="15" font-weight="600" fill="#C8102E" text-anchor="start">detokenised for its own purpose</text>
+<line x1="1676" y1="700" x2="1706" y2="700" stroke="#1E7B4F" stroke-width="2.5"/>
+<text x="1714" y="705" font-size="15" font-weight="600" fill="#1E7B4F" text-anchor="start">masked text only</text>
+<rect x="648" y="716" width="672" height="196" rx="12" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="666" y="746" font-size="18" font-weight="700" fill="#4A4F6E" text-anchor="start">Data, in an India region</text>
+<line x1="984" y1="682" x2="984" y2="714" stroke="#4A4F6E" stroke-width="2" marker-end="url(#a)"/>
+<rect x="666" y="762" width="152" height="132" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="682" y="794" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">Postgres</text>
+<text x="682" y="820" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">tokens, encrypted</text>
+<text x="682" y="843" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">columns, events</text>
+<rect x="828" y="762" width="152" height="132" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="844" y="794" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">Documents</text>
+<text x="844" y="820" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">AES-256-GCM,</text>
+<text x="844" y="843" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">one key per file</text>
+<rect x="990" y="762" width="152" height="132" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="1006" y="794" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">Consent ledger</text>
+<text x="1006" y="820" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">purpose, notice</text>
+<text x="1006" y="843" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">version, audit log</text>
+<rect x="1152" y="762" width="152" height="132" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="1168" y="794" font-size="19" font-weight="700" fill="#1B1F3B" text-anchor="start">Key service</text>
+<text x="1168" y="820" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">KMS master key,</text>
+<text x="1168" y="843" font-size="16.5" font-weight="400" fill="#4A4F6E" text-anchor="start">crypto-shredding</text>
+<rect x="60" y="716" width="550" height="196" rx="12" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
+<text x="78" y="746" font-size="18" font-weight="700" fill="#4A4F6E" text-anchor="start">Four flows</text>
+<circle cx="92" cy="776" r="12" fill="#C8102E"/>
+<text x="92" y="782" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+<text x="114" y="782" font-size="18" font-weight="700" fill="#1B1F3B" text-anchor="start">Advise</text>
+<text x="196" y="782" font-size="17" font-weight="400" fill="#4A4F6E" text-anchor="start">owner message, advisor calls the rules engine, quote</text>
+<circle cx="92" cy="808" r="12" fill="#C8102E"/>
+<text x="92" y="814" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+<text x="114" y="814" font-size="18" font-weight="700" fill="#1B1F3B" text-anchor="start">Verify</text>
+<text x="196" y="814" font-size="17" font-weight="400" fill="#4A4F6E" text-anchor="start">consent, encrypted upload, OCR, registries, fix hints</text>
+<circle cx="92" cy="840" r="12" fill="#C8102E"/>
+<text x="92" y="846" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+<text x="114" y="846" font-size="18" font-weight="700" fill="#1B1F3B" text-anchor="start">Fulfil</text>
+<text x="196" y="846" font-size="17" font-weight="400" fill="#4A4F6E" text-anchor="start">order, payment, legacy order management, live tracker</text>
+<circle cx="92" cy="872" r="12" fill="#C8102E"/>
+<text x="92" y="878" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+<text x="114" y="878" font-size="18" font-weight="700" fill="#1B1F3B" text-anchor="start">Recover</text>
+<text x="196" y="878" font-size="17" font-weight="400" fill="#4A4F6E" text-anchor="start">stalled leads with consent, ranked, masked call</text>
+<rect x="1360" y="716" width="500" height="196" rx="12" fill="#2B4C8C" fill-opacity="0.06" stroke="#2B4C8C" stroke-width="1.5"/>
+<text x="1378" y="746" font-size="18" font-weight="700" fill="#4A4F6E" text-anchor="start">Deployment</text>
+<text x="1378" y="782" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">One Docker image on Cloud Run, asia-south1 (Mumbai)</text>
+<text x="1378" y="809" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">autoscaling 1 to 10 instances, min 1 warm</text>
+<text x="1378" y="836" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">Postgres and Redis; secrets in Secret Manager</text>
+<text x="1378" y="863" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">CI: 82 tests (28 scenarios, 12 KYC specimens)</text>
+<text x="1378" y="890" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">works with no LLM key: rules-only mode</text>
+<text x="60" y="960" font-size="16" font-weight="400" fill="#8A8FA8" text-anchor="start">Accel Telecom and Accel Business are fictional; all data is the official synthetic pack. Airtel SYNC, Track A: Project Udyam Digital.</text>
+</svg>

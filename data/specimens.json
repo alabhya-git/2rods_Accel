@@ -1,0 +1,134 @@
+{
+ "K01": {
+  "business_name": "Vindhya Tours & Travels",
+  "gstin": "37IHKXV5167L1ZS",
+  "gst_status": "Cancelled",
+  "udyam_number": null,
+  "lead_id": "L00045",
+  "city": "Visakhapatnam",
+  "segment": "Professional offices",
+  "employees": 13,
+  "language": "Hindi"
+ },
+ "K02": {
+  "business_name": "Harmony Dental Care",
+  "gstin": "19EOGXH4115Y1ZL",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-WB-00-5053330",
+  "lead_id": "L01287",
+  "city": "Kolkata",
+  "segment": "Professional offices",
+  "employees": 5,
+  "language": "English"
+ },
+ "K03": {
+  "business_name": "Ganesh Woodcraft",
+  "gstin": "27XUIXG0767D1ZP",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-MH-00-9516696",
+  "lead_id": "L03571",
+  "city": "Nagpur",
+  "segment": "Small manufacturers",
+  "employees": 15,
+  "language": "Hindi"
+ },
+ "K04": {
+  "business_name": "Saffron Dental Care LLP",
+  "gstin": "27PZSXS1936O1ZH",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-MH-00-6131836",
+  "lead_id": "L01014",
+  "city": "Nagpur",
+  "segment": "Professional offices",
+  "employees": 7,
+  "language": "Marathi"
+ },
+ "K05": {
+  "business_name": "Balaji Realty LLP",
+  "gstin": "32TZAXB5481U1Z1",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-KL-00-5521886",
+  "lead_id": "L04014",
+  "city": "Kochi",
+  "segment": "Professional offices",
+  "employees": 23,
+  "language": "English"
+ },
+ "K06": {
+  "business_name": "Saffron Unisex Salon",
+  "gstin": "08YKZXS5189L1ZO",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-RJ-00-6577157",
+  "lead_id": "L00115",
+  "city": "Jaipur",
+  "segment": "Micro retail & services",
+  "employees": 1,
+  "language": "English"
+ },
+ "K07": {
+  "business_name": "Neelgiri Physio Clinic",
+  "gstin": "07CPCXN0398P1ZT",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-DL-00-9565547",
+  "lead_id": "L03349",
+  "city": "Delhi",
+  "segment": "Professional offices",
+  "employees": 8,
+  "language": "English"
+ },
+ "K08": {
+  "business_name": "Green Leaf Legal Associates",
+  "gstin": "24XORXG9365M1Z3",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-GJ-00-8477445",
+  "lead_id": "L03473",
+  "city": "Vadodara",
+  "segment": "Professional offices",
+  "employees": 18,
+  "language": "Hindi"
+ },
+ "K09": {
+  "business_name": "Kaveri Insurance Advisors",
+  "gstin": "37LDYXK0296F1ZB",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-AP-00-9751562",
+  "lead_id": "L04779",
+  "city": "Visakhapatnam",
+  "segment": "Professional offices",
+  "employees": 25,
+  "language": "Telugu"
+ },
+ "K10": {
+  "business_name": "Kaveri Stays LLP",
+  "gstin": "27QHJXK0658U1ZL",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-MH-00-7183141",
+  "lead_id": "L04525",
+  "city": "Mumbai",
+  "segment": "Small multi-site businesses",
+  "employees": 106,
+  "language": "Marathi"
+ },
+ "K11": {
+  "business_name": "Trinity Bake House Pvt Ltd",
+  "gstin": "03KGZXT1320R1ZZ",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-PB-00-9719478",
+  "lead_id": "L03485",
+  "city": "Ludhiana",
+  "segment": "Small multi-site businesses",
+  "employees": 117,
+  "language": "Punjabi"
+ },
+ "K12": {
+  "business_name": "Star Electronics",
+  "gstin": "37NBLXS1145E1ZU",
+  "gst_status": "Active",
+  "udyam_number": "UDYAM-AP-00-5186772",
+  "lead_id": "L03558",
+  "city": "Visakhapatnam",
+  "segment": "Small multi-site businesses",
+  "employees": 44,
+  "language": "Hindi"
+ }
+}

@@ -1,0 +1,7 @@
+**/node_modules
+web/dist
+var
+**/__pycache__
+.git
+docs/video
+*.log

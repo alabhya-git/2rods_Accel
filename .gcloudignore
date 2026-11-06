@@ -1,0 +1,13 @@
+# What Cloud Build uploads: the source the Dockerfile needs, never secrets or media
+#!include:.gitignore
+.git/
+.env
+api/.env
+infra/
+docs/video/
+docs/deck/
+web/dist/
+web/node_modules/
+api/tests/
+**/__pycache__/
+var/

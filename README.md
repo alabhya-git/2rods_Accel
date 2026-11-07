@@ -1,6 +1,6 @@
 # Accel Business · Udyam Digital
 
-**Four doors, one order.** A small business owner chooses *Help me choose*, *I know what I need* *Talk to a person* or *WhatsApp*: in any of 10 languages, by text or voice, on the web, a phone or WhatsApp. Every door ends in the same honest quote, the right proof route, a booked install, and one account afterwards.
+**Four doors, one order.** A small business owner chooses *Help me choose*, *I know what I need*, *Talk to a person* or *WhatsApp*: in any of 10 languages, by text or voice, on the web, a phone or WhatsApp. Every door ends in the same honest quote, the right proof route, a booked install, and one account afterwards.
 
 Built for Airtel SYNC, Track A: *Project Udyam Digital*. Accel Telecom and Accel Business are fictional; all data is the official synthetic pack. Payments run in test mode.
 

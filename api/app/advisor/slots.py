@@ -26,6 +26,10 @@ PROMISES = re.compile(
     r"गारंटी|मुफ़्त|मुफ्त|फ्री|छूट|डिस्काउंट|कल तक|आज ही|मोफत|சலுகை|இலவசம்|ఉచితం|ಉಚಿತ|મફત|বিনামূল্যে|സൗജന്യ|ਮੁਫ਼ਤ",
     re.I)
 
+# the reply is for the owner: notes to itself about the profile, the owner or its tools are not
+META = re.compile(r"\b(?:the owner(?:'s)?|profile|ask one question|tool (?:call|result)s?|the context|system prompt|"
+                  r"update_profile|request_human|recommend tool)\b", re.I)
+
 DAYS = {"en": "days", "hi": "दिन", "mr": "दिवस", "ta": "நாட்கள்", "te": "రోజులు", "kn": "ದಿನಗಳು", "gu": "દિવસ", "bn": "দিন",
         "ml": "ദിവസം", "pa": "ਦਿਨ"}
 
@@ -65,6 +69,9 @@ def problems(raw: str, bundle: dict | None) -> list[str]:
     pm = PROMISES.search(bare)
     if pm:
         out.append(f"a promise word ('{pm.group(0)}')")
+    mm = META.search(bare)
+    if mm:
+        out.append(f"talks about its own workings ('{mm.group(0)}')")
     return out
 
 

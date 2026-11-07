@@ -65,7 +65,13 @@ NUM_WORDS = {
     "दोन": 2, "पाच": 5, "सहा": 6, "आठ": 8,
 }
 PEOPLE = r"(?:staff|people|persons?|employees?|workers?|members?|team|log|logon|लोग|कर्मचारी|लोक|कामगार|பேர்|ஊழியர்கள்|మంది|ఉద్యోగులు|ಜನ|ಸಿಬ್ಬಂದಿ|લોકો|કર્મચારી|জন|কর্মী|പേർ|ജീവനക്കാർ|ਲੋਕ|ਕਰਮਚਾਰੀ)"
-SITES = r"(?:stores?|outlets?|branch(?:es)?|sites?|locations?|shops?|gyms?|clinics?|restaurants?|hotels?|schools?|centres?|centers?|offices?|showrooms?|counters? across|दुकानें|दुकान|शाखा(?:एं|एँ)?|शाखा|ब्रांच|கிளைகள்|బ్రాంచ్లు|బ్రాంచీలు|ಶಾಖೆ|શાખા|শাখা|ശാഖ|ਸ਼ਾਖਾਵਾਂ)"
+# job titles count people too ("4 teachers", "2 doctors and 3 nurses"); a total ("12 staff") wins over them
+ROLES = (r"(?:teachers?|doctors?|dentists?|nurses?|pharmacists?|chefs?|cooks?|waiters?|drivers?|engineers?|technicians?|mechanics?|"
+         r"helpers?|assistants?|therapists?|stylists?|beauticians?|barbers?|tailors?|karigars?|cashiers?|accountants?|lawyers?|"
+         r"consultants?|agents?|executives?|salesm[ae]n|sales ?(?:people|staff)|partners?|associates?|trainers?|labou?rers?|operators?|"
+         r"receptionists?|clerks?|managers?|guards?|cleaners?|peons?|attendants?|riders?|delivery (?:boys?|staff)|"
+         r"शिक्षक|डॉक्टर|नर्स|ड्राइवर|कारीगर|मजदूर)")
+SITES = r"(?:stores?|outlets?|branch(?:es)?|sites?|locations?|shops?|gyms?|clinics?|restaurants?|hotels?|schools?|centres?|centers?|offices?|showrooms?|counters? across|stalls?|kiosks?|pharmacies|bakeries|salons|parlou?rs|cafes|dhabas|warehouses?|godowns?|factories|plants|labs|studios|franchises|दुकानें|दुकान|शाखा(?:एं|एँ)?|शाखा|ब्रांच|கடைகள்|கடை|దుకాణాలు|దుకాణం|ಅಂಗಡಿಗಳು|ಅಂಗಡಿ|દુકાનો|દુકાન|দোকান|കടകൾ|ਦੁਕਾਨਾਂ|ਦੁਕਾਨ|கிளைகள்|బ్రాంచ్లు|బ్రాంచీలు|ಶಾಖೆ|શાખા|শাখা|ശാഖ|ਸ਼ਾਖਾਵਾਂ)"
 VEHICLES = r"(?:trucks?|vehicles?|vans?|cars?|bikes?|tempos?|lorries|गाड़ियां|गाड़ियाँ|ट्रक)"
 
 BUSINESS_KEYWORDS: list[tuple[str, str, str]] = [
@@ -81,6 +87,7 @@ BUSINESS_KEYWORDS: list[tuple[str, str, str]] = [
     (r"mobile repair|phone repair|mobile shop", "Mobile repair shop", "micro"),
     (r"optician|optical|spectacles|चश्मा", "Optician", "micro"),
     (r"stationery|xerox|photocopy", "Stationery shop", "micro"),
+    (r"tea stall|food stall|\bstalls?\b|kiosk|food cart", "Food stall", "micro"),
     (r"sweet shop|mithai|halwai|मिठाई", "Sweet shop", "micro"),
     (r"dental|dentist|डेंटल|दांत|दंत|பல் மருத்துவ|டென்டல்|డెంటల్|దంత|ಡೆಂಟಲ್|ದಂತ|ડેન્ટલ|દાંત|ডেন্টাল|দাঁত|ഡെന്റൽ|ദന്ത|ਡੈਂਟਲ|ਦੰਦ", "Dental clinic", "prof"),
     (r"physio", "Physiotherapy clinic", "prof"),
@@ -126,7 +133,7 @@ NEED_KEYWORDS: list[tuple[str, str]] = [
     (r"antivirus|anti-virus|ransomware|endpoint|virus|वायरस|வைரஸ்|వైరస్|ವೈರಸ್|વાયરસ|ভাইরাস|വൈറസ്|ਵਾਇਰਸ", "endpoint"),
     (r"firewall|फ़ायरवॉल|फायरवॉल", "firewall"),
     (r"failover|backup internet|backup line|second line|4g backup|5g backup", "failover"),
-    (r"sd-?wan|central(?:ly)? manag|manage all (?:stores|sites|branches)", "sdwan"),
+    (r"sd-?wan|central(?:ly|ized|ised)?\s+(?:network\s+)?manag|manage (?:all|every)\s+(?:our |my |the )?(?:stores|sites|branches|outlets|locations)|one dashboard for (?:all|every)", "sdwan"),
     (r"static ip|fixed ip|public ip", "static_ip"),
     (r"ivr|cloud telephony|telephony|landline|call recording|office phone", "telephony"),
     (r"toll[- ]?free|1800", "toll_free"),
@@ -138,12 +145,26 @@ NEED_KEYWORDS: list[tuple[str, str]] = [
     (r"internet|broadband|fib(?:re|er)|\bnet\b|wifi connection|upi (?:keeps )?(?:fails|failing)|upi|इंटरनेट|नेट|इंटरनेट|இணையம்|ఇంటర్నెట్|ಇಂಟರ್ನೆಟ್|ઇન્ટરનેટ|ইন্টারনেট|ഇന്റർനെറ്റ്|ਇੰਟਰਨੈੱਟ", "internet"),
 ]
 
-ONLY = r"\b(?:only|just|sirf|bas)\b|सिर्फ|केवल|फक्त|மட்டும்|మాత్రమే|ಮಾತ್ರ|ફક્ત|শুধু|മാത്രം|ਸਿਰਫ਼"
+ONLY = r"\b(?:only|just|sirf|bas)\b|nothing else|no other (?:products?|services?)|that'?s all|सिर्फ|केवल|फक्त|மட்டும்|మాత్రమే|ಮಾತ್ರ|ફક્ત|শুধু|മാത്രം|ਸਿਰਫ਼"
 NO_GST = r"(?:gst|gstin|जीएसटी|ஜிஎஸ்டி|జీఎస్టీ|జిఎస్టి|ಜಿಎಸ್ಟಿ|જીએસટી|জিএসটি|ജിഎസ്ടി|ਜੀਐਸਟੀ).{0,14}?(?:नहीं|नाही|இல்லை|లేదు|ಇಲ್ಲ|નથી|নেই|ഇല്ല|ਨਹੀਂ)|no gst|without gst|not (?:gst )?registered|gst (?:nahi|nahin|not)|don'?t have (?:a )?gst|no gstin|gst registration (?:nahi|not)|जीएसटी नहीं|GST नहीं|gst yet|not yet registered"
-YES_GST = r"(?:gst|gstin|जीएसटी|ஜிஎஸ்டி|జీఎస్టీ|జిఎస్టి|ಜಿಎಸ್ಟಿ|જીએસટી|জিএসটি|ജിഎസ്ടി|ਜੀਐਸਟੀ).{0,14}?(?:आहे|உள்ளது|இருக்கு|இருக்கிறது|ఉంది|ఉన్నది|ಇದೆ|છે|আছে|ഉണ്ട്|ਹੈ)|जीएसटी है|gst है|gst हैं|gst आहे|gst (?:registered|active|hai|number hai)|have (?:a )?gst|gstin hai|gst-registered|registered (?:under|for) gst|gst wala"
+YES_GST = r"(?:gst|gstin|जीएसटी|ஜிஎஸ்டி|జీఎస్టీ|జిఎస్టి|ಜಿಎಸ್ಟಿ|જીએસટી|জিএসটি|ജിഎസ്ടി|ਜੀਐਸਟੀ).{0,14}?(?:आहे|உள்ளது|இருக்கு|இருக்கிறது|ఉంది|ఉన్నది|ಇದೆ|છે|আছে|ഉണ്ട്|ਹੈ)|जीएसटी है|gst है|gst हैं|gst आहे|gst (?:registered|active|hai|number hai)|have (?:a )?gst|gstin hai|gst-registered|registered (?:under|for) gst|gst wala" \
+          r"|\bgst(?:in)?\b\s*(?:[:=\-–]|is|status|number)?\s*(?:yes|yeah|yep|haan|ha|available|valid|done)\b|\b(?:yes|haan)\b[,\s]+(?:we |i )?(?:have |got )?(?:a |an |the )?gst"
 CANCELLED = r"cancel+ed"
 SUSPENDED = r"suspended"
 NO_FIBRE = r"no fib(?:re|er)|fib(?:re|er) (?:is )?not (?:available|feasible)|fib(?:re|er) nahi|without fib(?:re|er)|only airfiber works|fib(?:re|er) isn'?t available"
+# any "fibre" + "can't / not / unavailable" in one clause, either order ("cannot get fibre", "fibre does not reach us")
+FIBRE_WORD = r"(?<![a-z])(?<!air )fib(?:re|er)|wired (?:internet|line|connection|broadband)|cable (?:internet|connection)|फाइबर|फ़ाइबर|ஃபைபர்|ఫైబర్|ಫೈಬರ್|ફાઇબર|ফাইবার|ഫൈബർ|ਫਾਈਬਰ"
+UNAVAILABLE = (r"\b(?:not|no|cannot|can'?t|couldn'?t|unable|unavailable|isn'?t|aren'?t|doesn'?t|don'?t|won'?t|nahi|nahin|never|impossible)\b|"
+               r"नहीं|नाही|இல்லை|లేదు|ಇಲ್ಲ|નથી|নেই|ഇല്ല|ਨਹੀਂ")
+NOT_ABOUT_SUPPLY = r"(?:don'?t|do not|doesn'?t|no)\s+(?:need|want|require)|not (?:needed|required|necessary)|lock-?in|contract|deposit|setup fee|charges?|nahi chahiye|नहीं चाहिए"
+# what the owner can or will pay ("can only spend 700", "afford 1,000", "1500 tak"): a budget, never today's spend
+_AMOUNT = r"(\d[\d,]{2,})(?![\d,]|\s*(?:mbps|gbps|gb\b|tb\b|mb\b|%|staff|people|employees|workers|users|sims?\b|cameras?|devices?|vehicles?|sq))"
+BUDGET = (r"(?:budget|under|within|max(?:imum)?|upto|up to|at most|not more than|no more than|less than|below|बजट)\D{0,12}?" + _AMOUNT +
+          r"|(?:can|could|will|would|want to|willing to|ready to|able to)\s+(?:only\s+|just\s+)?(?:spend|pay|afford)\D{0,12}?" + _AMOUNT +
+          r"|afford\D{0,12}?" + _AMOUNT +
+          r"|(?:can'?t|cannot|won'?t|shouldn'?t|not|never)\s+(?:go\s+|be\s+|spend\s+|pay\s+)?(?:above|over|beyond|more than|exceed)\D{0,8}?" + _AMOUNT +
+          r"|(\d[\d,]{2,})\s*(?:rs\.?|rupees|rupaye|₹|रुपये)?\s*(?:tak|तक)(?![\wऀ-෿])")
+FEATURE_WORDS = {"roaming": r"roam|रोमिंग|ரோமிங்|రోమింగ్|ರೋಮಿಂಗ್|રોમિંગ|রোমিং|റോമിംഗ്|ਰੋਮਿੰਗ", "priority_support": r"priority (?:care|support|service)"}
 INJECTION = r"ignore (?:your|all|the|previous|any) (?:rules|instructions)|forget (?:your|the) rules|you are now|system prompt|give (?:it )?(?:to )?me (?:for )?free|\bfor (?:rs\.?|₹|inr)\s?\d{1,3}\b(?! ?(?:a|per) (?:month|line|user))|100% discount|bypass"
 OUT_OF_SCOPE = r"\b(?:sell|buy|need|want|give|get|have)\b.{0,20}\b(?:laptops?|computers?|loans?|credit cards?|insurance polic(?:y|ies)|flights?|train tickets?|iphones?|recipes?|movie)\b|\bwhat is the weather\b|\bwho won\b"
 # "don't need X", "remove X", "X nahi chahiye": the named needs come off the profile
@@ -193,6 +214,8 @@ class Extracted:
     gstin_status: str | None = None
     fibre_feasible: bool | None = None
     needs: set[str] = field(default_factory=set)
+    features: set[str] = field(default_factory=set)
+    data_gb: int | None = None
     only: bool = False
     qty: dict[str, int] = field(default_factory=dict)
     budget: int | None = None
@@ -205,6 +228,26 @@ class Extracted:
     bare_number: int | None = None
     yes: bool = False
     no: bool = False
+
+
+def _no_supply(clause: str) -> bool:
+    """'fibre can't reach us', 'no wired internet here': a line is unavailable, which is not the owner turning internet down."""
+    fw = re.search(FIBRE_WORD, clause)
+    if not fw or re.search(NOT_ABOUT_SUPPLY, clause, flags=re.I):
+        return False
+    near = clause[max(0, fw.start() - 30):fw.end() + 30]
+    near = re.sub(r"\b(?:no|not|nahi|without)\s+(?:gst\w*|registration)\b|gst\w*\s+(?:nahi|nahin|not|नहीं)", " ", near)
+    return bool(re.search(UNAVAILABLE, near, flags=re.I))
+
+
+def _stem(name: str) -> str | None:
+    """A non-Latin city name without its final vowel sign or virama, so case endings still match."""
+    if name.isascii():
+        return None
+    stem = name
+    while stem and unicodedata.category(stem[-1]) in ("Mn", "Mc"):
+        stem = stem[:-1]
+    return stem if len(stem) >= 3 and stem != name else None
 
 
 def _num(s: str) -> int | None:
@@ -247,13 +290,18 @@ def extract(raw: str) -> Extracted:
     if e.employees is None:
         mm = re.search(r"team of\s+" + NUM, scrub)
         e.employees = _num(mm.group(1)) if mm else None
+    if e.employees is None:  # no total given: add up the people named by role
+        roles = [n for mm in re.finditer(NUM + r"\s*(?:" + ADJ + r"\s+)?" + ROLES + r"(?![\wऀ-෿])", scrub) if (n := _num(mm.group(1)))]
+        e.employees = sum(roles) or None
     # sites add up: "2 shops in Jaipur and 1 in Ajmer" is 3 sites
-    site_counts = [_num(mm.group(1)) for mm in re.finditer(NUM + r"\s*[-]?\s*(?:" + ADJ + r"\s+)?(?:" + SITES + r")", scrub)]
-    site_counts = [n for n in site_counts if n]
-    if site_counts:
-        site_counts += [n for mm in re.finditer(r"(?:\band\b|,|\baur\b|और)\s*" + NUM + r"\s+(?:more\s+)?(?:in|at|में)\s", scrub)
-                        if (n := _num(mm.group(1)))]
-        e.sites = sum(site_counts)
+    site_hits = [mm for mm in re.finditer(NUM + r"\s*[-]?\s*(?:" + ADJ + r"\s+)?(?:" + SITES + r")", scrub) if _num(mm.group(1))]
+    if site_hits:
+        named = sum(_num(mm.group(1)) for mm in site_hits)
+        parts = [n for mm in re.finditer(r"(?:\band\b|,|\baur\b|और)\s*" + NUM + r"\s+(?:more\s+)?(?:in|at|में)\s", scrub)
+                 if (n := _num(mm.group(1)))]
+        # "2 shops in Jaipur and 1 in Ajmer" adds up; "2 clinics, one in Pune and one in Nashik" splits the 2
+        located = re.match(r"\s*(?:in|at|में)\s", scrub[site_hits[0].end():])
+        e.sites = named + sum(parts) if located else max(named, sum(parts))
     else:
         e.sites = grab(SITES)
     v = grab(VEHICLES)
@@ -267,15 +315,17 @@ def extract(raw: str) -> Extracted:
     if "lines" not in e.qty and re.search(r"\b(?:a|an|one|single|ek)\s+(?:mobile|phone|postpaid|sim)\b", scrub):
         e.qty["lines"] = 1
 
-    bm = re.search(r"(?:budget|under|within|max(?:imum)?|upto|up to|बजट)\D{0,12}?(\d[\d,]{2,})", scrub) or \
-        re.search(r"(?:rs\.?|₹|inr)\s*(\d[\d,]{2,})\s*(?:a|per|/)\s*(?:month|mo)", scrub) or \
-        re.search(r"(\d[\d,]{2,})\s*(?:rs|rupees|₹|रुपये)\s*(?:a|per|/|महीना|प्रति)", scrub)
+    explicit_budget = re.search(BUDGET, scrub)
+    rest = scrub[:explicit_budget.start()] + " " + scrub[explicit_budget.end():] if explicit_budget else scrub
+    bm = re.search(r"(?:rs\.?|₹|inr)\s*(\d[\d,]{2,})\s*(?:a|per|/)\s*(?:month|mo)", rest) or \
+        re.search(r"(\d[\d,]{2,})\s*(?:rs|rupees|₹|रुपये)\s*(?:a|per|/|महीना|प्रति)", rest)
     # what they pay today ("we spend Rs 900 a month on the hotspot"): shown beside the quote, never used as a budget
-    sp = re.search(r"(?:currently|today|right now|abhi|अभी|pay(?:ing)?|spend(?:ing)?|kharcha|खर्च)\D{0,24}?(\d[\d,]{2,})", scrub)
+    sp = re.search(r"(?:currently|today|right now|abhi|अभी|pay(?:ing)?|spend(?:ing)?|kharcha|खर्च)\D{0,24}?(\d[\d,]{2,})", rest)
     if sp:
         e.current_spend = int(sp.group(1).replace(",", ""))
-    explicit_budget = re.search(r"(?:budget|under|within|max(?:imum)?|upto|up to|बजट)\D{0,12}?(\d[\d,]{2,})", scrub)
-    if bm and (explicit_budget or not sp):
+    if explicit_budget:
+        e.budget = int(next(g for g in explicit_budget.groups() if g).replace(",", ""))
+    elif bm and not sp:
         e.budget = int(bm.group(1).replace(",", ""))
 
     sm = re.search(r"(\d{2,4})\s?mbps", scrub)
@@ -306,7 +356,7 @@ def extract(raw: str) -> Extracted:
             continue
         found = {need for pattern, need in NEED_KEYWORDS if re.search(pattern, clause, flags=re.I)} | loanword_needs(clause)
         if found and re.search(NEGATION, clause, flags=re.I):
-            if re.search(NO_FIBRE, clause):
+            if re.search(NO_FIBRE, clause) or _no_supply(clause):
                 found -= {"internet", "high_speed", "dedicated_line"}  # "no fibre here" still wants internet
             e.removed |= found
         else:
@@ -333,6 +383,17 @@ def extract(raw: str) -> Extracted:
         e.has_gstin, e.gstin_status = True, "Declared"
     if re.search(NO_FIBRE, scrub):
         e.fibre_feasible = False
+    if any(_no_supply(c) for c in re.split(CLAUSE_SPLIT + r"|\band\b|\baur\b|और", scrub, flags=re.I) if c):
+        e.fibre_feasible = False
+
+    for name, pat in FEATURE_WORDS.items():
+        if re.search(pat, scrub, flags=re.I):
+            e.features.add(name)
+    gb = re.search(r"(\d{2,4})\s?gb\b", scrub)
+    if gb and re.search(r"\b(?:data|sims?|mobile|postpaid|phones?|lines?)\b", scrub):
+        e.data_gb = int(gb.group(1))
+    if (e.features & {"roaming"} or e.data_gb) and "mobile_lines" not in e.removed:
+        e.needs.add("mobile_lines")
     if re.search(TERM24, scrub):
         e.term_months = 24
     if re.search(SHORT_CONTRACT, scrub):
@@ -348,13 +409,20 @@ def extract(raw: str) -> Extracted:
     cities = {c.lower(): c for c in list(ds.city_tier) + list(EXTRA_TIERS)}
     for alias, city in CITY_ALIASES.items():
         cities.setdefault(alias.lower(), city)
-    for name in sorted(cities, key=len, reverse=True):
-        if re.search(r"(?<![a-z])" + re.escape(name) + r"(?![a-z])", scrub):
-            c = cities[name]
-            e.city = c
-            e.city_tier = ds.city_tier.get(c) or EXTRA_TIERS.get(c)
-            e.state = ds.city_state.get(c) or CITY_STATE_EXTRA.get(c)
-            break
+    names = sorted(cities, key=len, reverse=True)
+    found = next((n for n in names if re.search(r"(?<![a-z])" + re.escape(n) + r"(?![a-z])", scrub)), None)
+    if not found:
+        # Indian languages add case endings to the name itself (கோயம்புத்தூரில், ಬೆಂಗಳೂರಿನಲ್ಲಿ, पुण्यात): match the stem
+        for n in names:
+            stem = _stem(n)
+            if stem and re.search(r"(?<![\wऀ-෿])" + re.escape(stem), scrub):
+                found = n
+                break
+    if found:
+        c = cities[found]
+        e.city = c
+        e.city_tier = ds.city_tier.get(c) or EXTRA_TIERS.get(c)
+        e.state = ds.city_state.get(c) or CITY_STATE_EXTRA.get(c)
 
     stripped = scrub.strip(" .!?")
     if re.fullmatch(NUM, stripped):

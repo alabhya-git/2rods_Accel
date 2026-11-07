@@ -9,6 +9,7 @@ Segment defaults are grounded in what last quarter's activated customers actuall
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 # need -> ordered chain of products that can serve it (first eligible wins)
@@ -51,6 +52,41 @@ FALLBACK: dict[str, str] = {
 
 CONNECTIVITY = ("P01", "P02", "P03", "P04", "P05", "P06")
 FIBRE = ("P01", "P02", "P03")
+# a 1-2 year commitment with a large setup fee: only ever sold when the owner asks for it
+LEASED = ("P05", "P06")
+
+# Features an owner can insist on, read from the catalogue description (so a new plan with
+# the feature qualifies without a code change).
+FEATURES: dict[str, str] = {"roaming": r"\broaming\b", "priority_support": r"\bpriority (?:care|support)\b"}
+DATA_GB = re.compile(r"(\d+)\s*GB data", re.I)
+SPEED = re.compile(r"(\d+)\s*(Mbps|Gbps)", re.I)
+BROADBAND = ("P01", "P02", "P03", "P04")
+
+
+def speed_mbps(description: str) -> int | None:
+    m = SPEED.search(description)
+    return int(m.group(1)) * (1000 if m.group(2).lower() == "gbps" else 1) if m else None
+
+
+def data_gb(description: str) -> int | None:
+    m = DATA_GB.search(description)
+    return int(m.group(1)) if m else None
+
+
+def fits(chain: tuple[str, ...], products: dict, features: set[str], want_gb: int | None) -> tuple[str, ...]:
+    """Narrow a need's products to those with every feature the owner named. A feature no
+    product in the chain offers (roaming, for email) does not apply to that need."""
+    out = chain
+    for f in sorted(features & set(FEATURES)):
+        has = tuple(p for p in out if re.search(FEATURES[f], products[p].description, re.I))
+        if has:
+            out = has
+    if want_gb:
+        sized = {p: data_gb(products[p].description) for p in out}
+        if any(v is not None for v in sized.values()):
+            enough = tuple(p for p in out if (sized[p] or 0) >= want_gb)
+            out = enough or (max(out, key=lambda p: sized[p] or 0),)  # nothing that big: the largest there is
+    return out
 
 # Default needs per segment, from the take rates of activated bundles (smb_leads.csv).
 SEGMENT_DEFAULTS: dict[str, tuple[str, ...]] = {

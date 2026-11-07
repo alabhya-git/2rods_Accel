@@ -120,6 +120,20 @@ SCENARIOS: list[Scenario] = [
     Scenario("S28", "CCTV added to a cart with no connection", "(owner keeps only CCTV in the cart)",
              {"business_type": "Boutique", "segment": "micro", "employees": 2, "city": "Delhi", "city_tier": 1, "has_gstin": False},
              custom={"P23": 2}, include=["P23"], any_of=[["P01", "P02", "P03", "P04", "P05", "P06"]]),
+    Scenario("S29", "SIMs with roaming get the plan that has roaming", "Just need 4 business SIM cards with roaming for my sales team in Delhi.",
+             {"segment": None, "employees": 6, "city": "Delhi", "city_tier": 1, **GST_ACTIVE, "needs": {"mobile_lines"}, "only": True,
+              "features": {"roaming"}, "qty": {"lines": 4}},
+             only=["P08"], qty={"P08": 4}),
+    Scenario("S30", "Firewall where fibre cannot reach", "Our building does not allow fibre. 12 staff in Pune, GST active. We want a managed firewall.",
+             {"business_type": "Office", "segment": "prof", "employees": 12, "city": "Pune", "city_tier": 1, **GST_ACTIVE, "fibre_feasible": False,
+              "needs": {"firewall"}},
+             include=["P04", "P20"], absent=["P21", "P05", "P06"], exclude={"P21": "line_on_request"}),
+    Scenario("S31", "At least 500 Mbps", "Need at least 500 Mbps for my design studio in Pune, 6 staff, GST active.",
+             {"business_type": "Architecture studio", "segment": "prof", "employees": 6, "city": "Pune", "city_tier": 1, **GST_ACTIVE, "speed_mbps": 500},
+             include=["P03"]),
+    Scenario("S32", "99.5% uptime and 1 Gbps, but only 6 staff", "Clinic in Mumbai, 6 staff, GST active: 1 Gbps with 99.5% uptime.",
+             {"business_type": "Clinic", "segment": "prof", "employees": 6, "city": "Mumbai", "city_tier": 1, **GST_ACTIVE, "speed_mbps": 1000, "uptime_pct": 99.5},
+             include=["P03"], absent=["P05", "P06"], exclude={"P06": "min_employees"}),
 ]
 
 

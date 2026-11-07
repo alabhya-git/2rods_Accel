@@ -32,7 +32,7 @@ Two independent evaluations (Claude and Codex) found the same blockers. Each is 
 
 ## How it works
 
-- **Advisor:** a deterministic rules engine owns eligibility, quantity and price. Claude Opus 5.5 (official SDK, cached system prompt, low effort, refusal fallback) asks and explains through tools, and writes numbers only as slots. After a recommendation, the engine finds the assumptions that move the price most and offers them as one-tap questions (typed profile patches with a quote diff). With no key, the same engine runs a rules-only advisor in all 10 languages.
+- **Advisor:** a deterministic rules engine owns eligibility, quantity and price. Claude Opus 5.5 (official SDK, cached system prompt, low effort, refusal fallback) asks and explains through tools, and writes numbers only as slots. After a recommendation, the engine finds the assumptions that move the price most and offers them as one-tap questions (typed profile patches with a quote diff). With no key, the same engine runs a rules-only advisor in all 10 languages. The engine keeps what the owner asked for: a feature they name (roaming, data per SIM) picks the plan that has it and survives budget cuts; a speed they name gets the slowest line that meets it; a leased line is never added just to unlock an add-on; and a rule that blocks one product gets an explanation and the rest of the bundle, never a hand-off.
 - **Smart KYC:** local OCR (Tesseract + OpenCV) is the first reader. With the owner's separate consent, Claude vision is a second reader for **business documents only** (never ID cards); fields both readers disagree on, or pages that look edited, go to a person. Validators follow the dataset's own rules (PAN 'X', Udyam district 00, 15 July 2026 as "today").
 - **Money:** `engine/schedule.py` turns a quote into dated debits; due today, instalments (summing exactly to setup), mandate limit and invoice lines are read from it.
 - **Voice:** Sarvam speech in 10 languages through the server (key never in the browser), browser speech as fallback; heard words are shown for confirmation. WhatsApp voice notes are transcribed and answered.
@@ -71,7 +71,7 @@ Owner web app · WhatsApp · Voice · Partner desk
 cd api && pip install -r requirements-dev.txt && uvicorn app.main:app --reload
 # Web app
 cd web && npm ci && npm run dev        # or npm run build; the API serves web/dist at /
-# Tests: 907, including the 743-case invariant eval and the 10,000-cart money test
+# Tests: 971, including the 744-case invariant eval and the 10,000-cart money test
 cd api && python -m pytest -q
 ```
 

@@ -28,6 +28,8 @@ class Profile:
     excluded: set[str] = field(default_factory=set)  # needs the owner said no to: never added back as defaults
     only: bool = False  # owner wants only what they named, no suggestions
     qty: dict[str, int] = field(default_factory=dict)
+    features: set[str] = field(default_factory=set)  # what a product must include: "roaming", "priority_support"
+    data_gb: int | None = None  # mobile data per line the owner asked for
     speed_mbps: int | None = None
     uptime_pct: float | None = None
     budget: int | None = None
@@ -56,6 +58,7 @@ class Profile:
         d = asdict(self)
         d["needs"] = sorted(self.needs)
         d["excluded"] = sorted(self.excluded)
+        d["features"] = sorted(self.features)
         return d
 
     @classmethod
@@ -66,6 +69,7 @@ class Profile:
         d["needs"] = set(d.get("needs") or [])
         d["excluded"] = set(d.get("excluded") or [])
         d["qty"] = dict(d.get("qty") or {})
+        d["features"] = {f for f in (d.get("features") or []) if isinstance(f, str)}
         known = {f for f in cls.__dataclass_fields__}
         return cls(**{k: v for k, v in d.items() if k in known}).sanitised()
 
@@ -80,6 +84,7 @@ class Profile:
         self.sites = clamp(self.sites, 1, 1000)
         self.budget = clamp(self.budget, 1, 10_000_000)
         self.current_spend = clamp(self.current_spend, 0, 10_000_000)
+        self.data_gb = clamp(self.data_gb, 1, 10_000)
         self.qty = {k: q for k, v in self.qty.items()
                     if k in QTY_KEYS and (q := clamp(v, 0, MAX_QTY))}  # zero or negative: dropped, not rounded up
         self.term_months = 24 if (self.term_months or 12) >= 24 else 12

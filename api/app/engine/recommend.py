@@ -170,25 +170,37 @@ class _Builder:
         return round(100 * self.ds.take_rate.get((seg, pid), 0.0)) if seg else 0
 
     # -- connectivity --
-    def connectivity_chain(self, needs: set[str]) -> tuple[list[str], str]:
+    def connectivity_chain(self, needs: set[str], for_dependency: bool = False) -> tuple[list[str], str]:
         prof = self.prof
         sla = "dedicated_line" in needs or (prof.uptime_pct or 0) >= 99.5
-        if not needs & {"dedicated_line", "high_speed"} and prof.segment == "mfg" and prof.n_employees >= 10:
+        if not needs & {"dedicated_line", "high_speed"} and prof.segment == "mfg" and prof.n_employees >= 10 and not for_dependency:
             sla = True
         gig = "high_speed" in needs or (prof.speed_mbps or 0) >= 1000
-        if sla:
+        want = 1000 if gig else prof.speed_mbps or 0
+        speed = {p: graph.speed_mbps(self.P(p).description) or 0 for p in graph.BROADBAND}
+
+        def broadband(default: list[str]) -> list[str]:
+            if want <= speed[default[0]]:
+                return default
+            # the owner named a speed above the usual pick: the slowest line that meets it, then the fastest that don't
+            meets = sorted((p for p in graph.BROADBAND if speed[p] >= want), key=lambda p: speed[p])
+            return meets + sorted((p for p in graph.BROADBAND if speed[p] < want), key=lambda p: -speed[p])
+
+        if sla:  # when the leased line is not allowed, the broadband behind it still honours the speed
             big = (prof.uptime_pct or 0) >= 99.9 or (prof.speed_mbps or 0) >= 100
-            return (["P06", "P05", "P02", "P01", "P04"] if big else ["P05", "P02", "P01", "P04"]), "sla"
+            return (["P06", "P05"] if big else ["P05"]) + broadband(["P02", "P01", "P04"]), "sla"
         if gig:
             return ["P03", "P02", "P01", "P04"], "gig"
-        if (prof.speed_mbps or 0) >= 300 or prof.n_employees >= 5 or prof.segment in ("prof", "multi", "mfg"):
-            return ["P02", "P01", "P04"], "size"
-        return ["P01", "P04"], "basic"
+        default = ["P02", "P01", "P04"] if prof.n_employees >= 5 or prof.segment in ("prof", "multi", "mfg") else ["P01", "P04"]
+        chain = broadband(default)
+        return chain, ("speed" if chain is not default else "size" if default[0] == "P02" else "basic")
 
-    def choose_connectivity(self, needs: set[str], source: str, reason_extra: dict | None = None) -> str | None:
-        chain, why = self.connectivity_chain(needs)
+    def choose_connectivity(self, needs: set[str], source: str, reason_extra: dict | None = None, for_dependency: bool = False) -> str | None:
+        chain, why = self.connectivity_chain(needs, for_dependency)
+        if for_dependency:
+            chain = [p for p in chain if p not in graph.LEASED]
         first = chain[0]
-        explicit = bool(needs & {"dedicated_line", "high_speed"}) or why == "sla" and self.prof.uptime_pct
+        explicit = bool(needs & {"dedicated_line", "high_speed"}) or why == "sla" and self.prof.uptime_pct or why == "speed"
         for i, pid in enumerate(chain):
             v = violations(self.P(pid), self.prof)
             if not v:
@@ -207,8 +219,9 @@ class _Builder:
     # -- other needs --
     def pick(self, need: str, asked: bool) -> str | None:
         chain = graph.NEED_CHAIN[need]
-        if need == "mobile_lines":
-            chain = ("P07",) if (self.prof.segment in (None, "micro")) else ("P08", "P07")
+        if need == "mobile_lines" and self.prof.segment in (None, "micro"):
+            chain = ("P07", "P08")  # the cheaper line first, unless the owner names a feature only the other has
+        chain = graph.fits(chain, self.ds.products, self.prof.features, self.prof.data_gb if need == "mobile_lines" else None)
         for pid in chain:
             v = violations(self.P(pid), self.prof)
             if not v:
@@ -237,20 +250,30 @@ class _Builder:
                 if not req or any(r in self.lines for r in req):
                     continue
                 if base is None:
-                    base = self.choose_connectivity({"internet"}, "dependency", {"for": [ln.name]})
+                    base = self.choose_connectivity({"internet"}, "dependency", {"for": [ln.name]}, for_dependency=True)
                     base_is_dependency = True
                     if base and base in req:
                         self.lines[base].source = "dependency"
                         self.lines[base].reason = {"code": "dependency", "for": [ln.name]}
                         changed = True
                         continue
-                # cheapest eligible product from the required set
+                # cheapest eligible product from the required set; a leased line only when the owner asks for one
                 options = sorted((self.P(r) for r in req if not violations(self.P(r), self.prof)), key=lambda p: p.price_min)
+                on_request = [p for p in options if p.id in graph.LEASED]
+                options = [p for p in options if p.id not in graph.LEASED]
                 if options:
                     self.add(options[0].id, "dependency", None, {"code": "dependency", "for": [ln.name]})
                 else:
                     del self.lines[pid]
-                    self.exclude(pid, "dependency_unmet", {"requires": [self.P(r).name for r in req]}, None, ln.need)
+                    alt = graph.FALLBACK.get(pid)
+                    alt = alt if alt and not violations(self.P(alt), self.prof) and not self.P(alt).requires_one_of else None
+                    if alt and ln.source == "asked" and alt not in self.lines:
+                        self.add(alt, "fallback", ln.need, {"code": "fallback", "instead_of": pid, "rule": "dependency_unmet"})
+                    if on_request:
+                        self.exclude(pid, "line_on_request", {"option": on_request[0].name, "requires": [self.P(r).name for r in req]},
+                                     alt if alt in self.lines else None, ln.need)
+                    else:
+                        self.exclude(pid, "dependency_unmet", {"requires": [self.P(r).name for r in req]}, alt if alt in self.lines else None, ln.need)
                 changed = True
         # drop a dependency-only connection whose dependents were all refused
         if base and base_is_dependency and base in self.lines:
@@ -295,6 +318,8 @@ class _Builder:
             if total() <= budget:
                 break
             if old in self.lines and new not in self.lines and not violations(self.P(new), self.prof):
+                if new not in graph.fits((old, new), self.ds.products, self.prof.features, self.prof.data_gb):
+                    continue  # never trade away a feature the owner named (roaming, data) to save money
                 blocked = any(old in self.P(o).requires_one_of and new not in self.P(o).requires_one_of
                               and not any(r in self.lines and r != old for r in self.P(o).requires_one_of)
                               for o in self.lines if o != old)

@@ -14,7 +14,7 @@ from app.advisor.agent import Advisor
 from app.data_store import store
 from app.engine import graph
 from app.engine.profile import Profile
-from app.engine.recommend import PER_SITE_ADDONS, price_custom, recommend
+from app.engine.recommend import PER_SITE_ADDONS, price_custom, recommend, violations
 
 
 def rule_breaks(bundle_lines, prof: Profile) -> list[str]:
@@ -59,12 +59,40 @@ def random_profiles(n: int, seed: int = 11):
             "gstin_status": rng.choice(["Active", "Declared", "Cancelled"]) if gst else None,
             "needs": rng.sample(needs, rng.randint(0, 4)), "only": rng.random() < 0.2, "budget": rng.choice([None, 900, 1500, 5000]),
             "term_months": rng.choice([12, 24]), "fibre_feasible": rng.choice([None, True, False]),
+            "features": rng.sample(sorted(graph.FEATURES), rng.randint(0, 1)), "data_gb": rng.choice([None, None, 30, 100, 500]),
+            "speed_mbps": rng.choice([None, None, 100, 300, 500, 1000]), "uptime_pct": rng.choice([None, None, 99.5, 99.9]),
             "qty": {k: rng.randint(1, 12) for k in rng.sample(["users", "devices", "lines", "cameras"], rng.randint(0, 2))},
         })
 
 
 def test_600_random_profiles_never_break_a_rule():
     broken = [(p.to_dict(), b) for p in random_profiles(600) if (b := rule_breaks(recommend(p).lines, p))]
+    assert not broken, broken[:3]
+
+
+def test_600_random_profiles_keep_what_the_owner_asked_for():
+    """No leased line the owner did not ask for (or a factory's own default line); named mobile features honoured;
+    a named speed met whenever a line that fast is allowed; going over budget is always said."""
+    ds = store()
+    broken = []
+    for p in random_profiles(600, seed=23):
+        b = recommend(p)
+        got = {ln.product_id for ln in b.lines}
+        wants_sla = "dedicated_line" in p.needs or (p.uptime_pct or 0) >= 99.5 or (
+            p.segment == "mfg" and p.n_employees >= 10 and not p.only and not p.needs & {"high_speed", "dedicated_line"} and "internet" not in p.excluded)
+        if got & set(graph.LEASED) and not wants_sla:
+            broken.append(("leased line not asked for", p.to_dict(), sorted(got)))
+        mobile = got & {"P07", "P08"}
+        if mobile and (p.features or p.data_gb) and mobile != set(graph.fits(("P07", "P08"), ds.products, p.features, p.data_gb)) & mobile:
+            broken.append(("named feature dropped", p.to_dict(), sorted(got)))
+        line = got & set(graph.BROADBAND)
+        if p.speed_mbps and not p.budget and line and not got & set(graph.LEASED):
+            fast_enough = [q for q in graph.BROADBAND if (graph.speed_mbps(ds.products[q].description) or 0) >= p.speed_mbps
+                           and not violations(ds.products[q], p)]
+            if fast_enough and not any((graph.speed_mbps(ds.products[q].description) or 0) >= p.speed_mbps for q in line):
+                broken.append(("slower than asked", p.to_dict(), sorted(got)))
+        if p.budget and b.monthly + b.gst_monthly > p.budget and not any(n["code"] == "over_budget" for n in b.notes):
+            broken.append(("over budget, not said", p.to_dict(), b.monthly))
     assert not broken, broken[:3]
 
 

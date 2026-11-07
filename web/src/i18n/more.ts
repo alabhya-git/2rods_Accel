@@ -3,9 +3,9 @@
 type Dict = Record<string, string>
 
 const en: Dict = {
-  door_help: 'Help me choose', door_help_sub: 'Tell us about your business. We suggest what fits.',
-  door_express: 'I know what I need', door_express_sub: 'Pick a product, see the price in a minute.',
-  door_person: 'Talk to a person', door_person_sub: 'We call you back in your language, when you choose.',
+  door_help: 'Help me choose', door_help_sub: 'We suggest what fits you.',
+  door_express: 'I know what I need', door_express_sub: 'Your price in a minute.',
+  door_person: 'Talk to a person', door_person_sub: 'A call in your language.', door_wa_sub: 'Same help, in a chat.',
   resume: 'Continue my order', express_title: 'Pick what you need', city_label: 'Your city', staff_label: 'People in your business',
   gst_question: 'Do you have a GSTIN?', yes_word: 'Yes', no_word: 'No', from_month: 'from {amount} a month', needs_gst: 'Needs a GSTIN',
   get_price: 'Get my price', all_in: 'Each month, with GST', due_today: 'Due today', after_emi: 'After {n} months',
@@ -24,9 +24,9 @@ const en: Dict = {
 }
 
 const hi: Dict = {
-  door_help: 'चुनने में मदद करें', door_help_sub: 'अपने काम के बारे में बताएँ, हम सही प्लान सुझाएँगे।',
-  door_express: 'मुझे पता है क्या चाहिए', door_express_sub: 'प्रोडक्ट चुनें, एक मिनट में कीमत देखें।',
-  door_person: 'किसी से बात करें', door_person_sub: 'आपकी भाषा में, आपके चुने समय पर कॉल।',
+  door_help: 'चुनने में मदद करें', door_help_sub: 'हम सही प्लान सुझाएँगे।',
+  door_express: 'मुझे पता है क्या चाहिए', door_express_sub: 'एक मिनट में कीमत।',
+  door_person: 'किसी से बात करें', door_person_sub: 'आपकी भाषा में कॉल।', door_wa_sub: 'वही मदद, चैट में।',
   resume: 'मेरा ऑर्डर जारी रखें', express_title: 'जो चाहिए वो चुनें', city_label: 'आपका शहर', staff_label: 'आपके काम में कितने लोग',
   gst_question: 'क्या आपके पास जीएसटीआईएन है?', yes_word: 'हाँ', no_word: 'नहीं', from_month: '{amount} प्रति माह से', needs_gst: 'जीएसटीआईएन चाहिए',
   get_price: 'मेरी कीमत देखें', all_in: 'हर महीने, जीएसटी सहित', due_today: 'आज देना है', after_emi: '{n} महीने बाद',
@@ -45,9 +45,9 @@ const hi: Dict = {
 }
 
 const mr: Dict = {
-  door_help: 'निवडायला मदत करा', door_help_sub: 'तुमच्या व्यवसायाबद्दल सांगा, आम्ही योग्य पर्याय सुचवू.',
-  door_express: 'मला काय हवे ते माहीत आहे', door_express_sub: 'उत्पादन निवडा, एका मिनिटात किंमत पाहा.',
-  door_person: 'व्यक्तीशी बोला', door_person_sub: 'तुमच्या भाषेत, तुम्ही निवडलेल्या वेळी कॉल.',
+  door_help: 'निवडायला मदत करा', door_help_sub: 'आम्ही योग्य पर्याय सुचवू.',
+  door_express: 'मला काय हवे ते माहीत आहे', door_express_sub: 'एका मिनिटात किंमत.',
+  door_person: 'व्यक्तीशी बोला', door_person_sub: 'तुमच्या भाषेत कॉल.', door_wa_sub: 'तीच मदत, चॅटवर.',
   resume: 'माझी ऑर्डर सुरू ठेवा', express_title: 'हवे ते निवडा', city_label: 'तुमचे शहर', staff_label: 'व्यवसायात किती लोक',
   gst_question: 'तुमच्याकडे जीएसटीआयएन आहे का?', yes_word: 'हो', no_word: 'नाही', from_month: 'दरमहा {amount} पासून', needs_gst: 'जीएसटीआयएन लागतो',
   get_price: 'माझी किंमत पाहा', all_in: 'दरमहा, जीएसटीसह', due_today: 'आज भरायचे', after_emi: '{n} महिन्यांनंतर',
@@ -66,9 +66,9 @@ const mr: Dict = {
 }
 
 const ta: Dict = {
-  door_help: 'தேர்வு செய்ய உதவுங்கள்', door_help_sub: 'உங்கள் தொழிலைப் பற்றிச் சொல்லுங்கள், பொருத்தமானதைப் பரிந்துரைப்போம்.',
-  door_express: 'எனக்கு என்ன வேண்டும் தெரியும்', door_express_sub: 'பொருளைத் தேர்ந்தெடுங்கள், ஒரு நிமிடத்தில் விலை.',
-  door_person: 'ஒருவரிடம் பேசுங்கள்', door_person_sub: 'உங்கள் மொழியில், நீங்கள் தேர்ந்த நேரத்தில் அழைப்போம்.',
+  door_help: 'தேர்வு செய்ய உதவுங்கள்', door_help_sub: 'ஏற்றதைப் பரிந்துரைப்போம்.',
+  door_express: 'எனக்கு என்ன வேண்டும் தெரியும்', door_express_sub: 'ஒரு நிமிடத்தில் விலை.',
+  door_person: 'ஒருவரிடம் பேசுங்கள்', door_person_sub: 'உங்கள் மொழியில் அழைப்பு.', door_wa_sub: 'அதே உதவி, சாட்டில்.',
   resume: 'என் ஆர்டரைத் தொடரவும்', express_title: 'தேவையானதைத் தேர்ந்தெடுங்கள்', city_label: 'உங்கள் நகரம்', staff_label: 'தொழிலில் எத்தனை பேர்',
   gst_question: 'உங்களிடம் ஜிஎஸ்டிஐஎன் உள்ளதா?', yes_word: 'ஆம்', no_word: 'இல்லை', from_month: 'மாதம் {amount} முதல்', needs_gst: 'ஜிஎஸ்டிஐஎன் தேவை',
   get_price: 'என் விலையைப் பார்க்கவும்', all_in: 'ஒவ்வொரு மாதமும், ஜிஎஸ்டி உட்பட', due_today: 'இன்று செலுத்த வேண்டியது', after_emi: '{n} மாதங்களுக்குப் பிறகு',
@@ -87,9 +87,9 @@ const ta: Dict = {
 }
 
 const te: Dict = {
-  door_help: 'ఎంచుకోవడంలో సహాయం', door_help_sub: 'మీ వ్యాపారం గురించి చెప్పండి, సరైనది సూచిస్తాం.',
-  door_express: 'నాకు ఏం కావాలో తెలుసు', door_express_sub: 'ఉత్పత్తిని ఎంచుకోండి, ఒక నిమిషంలో ధర.',
-  door_person: 'ఒకరితో మాట్లాడండి', door_person_sub: 'మీ భాషలో, మీరు ఎంచుకున్న సమయంలో కాల్.',
+  door_help: 'ఎంచుకోవడంలో సహాయం', door_help_sub: 'సరైనది సూచిస్తాం.',
+  door_express: 'నాకు ఏం కావాలో తెలుసు', door_express_sub: 'ఒక నిమిషంలో ధర.',
+  door_person: 'ఒకరితో మాట్లాడండి', door_person_sub: 'మీ భాషలో కాల్.', door_wa_sub: 'అదే సహాయం, చాట్‌లో.',
   resume: 'నా ఆర్డర్ కొనసాగించు', express_title: 'కావాల్సింది ఎంచుకోండి', city_label: 'మీ నగరం', staff_label: 'వ్యాపారంలో ఎంత మంది',
   gst_question: 'మీకు జీఎస్టీఐఎన్ ఉందా?', yes_word: 'అవును', no_word: 'లేదు', from_month: 'నెలకు {amount} నుండి', needs_gst: 'జీఎస్టీఐఎన్ అవసరం',
   get_price: 'నా ధర చూపించు', all_in: 'ప్రతి నెల, జీఎస్టీతో', due_today: 'ఈరోజు చెల్లించాల్సింది', after_emi: '{n} నెలల తర్వాత',
@@ -108,9 +108,9 @@ const te: Dict = {
 }
 
 const kn: Dict = {
-  door_help: 'ಆಯ್ಕೆಗೆ ಸಹಾಯ ಮಾಡಿ', door_help_sub: 'ನಿಮ್ಮ ವ್ಯಾಪಾರದ ಬಗ್ಗೆ ಹೇಳಿ, ಸೂಕ್ತವಾದುದನ್ನು ಸೂಚಿಸುತ್ತೇವೆ.',
-  door_express: 'ನನಗೆ ಏನು ಬೇಕು ಗೊತ್ತು', door_express_sub: 'ಉತ್ಪನ್ನ ಆಯ್ಕೆಮಾಡಿ, ಒಂದು ನಿಮಿಷದಲ್ಲಿ ಬೆಲೆ.',
-  door_person: 'ಒಬ್ಬರೊಂದಿಗೆ ಮಾತನಾಡಿ', door_person_sub: 'ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ, ನೀವು ಆರಿಸಿದ ಸಮಯದಲ್ಲಿ ಕರೆ.',
+  door_help: 'ಆಯ್ಕೆಗೆ ಸಹಾಯ ಮಾಡಿ', door_help_sub: 'ಸೂಕ್ತವಾದುದನ್ನು ಸೂಚಿಸುತ್ತೇವೆ.',
+  door_express: 'ನನಗೆ ಏನು ಬೇಕು ಗೊತ್ತು', door_express_sub: 'ಒಂದು ನಿಮಿಷದಲ್ಲಿ ಬೆಲೆ.',
+  door_person: 'ಒಬ್ಬರೊಂದಿಗೆ ಮಾತನಾಡಿ', door_person_sub: 'ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ಕರೆ.', door_wa_sub: 'ಅದೇ ಸಹಾಯ, ಚಾಟ್‌ನಲ್ಲಿ.',
   resume: 'ನನ್ನ ಆರ್ಡರ್ ಮುಂದುವರಿಸಿ', express_title: 'ಬೇಕಾದುದನ್ನು ಆರಿಸಿ', city_label: 'ನಿಮ್ಮ ನಗರ', staff_label: 'ವ್ಯಾಪಾರದಲ್ಲಿ ಎಷ್ಟು ಜನ',
   gst_question: 'ನಿಮ್ಮ ಬಳಿ ಜಿಎಸ್‌ಟಿಐಎನ್ ಇದೆಯೇ?', yes_word: 'ಹೌದು', no_word: 'ಇಲ್ಲ', from_month: 'ತಿಂಗಳಿಗೆ {amount} ರಿಂದ', needs_gst: 'ಜಿಎಸ್‌ಟಿಐಎನ್ ಬೇಕು',
   get_price: 'ನನ್ನ ಬೆಲೆ ನೋಡಿ', all_in: 'ಪ್ರತಿ ತಿಂಗಳು, ಜಿಎಸ್‌ಟಿ ಸೇರಿ', due_today: 'ಇಂದು ಪಾವತಿಸಬೇಕಾದದ್ದು', after_emi: '{n} ತಿಂಗಳ ನಂತರ',
@@ -129,9 +129,9 @@ const kn: Dict = {
 }
 
 const gu: Dict = {
-  door_help: 'પસંદગીમાં મદદ કરો', door_help_sub: 'તમારા વ્યવસાય વિશે કહો, અમે યોગ્ય સૂચવીશું.',
-  door_express: 'મને ખબર છે શું જોઈએ', door_express_sub: 'પ્રોડક્ટ પસંદ કરો, એક મિનિટમાં કિંમત.',
-  door_person: 'કોઈની સાથે વાત કરો', door_person_sub: 'તમારી ભાષામાં, તમે પસંદ કરેલા સમયે કૉલ.',
+  door_help: 'પસંદગીમાં મદદ કરો', door_help_sub: 'અમે યોગ્ય સૂચવીશું.',
+  door_express: 'મને ખબર છે શું જોઈએ', door_express_sub: 'એક મિનિટમાં કિંમત.',
+  door_person: 'કોઈની સાથે વાત કરો', door_person_sub: 'તમારી ભાષામાં કૉલ.', door_wa_sub: 'એ જ મદદ, ચેટમાં.',
   resume: 'મારો ઓર્ડર ચાલુ રાખો', express_title: 'જોઈએ તે પસંદ કરો', city_label: 'તમારું શહેર', staff_label: 'વ્યવસાયમાં કેટલા લોકો',
   gst_question: 'શું તમારી પાસે જીએસટીઆઈએન છે?', yes_word: 'હા', no_word: 'ના', from_month: 'મહિને {amount} થી', needs_gst: 'જીએસટીઆઈએન જોઈએ',
   get_price: 'મારી કિંમત જુઓ', all_in: 'દર મહિને, જીએસટી સહિત', due_today: 'આજે ચૂકવવાનું', after_emi: '{n} મહિના પછી',
@@ -150,9 +150,9 @@ const gu: Dict = {
 }
 
 const bn: Dict = {
-  door_help: 'বেছে নিতে সাহায্য করুন', door_help_sub: 'আপনার ব্যবসার কথা বলুন, আমরা উপযুক্তটি সুপারিশ করব।',
-  door_express: 'আমি জানি কী দরকার', door_express_sub: 'পণ্য বেছে নিন, এক মিনিটে দাম দেখুন।',
-  door_person: 'কারও সাথে কথা বলুন', door_person_sub: 'আপনার ভাষায়, আপনার বেছে নেওয়া সময়ে কল।',
+  door_help: 'বেছে নিতে সাহায্য করুন', door_help_sub: 'উপযুক্তটি সুপারিশ করব।',
+  door_express: 'আমি জানি কী দরকার', door_express_sub: 'এক মিনিটে দাম।',
+  door_person: 'কারও সাথে কথা বলুন', door_person_sub: 'আপনার ভাষায় কল।', door_wa_sub: 'একই সাহায্য, চ্যাটে।',
   resume: 'আমার অর্ডার চালিয়ে যান', express_title: 'যা দরকার বেছে নিন', city_label: 'আপনার শহর', staff_label: 'ব্যবসায় কতজন',
   gst_question: 'আপনার কি জিএসটিআইএন আছে?', yes_word: 'হ্যাঁ', no_word: 'না', from_month: 'মাসে {amount} থেকে', needs_gst: 'জিএসটিআইএন লাগবে',
   get_price: 'আমার দাম দেখুন', all_in: 'প্রতি মাসে, জিএসটি সহ', due_today: 'আজ দিতে হবে', after_emi: '{n} মাস পরে',
@@ -171,9 +171,9 @@ const bn: Dict = {
 }
 
 const ml: Dict = {
-  door_help: 'തിരഞ്ഞെടുക്കാൻ സഹായിക്കൂ', door_help_sub: 'നിങ്ങളുടെ ബിസിനസിനെക്കുറിച്ച് പറയൂ, അനുയോജ്യമായത് നിർദ്ദേശിക്കാം.',
-  door_express: 'എനിക്ക് എന്ത് വേണമെന്ന് അറിയാം', door_express_sub: 'ഉൽപ്പന്നം തിരഞ്ഞെടുക്കൂ, ഒരു മിനിറ്റിൽ വില.',
-  door_person: 'ഒരാളോട് സംസാരിക്കൂ', door_person_sub: 'നിങ്ങളുടെ ഭാഷയിൽ, നിങ്ങൾ തിരഞ്ഞെടുത്ത സമയത്ത് വിളിക്കാം.',
+  door_help: 'തിരഞ്ഞെടുക്കാൻ സഹായിക്കൂ', door_help_sub: 'യോജിച്ചത് പറഞ്ഞുതരാം.',
+  door_express: 'എനിക്ക് എന്ത് വേണമെന്ന് അറിയാം', door_express_sub: 'ഒരു മിനിറ്റിൽ വില.',
+  door_person: 'ഒരാളോട് സംസാരിക്കൂ', door_person_sub: 'നിങ്ങളുടെ ഭാഷയിൽ കോൾ.', door_wa_sub: 'അതേ സഹായം, ചാറ്റിൽ.',
   resume: 'എന്റെ ഓർഡർ തുടരുക', express_title: 'വേണ്ടത് തിരഞ്ഞെടുക്കൂ', city_label: 'നിങ്ങളുടെ നഗരം', staff_label: 'ബിസിനസിൽ എത്ര പേർ',
   gst_question: 'നിങ്ങൾക്ക് ജിഎസ്ടിഐഎൻ ഉണ്ടോ?', yes_word: 'ഉണ്ട്', no_word: 'ഇല്ല', from_month: 'മാസം {amount} മുതൽ', needs_gst: 'ജിഎസ്ടിഐഎൻ വേണം',
   get_price: 'എന്റെ വില കാണൂ', all_in: 'ഓരോ മാസവും, ജിഎസ്ടി ഉൾപ്പെടെ', due_today: 'ഇന്ന് അടയ്ക്കേണ്ടത്', after_emi: '{n} മാസത്തിനു ശേഷം',
@@ -192,9 +192,9 @@ const ml: Dict = {
 }
 
 const pa: Dict = {
-  door_help: 'ਚੁਣਨ ਵਿੱਚ ਮਦਦ ਕਰੋ', door_help_sub: 'ਆਪਣੇ ਕਾਰੋਬਾਰ ਬਾਰੇ ਦੱਸੋ, ਅਸੀਂ ਸਹੀ ਚੀਜ਼ ਸੁਝਾਵਾਂਗੇ।',
-  door_express: 'ਮੈਨੂੰ ਪਤਾ ਹੈ ਕੀ ਚਾਹੀਦਾ', door_express_sub: 'ਉਤਪਾਦ ਚੁਣੋ, ਇੱਕ ਮਿੰਟ ਵਿੱਚ ਕੀਮਤ ਵੇਖੋ।',
-  door_person: 'ਕਿਸੇ ਨਾਲ ਗੱਲ ਕਰੋ', door_person_sub: 'ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਵਿੱਚ, ਤੁਹਾਡੇ ਚੁਣੇ ਸਮੇਂ ʼਤੇ ਕਾਲ।',
+  door_help: 'ਚੁਣਨ ਵਿੱਚ ਮਦਦ ਕਰੋ', door_help_sub: 'ਅਸੀਂ ਸਹੀ ਚੀਜ਼ ਸੁਝਾਵਾਂਗੇ।',
+  door_express: 'ਮੈਨੂੰ ਪਤਾ ਹੈ ਕੀ ਚਾਹੀਦਾ', door_express_sub: 'ਇੱਕ ਮਿੰਟ ਵਿੱਚ ਕੀਮਤ।',
+  door_person: 'ਕਿਸੇ ਨਾਲ ਗੱਲ ਕਰੋ', door_person_sub: 'ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਵਿੱਚ ਕਾਲ।', door_wa_sub: 'ਉਹੀ ਮਦਦ, ਚੈਟ ਵਿੱਚ।',
   resume: 'ਮੇਰਾ ਆਰਡਰ ਜਾਰੀ ਰੱਖੋ', express_title: 'ਜੋ ਚਾਹੀਦਾ ਚੁਣੋ', city_label: 'ਤੁਹਾਡਾ ਸ਼ਹਿਰ', staff_label: 'ਕਾਰੋਬਾਰ ਵਿੱਚ ਕਿੰਨੇ ਲੋਕ',
   gst_question: 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ ਜੀਐਸਟੀਆਈਐਨ ਹੈ?', yes_word: 'ਹਾਂ', no_word: 'ਨਹੀਂ', from_month: '{amount} ਪ੍ਰਤੀ ਮਹੀਨਾ ਤੋਂ', needs_gst: 'ਜੀਐਸਟੀਆਈਐਨ ਲੋੜੀਂਦਾ',
   get_price: 'ਮੇਰੀ ਕੀਮਤ ਵੇਖੋ', all_in: 'ਹਰ ਮਹੀਨੇ, ਜੀਐਸਟੀ ਸਮੇਤ', due_today: 'ਅੱਜ ਦੇਣਾ ਹੈ', after_emi: '{n} ਮਹੀਨਿਆਂ ਬਾਅਦ',

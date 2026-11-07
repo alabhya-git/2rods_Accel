@@ -9,6 +9,7 @@ const ICONS: Record<string, ReactNode> = {
   help: <path d="M4 5h16v11H8l-4 4V5z" />,
   express: <path d="M4 7h16M4 12h16M4 17h10" />,
   person: <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" />,
+  whatsapp: <path d="M20 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.2A8.5 8.5 0 1 1 20 11.5z" />,
   clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
   bill: <><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" /><path d="M9 8h6M9 12h6" /></>,
   lock: <><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></>,
@@ -17,7 +18,7 @@ const ICONS: Record<string, ReactNode> = {
   chevron: <path d="M9 5l7 7-7 7" />,
 }
 
-/** Three doors, one order: the owner chooses how to buy, not the AI. */
+/** Four doors, one order: the owner chooses how to buy, not the AI. */
 export default function Home() {
   const { lang, setLang, t } = useLang()
   const nav = useNavigate()
@@ -25,8 +26,9 @@ export default function Home() {
   const hasOrders = myOrders().length > 0
   const doors = [
     { key: 'help', title: t('door_help'), sub: t('door_help_sub'), go: () => nav(`/advisor?lang=${lang}${partner ? `&partner=${partner}` : ''}`), primary: true },
-    { key: 'express', title: t('door_express'), sub: t('door_express_sub'), go: () => nav('/express'), primary: false },
     { key: 'person', title: t('door_person'), sub: t('door_person_sub'), go: () => nav('/help?source=home'), primary: false },
+    { key: 'whatsapp', title: t('on_whatsapp'), sub: t('door_wa_sub'), go: () => nav('/whatsapp'), primary: false },
+    { key: 'express', title: t('door_express'), sub: t('door_express_sub'), go: () => nav('/express'), primary: false },
   ]
   const why = [['clock', t('time_promise')], ['bill', t('one_bill')], ['lock', t('privacy_line')], ['shield', t('never_ask')]]
 
@@ -50,30 +52,27 @@ export default function Home() {
             </ol>
           </div>
 
-          <div className="animate-rise rounded-3xl bg-white p-4 text-ink shadow-lift sm:p-6">
+          <div className="animate-rise rounded-3xl bg-white p-3 text-ink shadow-lift sm:p-6">
             <h2 className="px-1 text-[18px] font-bold">{t('start_title')}</h2>
             <nav className="mt-3 flex flex-col gap-3" aria-label={t('start_title')}>
               {doors.map((d) => (
                 <button key={d.key} onClick={d.go}
-                  className={`group relative flex items-center gap-4 rounded-2xl p-4 text-left transition ${d.primary
+                  className={`group relative flex items-center gap-3 rounded-2xl p-3.5 text-left transition sm:gap-4 sm:p-4 ${d.primary
                     ? 'text-onbrand shadow-brand hover:brightness-105 [background-image:linear-gradient(135deg,#e3162f,#b30c24)]'
                     : 'border-[1.5px] border-rule bg-white hover:border-ink hover:shadow-card'}`}>
-                  <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl ${d.primary ? 'bg-onbrand/15' : 'bg-kumkum-soft text-kumkum'}`}>
+                  <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl sm:h-12 sm:w-12 ${d.primary ? 'bg-onbrand/15' : 'bg-kumkum-soft text-kumkum'}`}>
                     <Svg d={ICONS[d.key]} size={24} width={2} />
                   </span>
                   <span className="min-w-0 flex-1">
                     {d.primary && <span className="mb-1 inline-block rounded-pill bg-onbrand px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wide text-kumkum">{t('not_sure')}</span>}
                     <span className="block text-[19px] font-bold leading-tight">{d.title}</span>
-                    <span className={`mt-0.5 block text-[15px] leading-snug ${d.primary ? 'text-onbrand/90' : 'text-ink-soft'}`}>{d.sub}</span>
+                    <span className={`mt-0.5 block truncate text-[15px] leading-snug ${d.primary ? 'text-onbrand/90' : 'text-ink-soft'}`}>{d.sub}</span>
                   </span>
                   <span className={`shrink-0 transition group-hover:translate-x-0.5 ${d.primary ? 'text-onbrand' : 'text-ink-faint'}`}><Svg d={ICONS.chevron} /></span>
                 </button>
               ))}
             </nav>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {hasOrders && <button className="btn-secondary flex-1" onClick={() => nav('/orders')}>{t('my_orders')}</button>}
-              <button className="btn-quiet flex-1" onClick={() => nav('/whatsapp')}>{t('on_whatsapp')}</button>
-            </div>
+            {hasOrders && <button className="btn-secondary mt-3 w-full" onClick={() => nav('/orders')}>{t('my_orders')}</button>}
           </div>
         </div>
       </section>

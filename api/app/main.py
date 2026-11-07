@@ -24,7 +24,7 @@ from .network.telco import fibre_feasible
 from .orders.events import bus
 from .privacy import redact
 from .privacy.retention import purge
-from .routers import advisor, backoffice, care, judge, orders, voice, whatsapp
+from .routers import advisor, approvals, backoffice, care, judge, orders, voice, whatsapp
 from .security import check_rate, production_problems
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -91,7 +91,7 @@ async def security_headers(request: Request, call_next):
     return resp
 
 
-for r in (advisor.router, orders.router, care.router, backoffice.router, judge.router, whatsapp.router, voice.router):
+for r in (advisor.router, orders.router, care.router, approvals.router, backoffice.router, judge.router, whatsapp.router, voice.router):
     app.include_router(r)
 
 

@@ -7,25 +7,25 @@ from __future__ import annotations
 
 DOCS = {
     "en": {"gst_certificate": "GST certificate", "udyam_certificate": "Udyam certificate", "address_proof": "electricity bill",
-           "signatory_id": "ID card", "shop_licence": "shop licence"},
+           "signatory_id": "ID card", "shop_licence": "shop licence", "rent_agreement": "rent agreement"},
     "hi": {"gst_certificate": "जीएसटी प्रमाणपत्र", "udyam_certificate": "उद्यम प्रमाणपत्र", "address_proof": "बिजली का बिल",
-           "signatory_id": "पहचान पत्र", "shop_licence": "दुकान लाइसेंस"},
+           "signatory_id": "पहचान पत्र", "shop_licence": "दुकान लाइसेंस", "rent_agreement": "किराया अनुबंध"},
     "mr": {"gst_certificate": "जीएसटी प्रमाणपत्र", "udyam_certificate": "उद्यम प्रमाणपत्र", "address_proof": "वीज बिल",
-           "signatory_id": "ओळखपत्र", "shop_licence": "दुकान परवाना"},
+           "signatory_id": "ओळखपत्र", "shop_licence": "दुकान परवाना", "rent_agreement": "भाडेकरार"},
     "ta": {"gst_certificate": "ஜிஎஸ்டி சான்றிதழ்", "udyam_certificate": "உத்யம் சான்றிதழ்", "address_proof": "மின் கட்டண ரசீது",
-           "signatory_id": "அடையாள அட்டை", "shop_licence": "கடை உரிமம்"},
+           "signatory_id": "அடையாள அட்டை", "shop_licence": "கடை உரிமம்", "rent_agreement": "வாடகை ஒப்பந்தம்"},
     "te": {"gst_certificate": "జీఎస్టీ సర్టిఫికెట్", "udyam_certificate": "ఉద్యమ్ సర్టిఫికెట్", "address_proof": "కరెంట్ బిల్లు",
-           "signatory_id": "గుర్తింపు కార్డు", "shop_licence": "షాప్ లైసెన్స్"},
+           "signatory_id": "గుర్తింపు కార్డు", "shop_licence": "షాప్ లైసెన్స్", "rent_agreement": "అద్దె ఒప్పందం"},
     "kn": {"gst_certificate": "ಜಿಎಸ್‌ಟಿ ಪ್ರಮಾಣಪತ್ರ", "udyam_certificate": "ಉದ್ಯಮ್ ಪ್ರಮಾಣಪತ್ರ", "address_proof": "ವಿದ್ಯುತ್ ಬಿಲ್",
-           "signatory_id": "ಗುರುತಿನ ಚೀಟಿ", "shop_licence": "ಅಂಗಡಿ ಪರವಾನಗಿ"},
+           "signatory_id": "ಗುರುತಿನ ಚೀಟಿ", "shop_licence": "ಅಂಗಡಿ ಪರವಾನಗಿ", "rent_agreement": "ಬಾಡಿಗೆ ಒಪ್ಪಂದ"},
     "gu": {"gst_certificate": "જીએસટી પ્રમાણપત્ર", "udyam_certificate": "ઉદ્યમ પ્રમાણપત્ર", "address_proof": "વીજળી બિલ",
-           "signatory_id": "ઓળખપત્ર", "shop_licence": "દુકાન લાઇસન્સ"},
+           "signatory_id": "ઓળખપત્ર", "shop_licence": "દુકાન લાઇસન્સ", "rent_agreement": "ભાડા કરાર"},
     "bn": {"gst_certificate": "জিএসটি সার্টিফিকেট", "udyam_certificate": "উদ্যম সার্টিফিকেট", "address_proof": "বিদ্যুতের বিল",
-           "signatory_id": "পরিচয়পত্র", "shop_licence": "দোকানের লাইসেন্স"},
+           "signatory_id": "পরিচয়পত্র", "shop_licence": "দোকানের লাইসেন্স", "rent_agreement": "ভাড়ার চুক্তি"},
     "ml": {"gst_certificate": "ജിഎസ്ടി സർട്ടിഫിക്കറ്റ്", "udyam_certificate": "ഉദ്യം സർട്ടിഫിക്കറ്റ്", "address_proof": "വൈദ്യുതി ബിൽ",
-           "signatory_id": "തിരിച്ചറിയൽ കാർഡ്", "shop_licence": "കട ലൈസൻസ്"},
+           "signatory_id": "തിരിച്ചറിയൽ കാർഡ്", "shop_licence": "കട ലൈസൻസ്", "rent_agreement": "വാടക കരാർ"},
     "pa": {"gst_certificate": "ਜੀਐਸਟੀ ਸਰਟੀਫਿਕੇਟ", "udyam_certificate": "ਉਦਯਮ ਸਰਟੀਫਿਕੇਟ", "address_proof": "ਬਿਜਲੀ ਦਾ ਬਿੱਲ",
-           "signatory_id": "ਪਛਾਣ ਪੱਤਰ", "shop_licence": "ਦੁਕਾਨ ਲਾਇਸੈਂਸ"},
+           "signatory_id": "ਪਛਾਣ ਪੱਤਰ", "shop_licence": "ਦੁਕਾਨ ਲਾਇਸੈਂਸ", "rent_agreement": "ਕਿਰਾਇਆ ਸਮਝੌਤਾ"},
 }
 
 FIX = {
@@ -100,6 +100,23 @@ FIX = {
         "bn": "আপনার অর্ডারের কিছু পণ্যের জন্য জিএসটিআইএন লাগবে। সেগুলো সরান, বা আপনার জিএসটিআইএন দিয়ে যাচাই করুন।",
         "ml": "നിങ്ങളുടെ ഓർഡറിലെ ചില ഉൽപ്പന്നങ്ങൾക്ക് ജിഎസ്ടിഐഎൻ വേണം. അവ നീക്കൂ, അല്ലെങ്കിൽ ജിഎസ്ടിഐഎൻ ഉപയോഗിച്ച് പരിശോധിക്കൂ.",
         "pa": "ਤੁਹਾਡੇ ਆਰਡਰ ਦੇ ਕੁਝ ਉਤਪਾਦਾਂ ਲਈ ਜੀਐਸਟੀਆਈਐਨ ਲੋੜੀਂਦਾ ਹੈ। ਉਹਨਾਂ ਨੂੰ ਹਟਾਓ, ਜਾਂ ਆਪਣੇ ਜੀਐਸਟੀਆਈਐਨ ਨਾਲ ਪੁਸ਼ਟੀ ਕਰੋ।"},
+    "rented": {
+        "en": "Your bill is in {name}'s name. If you rent the shop, ask your landlord to confirm with one tap, or upload your rent agreement.",
+        "hi": "बिल {name} के नाम पर है। अगर दुकान किराए की है, तो मकान मालिक से एक टैप में पुष्टि करवाएँ, या किराया अनुबंध अपलोड करें।",
+        "mr": "बिल {name} यांच्या नावावर आहे. दुकान भाड्याचे असल्यास, घरमालकाकडून एका टॅपमध्ये खात्री करून घ्या, किंवा भाडेकरार अपलोड करा.",
+        "ta": "ரசீது {name} பெயரில் உள்ளது. கடை வாடகைக்கு என்றால், உரிமையாளரை ஒரே தட்டலில் உறுதிப்படுத்தச் சொல்லுங்கள், அல்லது வாடகை ஒப்பந்தத்தைப் பதிவேற்றுங்கள்.",
+        "te": "బిల్లు {name} పేరు మీద ఉంది. షాప్ అద్దెది అయితే, యజమానిని ఒక్క ట్యాప్‌తో ధృవీకరించమని అడగండి, లేదా అద్దె ఒప్పందాన్ని అప్‌లోడ్ చేయండి.",
+        "kn": "ಬಿಲ್ {name} ಅವರ ಹೆಸರಿನಲ್ಲಿದೆ. ಅಂಗಡಿ ಬಾಡಿಗೆಯದಾಗಿದ್ದರೆ, ಮಾಲೀಕರಿಂದ ಒಂದೇ ಟ್ಯಾಪ್‌ನಲ್ಲಿ ದೃಢೀಕರಿಸಿ, ಅಥವಾ ಬಾಡಿಗೆ ಒಪ್ಪಂದವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.",
+        "gu": "બિલ {name}ના નામે છે. દુકાન ભાડાની હોય તો મકાનમાલિક પાસે એક ટૅપમાં પુષ્ટિ કરાવો, અથવા ભાડા કરાર અપલોડ કરો.",
+        "bn": "বিলটি {name}-এর নামে। দোকান ভাড়ার হলে বাড়িওয়ালাকে এক ট্যাপে নিশ্চিত করতে বলুন, বা ভাড়ার চুক্তি আপলোড করুন।",
+        "ml": "ബിൽ {name} എന്നയാളുടെ പേരിലാണ്. കട വാടകയ്ക്കാണെങ്കിൽ, ഉടമയോട് ഒറ്റ ടാപ്പിൽ സ്ഥിരീകരിക്കാൻ പറയൂ, അല്ലെങ്കിൽ വാടക കരാർ അപ്‌ലോഡ് ചെയ്യൂ.",
+        "pa": "ਬਿੱਲ {name} ਦੇ ਨਾਂ ʼਤੇ ਹੈ। ਜੇ ਦੁਕਾਨ ਕਿਰਾਏ ਦੀ ਹੈ, ਤਾਂ ਮਾਲਕ ਤੋਂ ਇੱਕ ਟੈਪ ਵਿੱਚ ਪੁਸ਼ਟੀ ਕਰਵਾਓ, ਜਾਂ ਕਿਰਾਇਆ ਸਮਝੌਤਾ ਅੱਪਲੋਡ ਕਰੋ।"},
+    "rent_valid": {
+        "en": "Your rent agreement has ended. Upload the current one.", "hi": "आपका किराया अनुबंध खत्म हो चुका है। मौजूदा अनुबंध अपलोड करें।",
+        "mr": "तुमचा भाडेकरार संपला आहे. सध्याचा करार अपलोड करा.", "ta": "உங்கள் வாடகை ஒப்பந்தம் முடிந்துவிட்டது. தற்போதைய ஒப்பந்தத்தைப் பதிவேற்றுங்கள்.",
+        "te": "మీ అద్దె ఒప్పందం ముగిసింది. ప్రస్తుత ఒప్పందాన్ని అప్‌లోడ్ చేయండి.", "kn": "ನಿಮ್ಮ ಬಾಡಿಗೆ ಒಪ್ಪಂದ ಮುಗಿದಿದೆ. ಈಗಿನ ಒಪ್ಪಂದವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.",
+        "gu": "તમારો ભાડા કરાર પૂરો થઈ ગયો છે. હાલનો કરાર અપલોડ કરો.", "bn": "আপনার ভাড়ার চুক্তির মেয়াদ শেষ। বর্তমান চুক্তিটি আপলোড করুন।",
+        "ml": "നിങ്ങളുടെ വാടക കരാറിന്റെ കാലാവധി കഴിഞ്ഞു. നിലവിലെ കരാർ അപ്‌ലോഡ് ചെയ്യൂ.", "pa": "ਤੁਹਾਡਾ ਕਿਰਾਇਆ ਸਮਝੌਤਾ ਖ਼ਤਮ ਹੋ ਗਿਆ ਹੈ। ਮੌਜੂਦਾ ਸਮਝੌਤਾ ਅੱਪਲੋਡ ਕਰੋ।"},
     "review": {
         "en": "A person will check this within one working day and message you. You don't need to do anything now.",
         "hi": "हमारी टीम एक कार्यदिवस में इसे जाँचकर आपको संदेश भेजेगी। अभी आपको कुछ नहीं करना है।",
@@ -118,6 +135,7 @@ BY_CHECK = {
     "present": "present", "legible": "legible", "type": "type", "fields": "fields",
     "address_proof.fresh": "fresh", "address_proof.date": "fields", "signatory.valid": "valid",
     "udyam.number": "udyam", "udyam.format": "udyam", "bundle.gst_only": "gst_only",
+    "address_proof.name": "rented", "rent_agreement.valid": "rent_valid",
 }
 
 
@@ -127,4 +145,4 @@ def local_fix(check_id: str, severity: str, args: dict, lang: str) -> str:
     if severity == "review" or not key:
         key = "review"
     doc = DOCS[lang].get(args.get("doc") or check_id.split(".", 1)[0], "")
-    return FIX[key][lang].format(doc=doc, age=args.get("age_days", ""))
+    return FIX[key][lang].format(doc=doc, age=args.get("age_days", ""), name=args.get("billed_to", ""))

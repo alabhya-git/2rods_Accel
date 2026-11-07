@@ -12,6 +12,10 @@ Proof routes (which documents prove the business):
                 checked by a person. GST-only products are not available on this route.
 Every route also needs an address proof and the signatory's ID.
 
+Rented shops: the bill is often in the landlord's name. That is a fix the owner can make
+alone, not a review: the landlord confirms with an Aadhaar e-sign through a link, or the
+owner uploads a rent agreement naming the landlord on the bill, the business and the address.
+
 Registry first, documents second. Hard checks block until fixed; soft checks only add
 notes. Soft on purpose: in the specimen pack every Udyam certificate's registration
 date differs from the registry and several show a different activity, clean
@@ -40,10 +44,10 @@ from ..data_store import lookup_gstin, lookup_udyam
 from .ids import gstin_valid, mask_gstin, mask_udyam, udyam_valid
 from .ocr import Extraction, pin_code
 
-DOC_TYPES = ("gst_certificate", "udyam_certificate", "address_proof", "signatory_id", "shop_licence")
+DOC_TYPES = ("gst_certificate", "udyam_certificate", "address_proof", "signatory_id", "shop_licence", "rent_agreement")
 DOC_LABELS = {"gst_certificate": "GST certificate", "udyam_certificate": "Udyam certificate",
               "address_proof": "address proof (electricity bill)", "signatory_id": "signatory ID",
-              "shop_licence": "Shop and Establishment certificate or trade licence"}
+              "shop_licence": "Shop and Establishment certificate or trade licence", "rent_agreement": "rent agreement"}
 ROUTES = ("gst", "udyam", "shop_licence")
 REQUIRED = {
     "gst": ("gst_certificate", "address_proof", "signatory_id"),
@@ -55,6 +59,7 @@ ESSENTIAL = {
     "gst_certificate": ("gstin", "legal_name"),
     "address_proof": ("bill_date", "billed_to", "supply_address"),
     "signatory_id": ("name", "valid_till"),
+    "rent_agreement": ("landlord", "tenant", "premises"),
 }
 NAME_MATCH = 93
 ADDRESS_MATCH = 70
@@ -78,6 +83,7 @@ class Declared:
     udyam_number: str | None = None
     business_name: str | None = None
     route: str = "gst"
+    landlord: str | None = None  # the name a landlord e-signed with, confirming the shop is let to this business
 
 
 @dataclass
@@ -118,6 +124,52 @@ def _date(s: str | None) -> date | None:
         return date.fromisoformat(s) if s else None
     except ValueError:
         return None
+
+
+def _tenant_ok(tenant: str | None, names: list[str | None]) -> bool:
+    t = norm(tenant)
+    return bool(t) and any(n and (same(tenant, n) or (len(norm(n)) >= 6 and norm(n) in t)) for n in names)
+
+
+def rented(add, bill: dict, lease: dict, signed: str | None, names: list[str | None], today: date) -> None:
+    """The bill is in another name. A rented shop links itself to the bill through the landlord:
+    their Aadhaar e-sign, or a rent agreement naming them, the business and this address."""
+    billed = bill["billed_to"]
+    if signed and same(signed, billed):
+        add("address_proof.name", "hard", "pass", "review", f"The bill is in the landlord's name ({billed}), who confirmed with an Aadhaar e-sign.",
+            None, {"billed_to": billed, "via": "landlord_esign"})
+        return
+    if signed:
+        add("address_proof.name", "hard", "fail", "review", f"The landlord who confirmed (\"{signed}\") is not the person on the bill (\"{billed}\").",
+            "A person will check the bill and the landlord's confirmation.", {"billed_to": billed, "signed": signed})
+        return
+    if lease:
+        ok = True
+        if not same(lease.get("landlord"), billed):
+            ok = False
+            add("rent_agreement.landlord", "hard", "fail", "review", f"The landlord on the rent agreement (\"{lease.get('landlord')}\") is not the person on the bill (\"{billed}\").",
+                "A person will check the agreement.", {"landlord": lease.get("landlord"), "billed_to": billed})
+        if not _tenant_ok(lease.get("tenant"), names):
+            ok = False
+            add("rent_agreement.tenant", "hard", "fail", "review", f"The rent agreement is for a different tenant (\"{lease.get('tenant')}\").",
+                "A person will check the agreement.", {"tenant": lease.get("tenant")})
+        lp, bp = pin_code(lease.get("premises")), pin_code(bill.get("supply_address"))
+        if (lp and bp and lp != bp) or fuzz.token_set_ratio(street(lease.get("premises")), street(bill.get("supply_address"))) < ADDRESS_MATCH:
+            ok = False
+            add("rent_agreement.premises", "hard", "fail", "review", "The rent agreement is for a different address from the bill.",
+                "A person will check the address.", {"premises": lease.get("premises"), "bill": bill.get("supply_address")})
+        vt = _date(lease.get("valid_till"))
+        if vt and vt < today:
+            ok = False
+            add("rent_agreement.valid", "hard", "fail", "fix", f"The rent agreement ended on {lease['valid_till']}.",
+                "Upload your current rent agreement.", {"valid_till": lease["valid_till"], "doc": "rent_agreement"})
+        if ok:
+            add("address_proof.name", "hard", "pass", "review", f"The bill is in the landlord's name ({billed}); the rent agreement links the shop to you.",
+                None, {"billed_to": billed, "via": "rent_agreement"})
+            add("rent_agreement.face", "soft", "warn", "note", "Rent agreement accepted on its face; the installer sees the shop at the visit.")
+        return
+    add("address_proof.name", "hard", "fail", "fix", f"The bill is in another name ({billed}).",
+        "If you rent the shop, ask your landlord to confirm in one minute, or upload your rent agreement.", {"billed_to": billed, "rented": True})
 
 
 def required_docs(declared: Declared) -> tuple[str, ...]:
@@ -284,8 +336,9 @@ def evaluate(declared: Declared, docs: dict[str, Extraction | None]) -> Result:
             else:
                 add("address_proof.fresh", "hard", "pass", "fix", f"Bill dated {bill_f['bill_date']} ({age} days old).", None, {"age_days": age})
         if business and bill_f.get("billed_to") and not same(bill_f["billed_to"], business):
-            add("address_proof.name", "hard", "fail", "review", "The bill is in a different name from the business.",
-                "Upload a bill in the business name, or a rent agreement.", {"billed_to": bill_f["billed_to"]})
+            legal = (reg or {}).get("legal_name") or gst_f.get("legal_name")
+            if not (legal and same(bill_f["billed_to"], proprietor(legal) or legal)):  # a proprietor's own name is their business's
+                rented(add, bill_f, usable.get("rent_agreement", {}), declared.landlord, [business, legal, proprietor(legal)], today)
         reg_addr = (reg or {}).get("principal_place_of_business")
         reg_pin, bill_pin = pin_code(reg_addr), pin_code(bill_f.get("supply_address"))
         if reg_pin and bill_pin:

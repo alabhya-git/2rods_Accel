@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from ..config import ROOT, get_settings
 from ..data_store import lookup_udyam, store
-from ..db import Document, Order
+from ..db import Approval, Document, Order
 from ..network.telco import sim_swap
 from ..orders.service import add_event
 from ..privacy import vault
@@ -49,7 +49,23 @@ def specimens() -> dict:
     return json.loads((get_settings().data_dir / "specimens.json").read_text())
 
 
+# Our own demo applicants, kept apart from the official pack (and from its expected outcomes).
+# K02R: K02's clinic in a rented unit, the bill in the landlord's name; a rent agreement is held back
+# so the demo can show both ways out (landlord e-sign, or uploading the agreement).
+EXTRA = {"K02R": {"base": "K02", "landlord": "Sunita Banerjee", "held_back": ["rent_agreement"]}}
+
+
+def specimen(k: str) -> dict | None:
+    if k in EXTRA:
+        return {**specimens()[EXTRA[k]["base"]], **EXTRA[k]}
+    return specimens().get(k)
+
+
 def specimen_files(k: str) -> dict[str, Path]:
+    if k in EXTRA:
+        extra = get_settings().data_dir / "demo_extra"
+        own = {dt: extra / f"{k}_{dt}.png" for dt in DOC_TYPES if (extra / f"{k}_{dt}.png").exists()}
+        return {**specimen_files(EXTRA[k]["base"]), **own}
     d = get_settings().data_dir / "kyc_documents"
     return {dt: d / f"{k}_{dt}.png" for dt in DOC_TYPES if (d / f"{k}_{dt}.png").exists()}
 
@@ -64,7 +80,7 @@ def warm_cache() -> None:
         with _lock:
             _cache.update(pickle.loads(BAKED.read_bytes()))
         return
-    for k in specimens():
+    for k in [*specimens(), *EXTRA]:
         for dt, path in specimen_files(k).items():
             try:
                 read(path.read_bytes(), dt)
@@ -157,6 +173,13 @@ def route_of(order: Order) -> str:
     return "udyam" if order.udyam_token else "shop_licence"
 
 
+def landlord_signed(db: Session, order: Order) -> str | None:
+    """The name the landlord e-signed with, once they confirmed the shop is let to this business."""
+    a = db.scalar(select(Approval).where(Approval.order_id == order.id, Approval.kind == "landlord", Approval.status == "approved")
+                  .order_by(Approval.decided_at.desc()))
+    return vault.detokenize(db, a.name_token, "kyc_service", "kyc_verification", order.id) if a and a.name_token else None
+
+
 def run(db: Session, order: Order, declared_udyam: str | None = None) -> Result:
     require_consent(db, order)
     route = route_of(order)
@@ -164,7 +187,7 @@ def run(db: Session, order: Order, declared_udyam: str | None = None) -> Result:
     udyam = declared_udyam
     if not udyam and order.udyam_token:
         udyam = vault.detokenize(db, order.udyam_token, "kyc_service", "kyc_verification", order.id)
-    result = evaluate(Declared(gstin, udyam, order.business_name, route), latest_docs(db, order))
+    result = evaluate(Declared(gstin, udyam, order.business_name, route, landlord_signed(db, order)), latest_docs(db, order))
     # without a verified GSTIN, GST-only products cannot be sold: the owner removes them or switches route
     if route != "gst":
         gst_only = [ln["name"] for ln in order.bundle.get("lines", []) if store().products[ln["product_id"]].requires_gstin]

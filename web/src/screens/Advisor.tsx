@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LangSwitch, Logo, ErrorNote } from '../components/ui'
+import { ErrorNote, SiteHeader, Steps } from '../components/ui'
 import WhyPanel from '../components/WhyPanel'
 import { api, rupees, store, type SessionView, type Turn } from '../lib/api'
 import { useLang } from '../lib/i18n'
@@ -83,18 +83,11 @@ export default function Advisor() {
 
   return (
     <div className="flex h-[100dvh] flex-col">
-      <header className="sticky top-0 z-20 border-b border-rule bg-white">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4">
-          <Logo small />
-          <div className="flex items-center gap-2">
-            <button className="chip whitespace-nowrap lg:hidden" onClick={() => setWhy(!why)} aria-expanded={why}>{t('why_panel')}</button>
-            <LangSwitch />
-          </div>
-        </div>
-      </header>
+      <SiteHeader right={<button className="chip whitespace-nowrap lg:hidden" onClick={() => setWhy(!why)} aria-expanded={why}>{t('why_panel')}</button>} />
+      <div className="hidden lg:block"><Steps current="choose" /></div>
 
-      <div className="mx-auto flex min-h-0 w-full max-w-6xl flex-1 gap-6 px-0 lg:px-4">
-        <section className="flex min-h-0 w-full max-w-[480px] flex-1 flex-col lg:mx-0 mx-auto" aria-label="Conversation">
+      <div className="mx-auto flex min-h-0 w-full max-w-site flex-1 gap-8 px-0 lg:px-8">
+        <section className="mx-auto flex min-h-0 w-full max-w-[560px] flex-1 flex-col lg:mx-0 lg:max-w-none lg:border-x lg:border-rule lg:bg-white" aria-label="Conversation">
           {session?.partner_id && <p className="mx-4 mt-3 rounded-lg bg-haldi-soft px-3 py-2 text-[15px] text-haldi-dark">Assisted by partner {session.partner_id}</p>}
           <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4" aria-live="polite">
             {session?.messages.map((m, i) => (
@@ -179,7 +172,7 @@ export default function Advisor() {
           </div>
         </section>
 
-        <aside className={`${why ? 'fixed inset-x-0 bottom-0 top-16 z-30 overflow-y-auto bg-white p-5' : 'hidden'} lg:static lg:block lg:w-[380px] lg:shrink-0 lg:overflow-y-auto lg:border-l lg:border-rule lg:p-6`} aria-label={t('why_panel')}>
+        <aside className={`${why ? 'fixed inset-x-0 bottom-0 top-16 z-30 overflow-y-auto bg-white p-5' : 'hidden'} lg:static lg:block lg:w-[400px] lg:shrink-0 lg:overflow-y-auto lg:py-6`} aria-label={t('why_panel')}>
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-[19px] font-bold">{t('why_panel')}</h2>
             <button className="btn-quiet lg:hidden" onClick={() => setWhy(false)}>Close</button>

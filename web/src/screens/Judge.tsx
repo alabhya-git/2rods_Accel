@@ -33,6 +33,17 @@ export default function Judge() {
           </p>
         </section>
 
+        <section className="rounded-xl border border-rule bg-white p-4">
+          <h2 className="text-[22px] font-bold">Hidden pain points: try them</h2>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-[16px]">
+            <li><b>Existing Accel customer:</b> order with mobile <b>9876500001</b>. Welcome back, and their numbers become business SIMs with KYC on file.</li>
+            <li><b>Staff ordering for the owner:</b> on the quote pick <i>I work here</i> and give another number. Payment stays locked until the owner e-signs from their link.</li>
+            <li><b>Rented shop:</b> in KYC, specimen <b>K02R</b> (bill in the landlord's name). Ask the landlord to confirm, or upload the specimen rent agreement.</li>
+            <li><b>Scam calls:</b> <Link className="text-ledger underline" to="/verify">check a caller</Link> (try PARTNER-001), and the code on every call-back.</li>
+            <li><b>Setup after go-live:</b> order Cloud Email, go live, and see it tracked until it is set up.</li>
+          </ul>
+        </section>
+
         <section>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-[22px] font-bold">Try any advisor case live</h2>

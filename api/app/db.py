@@ -172,6 +172,28 @@ class SimUser(Base):
     verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
+class Approval(Base):
+    """Someone other than the person at the phone must say yes: the owner, when staff placed the
+    order; the landlord, when the shop is rented and the bill is in their name."""
+    __tablename__ = "approvals"
+    id: Mapped[str] = mapped_column(String(40), primary_key=True, default=lambda: new_id("apr"))
+    token: Mapped[str] = mapped_column(String(64), unique=True, default=lambda: uuid.uuid4().hex)  # the link sent to them
+    order_id: Mapped[str] = mapped_column(String(40), index=True)
+    kind: Mapped[str] = mapped_column(String(16))  # owner | landlord
+    phone_token: Mapped[str] = mapped_column(String(64))
+    phone_masked: Mapped[str] = mapped_column(String(16), default="")
+    expected_name: Mapped[str | None] = mapped_column(String(200), nullable=True)  # landlord: the name on the bill
+    name_token: Mapped[str | None] = mapped_column(String(64), nullable=True)  # the name the signer e-signed with
+    status: Mapped[str] = mapped_column(String(16), default="pending")  # pending | approved | declined
+    method: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    terms_version: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    schedule_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)  # what the owner saw is what gets charged
+    signature: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    decided_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
 class InboundMessage(Base):
     """Webhook deduplication: Meta retries deliveries, and each message must be answered once."""
     __tablename__ = "inbound_messages"

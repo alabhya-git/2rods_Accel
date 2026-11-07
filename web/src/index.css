@@ -5,7 +5,7 @@
 :root {
   --font: 'Baloo 2';
   --rule: #d5deee;
-  --margin: #c8102e;
+  --margin: #d50f2b;
   --row: 36px;
 }
 
@@ -17,7 +17,8 @@ body {
   line-height: 1.5;
   -webkit-tap-highlight-color: transparent;
 }
-:focus-visible { outline: 3px solid #2b4c8c; outline-offset: 2px; border-radius: 6px; }
+h1, h2, h3 { letter-spacing: -0.01em; }
+:focus-visible { outline: 3px solid #15171f; outline-offset: 2px; border-radius: 8px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
 /* The khata page: blue ruled lines and a red margin, as in an Indian account book. */
@@ -26,21 +27,22 @@ body {
   background-color: #fff;
   background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--row) - 1px), var(--rule) calc(var(--row) - 1px), var(--rule) var(--row));
   background-position: 0 14px;
-  padding: 14px 16px 16px 60px;
-  border: 1px solid var(--rule);
-  border-radius: 4px;
+  padding: 14px 18px 18px 60px;
+  border: 1px solid #e3e6ec;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 2px 10px rgba(16,24,40,.05);
 }
 .khata::before {
   content: '';
   position: absolute; top: 0; bottom: 0; left: 44px;
-  border-left: 2px solid var(--margin); opacity: .55;
+  border-left: 2px solid var(--margin); opacity: .5;
 }
 .khata .row { height: var(--row); display: flex; align-items: center; position: relative; }
 .khata .row-free { min-height: var(--row); display: flex; align-items: center; }
 /* a tick box sitting in the red margin, like ticking an entry in a ledger */
-.tick { position: absolute; left: -48px; top: 6px; width: 24px; height: 24px; border-radius: 5px; border: 2px solid #afc0de; background: #fff;
+.tick { position: absolute; left: -48px; top: 6px; width: 24px; height: 24px; border-radius: 6px; border: 2px solid #c7ccd6; background: #fff;
   display: grid; place-items: center; color: #fff; }
-.tick[aria-checked="true"] { background: #1e7b4f; border-color: #1e7b4f; }
+.tick[aria-checked="true"] { background: #18794b; border-color: #18794b; }
 .tick:disabled { opacity: .45; cursor: not-allowed; }
 
 /* Office rubber stamp for verification outcomes. */
@@ -54,14 +56,38 @@ body {
 .stamp-in { animation: stamp .38s cubic-bezier(.2,1.6,.4,1) both; }
 @keyframes stamp { from { transform: rotate(-4deg) scale(1.8); opacity: 0; } to { transform: rotate(-4deg) scale(1); opacity: .92; } }
 
-.bubble-me { @apply bg-ledger text-white rounded-2xl rounded-br-md px-4 py-2 max-w-[85%] ml-auto; }
-.bubble-ai { @apply bg-white text-ink rounded-2xl rounded-bl-md px-4 py-3 max-w-[92%] border border-rule; white-space: pre-line; }
+.bubble-me { @apply bg-ink text-white rounded-2xl rounded-br-md px-4 py-2 max-w-[85%] ml-auto; }
+.bubble-ai { @apply bg-white text-ink rounded-2xl rounded-bl-md px-4 py-3 max-w-[92%] border border-rule shadow-card; white-space: pre-line; }
 
-.btn { @apply inline-flex items-center justify-center gap-2 rounded-pill font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed; min-height: 48px; padding: 0 1.4rem; }
-.btn-primary { @apply btn bg-kumkum text-white hover:bg-kumkum-dark; }
-.btn-secondary { @apply btn bg-white text-ledger border-2 border-ledger hover:bg-ledger-soft; }
-.btn-quiet { @apply btn text-ledger hover:bg-ledger-soft; min-height: 40px; padding: 0 .9rem; }
-.chip { @apply inline-flex items-center rounded-pill border border-rule bg-white px-3 py-1 text-[15px] text-ink hover:border-ledger; min-height: 36px; }
-.field { @apply w-full rounded-xl border-2 border-rule bg-white px-4 text-ink placeholder:text-ink-faint focus:border-ledger focus:outline-none; min-height: 50px; }
+/* Buttons: one red action per view; everything else is quiet. */
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-pill font-semibold transition disabled:cursor-not-allowed; min-height: 48px; padding: 0 1.4rem; }
+.btn-primary { @apply btn text-white shadow-brand hover:brightness-[1.06] active:brightness-95 disabled:bg-none disabled:bg-rule-strong disabled:text-white disabled:shadow-none;
+  background-image: linear-gradient(180deg, #e3162f 0%, #c40d26 100%); background-color: #d50f2b; }
+.btn-secondary { @apply btn border-[1.5px] border-rule-strong bg-white text-ink hover:border-ink disabled:opacity-50; }
+.btn-quiet { @apply btn text-ink-soft hover:bg-paper-tint hover:text-ink disabled:opacity-50; min-height: 40px; padding: 0 .9rem; }
+.btn-on-red { @apply btn bg-white text-kumkum-dark hover:bg-kumkum-soft; }
+
+.chip { @apply inline-flex items-center rounded-pill border border-rule-strong bg-white px-3.5 py-1 text-[15px] text-ink transition hover:border-ink; min-height: 38px; }
+.chip[aria-pressed="true"], .chip[aria-checked="true"] { @apply border-kumkum bg-kumkum-soft font-semibold text-kumkum-dark; }
+
+/* a choice card (radio or toggle): selected = red border, tint and a tick */
+.choice { @apply relative rounded-2xl border-[1.5px] border-rule bg-white px-4 py-3 text-left font-semibold text-ink transition hover:border-ink-faint; }
+.choice[aria-checked="true"], .choice[aria-pressed="true"] { @apply border-kumkum bg-kumkum-soft text-kumkum-dark; box-shadow: inset 0 0 0 1px #d50f2b; }
+
+.field { @apply w-full rounded-xl border-[1.5px] border-rule-strong bg-white px-4 text-ink transition placeholder:text-ink-faint hover:border-ink-faint focus:border-ink focus:outline-none focus:ring-4 focus:ring-ink/10; min-height: 50px; }
+.label { @apply mb-1.5 block text-[15px] font-semibold text-ink; }
 .money { font-variant-numeric: tabular-nums; font-weight: 700; }
 .dash { @apply bg-white border border-rule rounded-lg; }
+
+.card { @apply rounded-2xl border border-rule bg-white shadow-card; }
+.eyebrow { @apply text-[13px] font-bold uppercase tracking-[0.08em] text-kumkum; }
+.link { @apply font-semibold text-ink underline decoration-kumkum/40 decoration-2 underline-offset-4 hover:decoration-kumkum; }
+.section-title { @apply text-[19px] font-bold text-ink lg:text-[21px]; }
+
+/* the red hero: brand gradient with a soft light and a fine diagonal weave */
+.hero-red {
+  background:
+    radial-gradient(900px 420px at 85% -10%, rgba(255,255,255,.18), transparent 60%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 2px, transparent 2px 14px),
+    linear-gradient(135deg, #e3162f 0%, #b30c24 55%, #6e0614 100%);
+}

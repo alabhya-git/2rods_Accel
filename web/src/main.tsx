@@ -18,6 +18,8 @@ import Express from './screens/Express'
 import Orders from './screens/Orders'
 import Help from './screens/Help'
 import SimVerify from './screens/SimVerify'
+import Approve from './screens/Approve'
+import VerifyCaller from './screens/VerifyCaller'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -38,6 +40,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/orders" element={<Orders />} />
           <Route path="/help" element={<Help />} />
           <Route path="/sim/:id" element={<SimVerify />} />
+          <Route path="/approve/:token" element={<Approve />} />
+          <Route path="/verify" element={<VerifyCaller />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </BrowserRouter>

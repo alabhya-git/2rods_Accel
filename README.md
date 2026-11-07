@@ -37,6 +37,17 @@ Two independent evaluations (Claude and Codex) found the same blockers. Each is 
 - **Money:** `engine/schedule.py` turns a quote into dated debits; due today, instalments (summing exactly to setup), mandate limit and invoice lines are read from it.
 - **Voice:** Sarvam speech in 10 languages through the server (key never in the browser), browser speech as fallback; heard words are shown for confirmation. WhatsApp voice notes are transcribed and answered.
 - **Privacy:** token vault with AES-256-GCM and per-record keys; consent checked per action; self-serve rights (see, download, erase, withdraw); the LLM sees masked text and tokens in chat.
+## The hidden pain points, from the leads data
+
+| Pain | Evidence (`smb_leads.csv` unless noted) | What the app does | Test |
+|---|---|---|---|
+| The person ordering isn't the owner | 59% of leads are managers, admins or partners; "owner had no time for a visit" drops 531 leads | *I work here*: staff prepare the order, the owner gets a link and approves with Aadhaar e-sign from anywhere. Nothing is charged before; the e-sign covers the payment schedule's hash, so what they approved is what gets charged | `test_staff_order_cannot_be_charged_until_the_owner_approves` |
+| KYC wants GST *and* Udyam | 58% lack one; quote-to-KYC is 21% with neither, 84% with both | Three proof routes (GST, Udyam, shop licence). On the shop-licence route, a nudge to free Udyam registration (Aadhaar + PAN, 10 minutes) turns a next-day review into an automatic check | `test_kyc_specimens.py` |
+| Existing Accel customers treated as strangers | 38% already use Accel; they activate at 9.2% vs 6.3% and cost 18% less, yet 16% are lost as "unreachable" | Recognised after the network verifies the number (never from a typed number): *welcome back*, and their existing numbers become business SIMs with KYC already on file, live at once | `test_existing_customer_is_recognised_and_their_numbers_become_business_sims` |
+| Rented shop: the bill is in the landlord's name | Not measured in the data. Before, our own KYC said "upload a rent agreement" with nowhere to upload one | A fix the owner can make alone: the landlord confirms through a link with Aadhaar e-sign (their name must match the bill), or the owner uploads a rent agreement naming the landlord, the business and the address. KYC then passes without a person. Demo applicant **K02R** | `test_landlord_link_verifies_kyc_without_a_review`, `test_rent_agreement_*` |
+| Each SIM user needs their own KYC | DoT, 31 Aug 2023 | Per-user verification links; lines held until verified; existing Accel numbers skip it | `test_api_journey.py` |
+| Fear of scams | Not in the data: owners are asked for documents and UPI details by callers they cannot check | Every call-back has a 4-digit code the caller must say first; *Check it's us* verifies a partner ID or calling number; "who opened your documents" from the audit log; "we never ask for OTP or PIN" on every money and document screen | `test_call_back_has_a_code_*`, `test_access_log_*` |
+| Products need setup after install | Churn: website 37.5%, guest Wi-Fi 23%, WhatsApp Business 22%, against 15% overall | *Set up* is tracked like *installed*: guided tasks, "do it with me" call, WhatsApp nudge on day 3, expert call on day 7, and an ops queue of live-but-not-set-up customers | `test_setup_is_tracked_after_go_live` |
 
 ```
 Owner web app · WhatsApp · Voice · Partner desk
@@ -51,7 +62,7 @@ Owner web app · WhatsApp · Voice · Partner desk
 
 | Real | Mocked (by design for the hackathon) |
 |---|---|
-| Rules engine, payment schedule, OCR, KYC decisions, vault and consent, staff roles, call-back tasks, tracker, Claude (with a key), Sarvam (with a key), WhatsApp webhook (with a Meta app) | GSTIN and Udyam registries (the supplied CSVs), DigiLocker, e-sign, operator end-user e-KYC, installer dispatch, billing system, SIM-swap check, payment provider (test-mode adapter) |
+| Rules engine, payment schedule, OCR, KYC decisions, vault and consent, staff roles, call-back tasks, tracker, Claude (with a key), Sarvam (with a key), WhatsApp webhook (with a Meta app) | GSTIN and Udyam registries (the supplied CSVs), DigiLocker, Aadhaar e-sign, Accel's subscriber base (demo numbers 9876500001 and 9876500002), operator end-user e-KYC, installer dispatch, billing system, SIM-swap check, payment provider (test-mode adapter) |
 
 ## Run it
 
@@ -60,7 +71,7 @@ Owner web app · WhatsApp · Voice · Partner desk
 cd api && pip install -r requirements-dev.txt && uvicorn app.main:app --reload
 # Web app
 cd web && npm ci && npm run dev        # or npm run build; the API serves web/dist at /
-# Tests: 893, including the 743-case invariant eval and the 10,000-cart money test
+# Tests: 907, including the 743-case invariant eval and the 10,000-cart money test
 cd api && python -m pytest -q
 ```
 
@@ -74,6 +85,8 @@ Optional keys (`.env`): `LLM_PROVIDER=anthropic` + `LLM_API_KEY` (Claude), `SARV
 4. Partner desk: the call-back request and the review queue (two reviewers for risky overrides).
 5. Tracker: SIM users verify through their links → lines go live → *My account* (one bill, Get help).
 6. Switch the AI off: the same quote, from the rules-only advisor.
+
+Pain-point demos: on the quote, use **9876500001** (an existing Accel customer) and *I work here* with any other number as the owner's; in KYC, specimen **K02R** (rented clinic, bill in the landlord's name); `/verify` to check a caller.
 
 ## Deploy
 

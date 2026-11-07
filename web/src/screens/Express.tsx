@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ErrorNote, Shell, StickyBar, Working } from '../components/ui'
+import { Card, ErrorNote, Hint, Shell, Split, StickyBar, Svg, Working } from '../components/ui'
 import { api, rupees } from '../lib/api'
 import { useLang } from '../lib/i18n'
 
@@ -44,66 +44,91 @@ export default function Express() {
     nav('/quote?express=1')
   }
 
-  if (!products) return <Shell back="/" title={t('express_title')}><Working label="…" /><ErrorNote msg={err} /></Shell>
-  return (
-    <Shell back="/" title={t('express_title')}>
-      <section className="space-y-3">
-        <label className="block">
-          <span className="mb-1 block font-semibold">{t('city_label')}</span>
-          <input className="field" list="cities" value={city} onChange={(e) => setCity(e.target.value)} autoComplete="address-level2" />
-          <datalist id="cities">{cities.map((c) => <option key={c.city} value={c.city} />)}</datalist>
-        </label>
-        <div className="flex items-center justify-between gap-3">
-          <span className="font-semibold">{t('staff_label')}</span>
-          <span className="flex items-center gap-2">
-            <button className="h-11 w-11 rounded-full border-2 border-rule text-[20px]" onClick={() => setStaff(Math.max(1, staff - 1))} aria-label="−">−</button>
-            <span className="w-10 text-center text-[20px] font-bold">{staff}</span>
-            <button className="h-11 w-11 rounded-full border-2 border-rule text-[20px]" onClick={() => setStaff(staff + 1)} aria-label="+">+</button>
-          </span>
-        </div>
-        <div className="flex items-center justify-between gap-3">
-          <span className="font-semibold">{t('gst_question')}</span>
-          <span className="flex gap-2">
-            {[true, false].map((v) => (
-              <button key={String(v)} className={`chip ${gst === v ? '!border-ledger !bg-ledger !text-white' : ''}`} aria-pressed={gst === v} onClick={() => setGst(v)}>
-                {v ? t('yes_word') : t('no_word')}
-              </button>
-            ))}
-          </span>
-        </div>
-      </section>
+  if (!products) return <Shell back="/" title={t('express_title')} width="wide" step="choose"><Working label="…" /><ErrorNote msg={err} /></Shell>
+  const chosen = products.filter((p) => p.id in picked)
+  // say exactly what is missing instead of leaving a grey button
+  const missing = gst === null ? t('gst_question') : chosen.length === 0 ? t('pick_one') : null
 
-      {Object.entries(groups).map(([cat, ps]) => (
-        <section key={cat} className="mt-6">
-          <h2 className="text-[15px] font-semibold text-ink-soft">{cat}</h2>
-          <ul className="mt-2 divide-y divide-rule rounded-xl border border-rule">
-            {ps.map((p) => {
-              const why = blocked(p)
-              const on = p.id in picked
-              return (
-                <li key={p.id}>
-                  <button className="flex w-full items-start justify-between gap-3 p-3 text-left disabled:opacity-60" disabled={!!why}
-                    aria-pressed={on} onClick={() => { const n = { ...picked }; if (on) delete n[p.id]; else n[p.id] = 1; setPicked(n) }}>
-                    <span className="min-w-0">
-                      <span className="block font-semibold">{p.name}</span>
-                      <span className="block text-[14px] leading-snug text-ink-soft">{p.description}</span>
-                      {why && <span className="mt-1 block text-[14px] text-kumkum-dark">{why}</span>}
-                    </span>
-                    <span className="shrink-0 text-right">
-                      <span className="block text-[14px] text-ink-soft">{t('from_month', { amount: rupees(p.price_min) })}</span>
-                      <span className={`mt-1 inline-block h-6 w-6 rounded-md border-2 ${on ? 'border-leaf bg-leaf' : 'border-rule'}`} aria-hidden="true" />
-                    </span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </section>
-      ))}
-      <ErrorNote msg={err} />
-      <StickyBar>
-        <button className="btn-primary w-full" disabled={!Object.keys(picked).length || gst === null} onClick={go}>{t('get_price')}</button>
-      </StickyBar>
+  return (
+    <Shell back="/" title={t('express_title')} width="wide" step="choose">
+      <Split aside={
+        <>
+          <Card title={t('your_selection')} className="hidden lg:block">
+            {chosen.length === 0 ? <p className="text-ink-soft">{t('pick_one')}</p> : (
+              <ul className="space-y-2">
+                {chosen.map((p) => (
+                  <li key={p.id} className="flex items-start justify-between gap-3">
+                    <span className="font-semibold leading-snug">{p.name}</span>
+                    <span className="shrink-0 text-[14px] text-ink-soft">{t('from_month', { amount: rupees(p.price_min) })}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+          <StickyBar hint={missing && <Hint>{missing}</Hint>}>
+            <span className="text-[15px] font-semibold text-ink-soft lg:hidden">{t('n_selected', { n: chosen.length })}</span>
+            <button className="btn-primary flex-1" disabled={!!missing} onClick={go}>{t('get_price')}</button>
+          </StickyBar>
+        </>
+      }>
+        <Card title={t('your_business')}>
+          <div className="grid gap-4 md:grid-cols-[1.4fr_1fr]">
+            <label className="block">
+              <span className="label">{t('city_label')}</span>
+              <input className="field" list="cities" value={city} onChange={(e) => setCity(e.target.value)} autoComplete="address-level2" />
+              <datalist id="cities">{cities.map((c) => <option key={c.city} value={c.city} />)}</datalist>
+            </label>
+            <div>
+              <span className="label">{t('staff_label')}</span>
+              <span className="flex h-[50px] items-center gap-2">
+                <button className="grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-rule-strong text-[20px] hover:border-ink" onClick={() => setStaff(Math.max(1, staff - 1))} aria-label="−">−</button>
+                <span className="w-12 text-center text-[20px] font-bold" aria-live="polite">{staff}</span>
+                <button className="grid h-11 w-11 place-items-center rounded-full border-[1.5px] border-rule-strong text-[20px] hover:border-ink" onClick={() => setStaff(staff + 1)} aria-label="+">+</button>
+              </span>
+            </div>
+          </div>
+          <div className="mt-4">
+            <span className="label">{t('gst_question')}</span>
+            <div className="grid max-w-sm grid-cols-2 gap-2" role="radiogroup" aria-label={t('gst_question')}>
+              {[true, false].map((v) => (
+                <button key={String(v)} role="radio" className="choice text-center" aria-checked={gst === v} onClick={() => setGst(v)}>
+                  {v ? t('yes_word') : t('no_word')}
+                </button>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        {Object.entries(groups).map(([cat, ps]) => (
+          <section key={cat} className="mt-8">
+            <h2 className="text-[13px] font-bold uppercase tracking-[0.08em] text-ink-soft">{cat}</h2>
+            <ul className="mt-3 grid gap-3 md:grid-cols-2">
+              {ps.map((p) => {
+                const why = blocked(p)
+                const on = p.id in picked
+                return (
+                  <li key={p.id}>
+                    <button className="choice flex h-full w-full items-start justify-between gap-3 !font-normal disabled:cursor-not-allowed disabled:bg-paper-tint disabled:opacity-70"
+                      disabled={!!why} aria-pressed={on}
+                      onClick={() => { const n = { ...picked }; if (on) delete n[p.id]; else n[p.id] = 1; setPicked(n) }}>
+                      <span className="min-w-0">
+                        <span className={`block font-bold ${on ? 'text-kumkum-dark' : 'text-ink'}`}>{p.name}</span>
+                        <span className="mt-0.5 block text-[14px] leading-snug text-ink-soft">{p.description}</span>
+                        <span className="mt-2 block text-[14px] font-semibold text-ink">{t('from_month', { amount: rupees(p.price_min) })}</span>
+                        {why && <span className="mt-1 block text-[14px] font-semibold text-kumkum-dark">{why}</span>}
+                      </span>
+                      <span className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md border-2 ${on ? 'border-kumkum bg-kumkum text-white' : 'border-rule-strong bg-white'}`} aria-hidden="true">
+                        {on && <Svg d={<path d="M5 12.5l4.5 4.5L19 7" />} size={15} width={3.5} />}
+                      </span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </section>
+        ))}
+        <ErrorNote msg={err} />
+      </Split>
     </Shell>
   )
 }

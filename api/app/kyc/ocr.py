@@ -28,6 +28,8 @@ DOC_TITLES = {
     "signatory_id": ["authorised signatory id", "signatory id"],
     "shop_licence": ["shop and establishment", "shops and establishments", "shops & establishments", "trade licence",
                      "trade license", "gumasta", "registration certificate of establishment"],
+    # last: a rented shop's bill is in the landlord's name, and this links the shop to its tenant
+    "rent_agreement": ["rent agreement", "leave and licence", "leave and license", "lease agreement", "tenancy agreement"],
 }
 FIELDS = {
     "gst_certificate": {"gstin": ["gstin"], "legal_name": ["legal name"], "trade_name": ["trade name"],
@@ -44,9 +46,12 @@ FIELDS = {
                      "establishment": ["name of establishment", "establishment name", "name of the establishment"],
                      "owner": ["name of employer", "name of owner", "proprietor"], "address": ["address", "postal address"],
                      "valid_till": ["valid till", "valid upto", "valid up to"]},
+    "rent_agreement": {"landlord": ["landlord", "licensor", "lessor"], "tenant": ["tenant", "licensee", "lessee"],
+                       "premises": ["premises", "property address"], "date_of_agreement": ["agreement date", "date of agreement"],
+                       "valid_till": ["valid till", "valid upto", "period till"], "rent": ["monthly rent", "rent per month"]},
 }
 CONTINUATION_LABELS = ["place of business"]
-MULTILINE = {"address", "supply_address"}
+MULTILINE = {"address", "supply_address", "premises"}
 
 
 @dataclass

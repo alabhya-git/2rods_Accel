@@ -20,7 +20,7 @@ from ..engine.profile import Profile
 from ..engine.recommend import build_addons, price_custom
 from ..kyc import service as kyc
 from ..kyc.ids import gstin_valid, mask_gstin, mask_phone, udyam_valid
-from ..network.telco import fibre_feasible, number_verify
+from ..network.telco import accel_account, fibre_feasible, number_verify_for
 from ..orders.events import bus
 from ..orders.service import add_event, advance, complete_if_all_live, create_order, install_slots, public_view
 from ..privacy import consent, vault
@@ -100,6 +100,17 @@ class OrderIn(BaseModel):
     business_name: str | None = None
     partner_id: str | None = None
     specimen: str | None = None
+    placed_by: str = "owner"  # owner | staff: staff prepare, the owner approves from their own phone
+    owner_phone: str | None = None
+
+
+def existing_customer(phone: str) -> dict | None:
+    """Masked view of the Accel account behind a just-verified number."""
+    acct = accel_account(phone)
+    if not acct:
+        return None
+    return {"since": acct["since"], "kind": acct["kind"], "account_masked": acct["account"][:4] + "****" + acct["account"][-4:],
+            "monthly_spend": acct["monthly_spend"], "lines": [{"id": i, "masked": mask_phone(n), "plan": plan} for i, n, plan in acct["lines"]]}
 
 
 @router.post("/orders")
@@ -115,8 +126,10 @@ def place_order(body: OrderIn, db: Session = Depends(get_db), x_staff_token: str
     tokens = (load_state(s).get("tokens") or {}) if s else {}
     gstin_token = tokens.get("gstin")
     spec = None
+    if body.placed_by == "staff" and not body.owner_phone:
+        raise HTTPException(422, "Enter the owner's mobile number: they approve the order from their phone")
     if body.specimen:
-        spec = kyc.specimens().get(body.specimen)
+        spec = kyc.specimen(body.specimen)
         if not spec:
             raise HTTPException(404, "unknown specimen")
         gstin_token = vault.tokenize(db, "gstin", spec["gstin"])
@@ -134,10 +147,27 @@ def place_order(body: OrderIn, db: Session = Depends(get_db), x_staff_token: str
         order.udyam_token = vault.tokenize(db, "udyam", spec["udyam_number"])
     if s:
         s.status = "ordered"
-    verify = number_verify(phone)
-    add_event(db, order, "number_verified", "Mobile number verified", method=verify["method"], masked=mask_phone(phone))
+    verify = number_verify_for(phone)
+    add_event(db, order, "number_verified", "Mobile number verified" + (" by the Accel network, no OTP" if verify["method"] == "network" else ""),
+              method=verify["method"], masked=mask_phone(phone))
+    # an existing Accel customer is recognised only after their number is verified, never from a typed number
+    known = existing_customer(phone) if verify["verified"] else None
+    profile = {**(order.profile or {}), "placed_by": "staff" if body.placed_by == "staff" else "owner"}
+    if known:
+        profile["accel_account"] = known
+        add_event(db, order, "existing_customer", f"Welcome back: with Accel since {known['since']}", lines=len(known["lines"]))
+    order.profile = profile
+    if body.placed_by == "staff":
+        from .approvals import request_owner
+        request_owner(db, order, body.owner_phone or "", phone)
     db.commit()
-    return {"order_id": order.id, "access_key": order.access_key, "phone_masked": mask_phone(phone), **public_view(order, _events(db, order))}
+    return {"order_id": order.id, "access_key": order.access_key, "phone_masked": mask_phone(phone), **public_view(order, _events(db, order)),
+            "approvals": _approvals(db, order)}
+
+
+def _approvals(db: Session, order: Order) -> list[dict]:
+    from .approvals import approvals_view
+    return approvals_view(db, order)
 
 
 def _events(db: Session, order: Order) -> list[OrderEvent]:
@@ -147,7 +177,7 @@ def _events(db: Session, order: Order) -> list[OrderEvent]:
 @router.get("/orders/{oid}")
 def get_order(oid: str, key: str = Query(...), db: Session = Depends(get_db)):
     o = owner_order(db, oid, key)
-    return {**public_view(o, _events(db, o)), "consent": consent.current(db, o.id)}
+    return {**public_view(o, _events(db, o)), "consent": consent.current(db, o.id), "approvals": _approvals(db, o)}
 
 
 # ---- consent ------------------------------------------------------------------------
@@ -252,6 +282,7 @@ async def upload_document(oid: str, key: str = Query(...), doc_type: str = Form(
 
 class SpecimenIn(BaseModel):
     specimen: str
+    docs: list[str] | None = None  # only these documents (the demo uploads a held-back one later)
 
 
 @router.post("/orders/{oid}/kyc/specimen")
@@ -265,7 +296,7 @@ async def use_specimen(oid: str, body: SpecimenIn, key: str = Query(...)):
         db = SessionLocal()
         try:
             o = owner_order(db, oid, key)
-            spec = kyc.specimens()[body.specimen]
+            spec = kyc.specimen(body.specimen)
             if not o.gstin_token:
                 o.gstin_token = vault.tokenize(db, "gstin", spec["gstin"])
             if spec.get("udyam_number") and not o.udyam_token:
@@ -274,6 +305,8 @@ async def use_specimen(oid: str, body: SpecimenIn, key: str = Query(...)):
             o.business_name = spec["business_name"]
             docs = []
             for dt, path in files.items():
+                if (body.docs is not None and dt not in body.docs) or (body.docs is None and dt in spec.get("held_back", [])):
+                    continue
                 doc, _ = kyc.upload(db, o, dt, path.read_bytes(), "image/png")
                 docs.append({"doc_type": dt, "quality": doc.quality, "fields": doc.fields})
             res = kyc.run(db, o)
@@ -346,6 +379,9 @@ def pay(oid: str, body: PayIn, key: str = Query(...), idempotency_key: str | Non
         return o.payment  # a retry after a timeout never charges twice
     if o.status != "kyc_verified":
         raise HTTPException(409, "Payment opens once KYC is verified")
+    from .approvals import owner_block
+    if block := owner_block(db, o):  # staff prepared it: only the owner commits the business to a contract
+        raise HTTPException(409, block)
     if body.method not in PAY_METHODS:
         raise HTTPException(422, "Choose UPI Autopay, UPI, card, netbanking or a pay link")
     sched = o.bundle.get("schedule") or payplan.for_bundle(o.bundle, o.setup_emi)
@@ -486,6 +522,32 @@ def my_data(oid: str, key: str = Query(...), db: Session = Depends(get_db)):
                          "deleted": d.deleted_at is not None, "fields": d.fields} for d in docs]
     db.commit()
     return out
+
+
+ACCESS_WHO = {"owner": "You", "kyc_service": "Automatic KYC check", "fulfilment": "Installation team", "messaging": "Order updates",
+              "system": "System", "sim_user": "SIM user", "landlord": "Your landlord"}
+ACCESS_WHAT = {"document_uploaded": "uploaded", "document_read": "read", "document_shredded": "deleted", "detokenize": "read",
+               "detokenize_denied": "was refused", "kyc_approve_first": "reviewed", "kyc_approve": "reviewed", "kyc_reject": "reviewed",
+               "kyc_ask_fix": "reviewed"}
+
+
+@router.get("/orders/{oid}/access-log")
+def access_log(oid: str, key: str = Query(...), db: Session = Depends(get_db)):
+    """Who opened my documents: every read of a document or an identifier, by whom and why."""
+    o = owner_order(db, oid, key)
+    docs = {d.id: d.doc_type for d in db.scalars(select(Document).where(Document.order_id == o.id))}
+    rows = db.scalars(select(AuditLog).where(AuditLog.target.in_(list(docs) + [o.id])).order_by(AuditLog.ts.desc()).limit(200)).all()
+    reads = db.scalars(select(AuditLog).where(AuditLog.action.in_(("detokenize", "detokenize_denied"))).order_by(AuditLog.ts.desc()).limit(500)).all()
+    rows = sorted([*rows, *[r for r in reads if (r.detail or {}).get("order") == o.id]], key=lambda r: r.ts, reverse=True)
+    out = []
+    for r in rows:
+        if r.action not in ACCESS_WHAT:
+            continue
+        actor = r.actor.split(":")[0]
+        what = docs.get(r.target, "identifier" if r.action.startswith("detokenize") else "order")
+        out.append({"at": r.ts.isoformat(), "who": ACCESS_WHO.get(actor, "Reviewer" if actor in ("reviewer", "ops") else actor),
+                    "action": ACCESS_WHAT[r.action], "what": what.replace("_", " "), "purpose": (r.purpose or "").replace("_", " ")})
+    return {"entries": out[:100], "people": sorted({e["who"] for e in out if e["who"] not in ("You", "System", "Automatic KYC check")})}
 
 
 @router.post("/orders/{oid}/erase")

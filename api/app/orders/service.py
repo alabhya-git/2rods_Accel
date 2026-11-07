@@ -52,9 +52,14 @@ def milestones(order: Order, events: list[OrderEvent]) -> list[dict]:
     kinds = {e.kind: e for e in events}
     steps = [("order_placed", "Order placed"), ("consent_given", "Consent recorded"), ("kyc_verified", "KYC verified"),
              ("payment_done", "First payment and Autopay"), ("install_scheduled", "Installation booked")]
+    if any(e.kind == "approval_requested" and e.detail.get("who") == "owner" for e in events):
+        steps.insert(3, ("owner_approved", "Owner approved"))  # staff placed it: the owner's yes comes before any charge
     out = []
     for kind, title in steps:
         e = kinds.get(kind)
+        if kind == "owner_approved" and not e and kinds.get("owner_declined"):
+            out.append({"kind": kind, "title": kinds["owner_declined"].title, "status": "attention", "at": kinds["owner_declined"].ts.isoformat()})
+            continue
         if kind == "kyc_verified" and not e:
             alt = kinds.get("kyc_review") or kinds.get("kyc_fix")
             if alt:
@@ -135,6 +140,7 @@ def public_view(order: Order, events: list[OrderEvent]) -> dict:
         "bundle": order.bundle, "term_months": order.term_months, "monthly": order.monthly, "setup": order.setup, "setup_emi": order.setup_emi,
         "kyc_outcome": order.kyc_outcome, "kyc": order.kyc_result, "payment": order.payment, "install_slot": order.install_slot,
         "gstin_masked": (order.profile or {}).get("gstin"), "specimen": order.specimen,
+        "customer": (order.profile or {}).get("accel_account"), "placed_by": (order.profile or {}).get("placed_by", "owner"),
         "milestones": milestones(order, events),
         "events": [{"id": e.id, "ts": e.ts.isoformat(), "kind": e.kind, "title": e.title, "product_id": e.product_id, "detail": e.detail} for e in events],
     }

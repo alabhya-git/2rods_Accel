@@ -30,14 +30,14 @@ export default function Consent() {
       setErr(e.message)
     }
   }
-  if (!notice) return <Shell title={t('consent_title')}><Working label="…" /></Shell>
+  if (!notice) return <Shell title={t('consent_title')} step="consent"><Working label="…" /></Shell>
 
   return (
-    <Shell title={t('consent_title')}>
+    <Shell title={t('consent_title')} step="consent">
       <p className="text-[18px]">{t('consent_intro')}</p>
-      <ul className="mt-5 divide-y divide-rule rounded-xl border border-rule bg-white">
+      <ul className="card mt-5 divide-y divide-rule">
         {Object.entries(notice.purposes).map(([k, p]) => (
-          <li key={k} className="p-4">
+          <li key={k} className="p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-[18px] font-bold">{t(`p_${k}`)}</p>

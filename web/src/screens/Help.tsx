@@ -11,7 +11,7 @@ export default function Help() {
   const p = new URLSearchParams(location.search)
   const [phone, setPhone] = useState('')
   const [win, setWin] = useState('today_evening')
-  const [done, setDone] = useState<{ phone_masked: string; window: string } | null>(null)
+  const [done, setDone] = useState<{ phone_masked: string; window: string; call_code: string } | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -19,7 +19,7 @@ export default function Help() {
     setBusy(true)
     setErr(null)
     try {
-      const r = await api.post<{ phone_masked: string; window: string }>('/api/help', {
+      const r = await api.post<{ phone_masked: string; window: string; call_code: string }>('/api/help', {
         phone, window: win, language: lang, source: p.get('source') || (p.get('order') ? 'tracker' : 'advisor'),
         session_id: p.get('session'), order_id: p.get('order'), key: p.get('key'), reason: p.get('reason') || 'prefer_person',
       })
@@ -33,6 +33,10 @@ export default function Help() {
         <section className="mt-6 text-center">
           <Stamp kind="ok">✓</Stamp>
           <p className="mt-4 text-[19px] font-semibold">{t('callback_done', { phone: done.phone_masked, window: t('w_' + win) })}</p>
+          {/* the caller must say this code first: a scam caller can't */}
+          <p className="mt-5 text-[44px] font-extrabold tracking-[0.25em] text-ledger" aria-label={done.call_code.split('').join(' ')}>{done.call_code}</p>
+          <p className="mt-1 text-[16px]">{t('call_code_note', { code: done.call_code })}</p>
+          <p className="mt-4 rounded-lg bg-paper-tint px-3 py-2 text-[14px] text-ink-soft">{t('never_ask')}</p>
         </section>
       ) : (
         <>
@@ -46,7 +50,7 @@ export default function Help() {
             <div className="flex flex-wrap gap-2" role="radiogroup">
               {WINDOWS.map((w) => (
                 <button key={w} role="radio" aria-checked={win === w} onClick={() => setWin(w)}
-                  className={`chip ${win === w ? '!border-ledger !bg-ledger !text-white' : ''}`}>{t('w_' + w)}</button>
+                  className="chip">{t('w_' + w)}</button>
               ))}
             </div>
           </fieldset>

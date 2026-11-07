@@ -37,6 +37,27 @@ def number_verify(phone: str, device_hint: str | None = None) -> dict:
     return {"verified": True, "method": "network" if device_hint else "otp_fallback"}
 
 
+def number_verify_for(phone: str) -> dict:
+    """An Accel SIM answers the network check silently; other networks fall back to an OTP."""
+    return number_verify(phone, device_hint="accel_sim" if accel_account(phone) else None)
+
+
+# Accel's own subscriber base (BSS/CRM). 38% of leads already use Accel, yet each one starts
+# as a stranger. Demo numbers below; production reads the CRM by the verified number.
+ACCOUNTS = {
+    "9876500001": {"account": "ACC-20191184", "since": 2019, "kind": "mobile", "monthly_spend": 1150,
+                   "lines": [("L1", "9876500001", "Postpaid 399"), ("L2", "9876500011", "Postpaid 299"), ("L3", "9876500012", "Prepaid 239")]},
+    "9876500002": {"account": "ACC-20210457", "since": 2021, "kind": "home_fibre_mobile", "monthly_spend": 1499,
+                   "lines": [("L1", "9876500002", "Postpaid 499")]},
+}
+
+
+def accel_account(phone: str) -> dict | None:
+    """Only ever called with a number that has just been verified: nothing about an account is
+    shown to someone who merely typed the number."""
+    return ACCOUNTS.get(phone[-10:])
+
+
 def masked_number() -> str:
     """A virtual number from the CPaaS pool, bridged to the customer for 72 hours."""
     return "+91 80" + "".join(secrets.choice("0123456789") for _ in range(8))

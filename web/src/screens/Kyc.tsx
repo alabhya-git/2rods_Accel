@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ErrorNote, Shell, Stamp, StickyBar, Working } from '../components/ui'
+import { Card, ErrorNote, Hint, Shell, Split, Stamp, StickyBar, Working } from '../components/ui'
 import { api, type Check, type KycResult, type OrderView } from '../lib/api'
 import { useLang } from '../lib/i18n'
 
-const ALL_DOCS = ['gst_certificate', 'udyam_certificate', 'shop_licence', 'address_proof', 'signatory_id'] as const
+const ALL_DOCS = ['gst_certificate', 'udyam_certificate', 'shop_licence', 'address_proof', 'signatory_id', 'rent_agreement'] as const
 // the proof route decides the documents: no GST is a route, not a dead end
 const ROUTE_DOCS: Record<string, string[]> = {
   gst: ['gst_certificate', 'udyam_certificate', 'address_proof', 'signatory_id'],
@@ -14,7 +14,7 @@ const ROUTE_DOCS: Record<string, string[]> = {
 const DOCS = ALL_DOCS
 type DocState = { status: 'empty' | 'uploading' | 'read' | 'retake' | 'digilocker'; fields?: Record<string, string>; skew?: number }
 const LABELS: Record<string, string> = { gstin: 'GSTIN', udyam_number: 'Udyam no.', id_no: 'ID no.', legal_name: 'Legal name', trade_name: 'Trade name', consumer_no: 'Consumer no.', billed_to: 'Billed to', supply_address: 'Address', bill_date: 'Bill date', enterprise_name: 'Enterprise', major_activity: 'Activity', valid_till: 'Valid till', business: 'Business' }
-const SPECIMENS = ['K01', 'K02', 'K03', 'K04', 'K05', 'K06', 'K07', 'K08', 'K09', 'K10', 'K11', 'K12']
+const SPECIMENS = ['K01', 'K02', 'K03', 'K04', 'K05', 'K06', 'K07', 'K08', 'K09', 'K10', 'K11', 'K12', 'K02R']  // K02R: our rented-shop case
 
 export default function Kyc() {
   const { id } = useParams()
@@ -32,6 +32,8 @@ export default function Kyc() {
   const inputs = useRef<Record<string, HTMLInputElement | null>>({})
   const [route, setRouteState] = useState<string | null>(null)
   const [gstOnly, setGstOnly] = useState<string[]>([])
+  const [landlordPhone, setLandlordPhone] = useState('')
+  const [landlord, setLandlord] = useState<{ phone_masked: string; link: string } | null>(null)
 
   const load = () => api.get<OrderView>(`/api/orders/${id}?key=${key}`).then((o) => {
     setOrder(o)
@@ -47,6 +49,26 @@ export default function Kyc() {
     } catch (e: any) { setErr(e.message) }
   }
   useEffect(() => { load() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // the landlord confirms on their own phone: their yes re-runs KYC, so keep the result fresh
+  useEffect(() => {
+    if (!landlord) return
+    const h = setInterval(() => { if (document.visibilityState === 'visible') load() }, 4000)
+    return () => clearInterval(h)
+  }, [landlord]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const askLandlord = async () => {
+    setErr(null)
+    try { setLandlord(await api.post(`/api/orders/${id}/landlord?key=${key}`, { phone: landlordPhone })) } catch (e: any) { setErr(e.message) }
+  }
+  const demoLease = async () => {
+    setBusy(t('verifying'))
+    try {
+      const r = await api.post<any>(`/api/orders/${id}/kyc/specimen?key=${key}`, { specimen: 'K02R', docs: ['rent_agreement'] })
+      setDocs((d) => ({ ...d, rent_agreement: { status: 'read', fields: r.documents[0]?.fields } }))
+      setResult(r.result)
+      load()
+    } catch (e: any) { setErr(e.message) } finally { setBusy(null) }
+  }
 
   const check = async () => {
     setErr(null)
@@ -109,25 +131,111 @@ export default function Kyc() {
   const fails = (result?.checks ?? []).filter((c) => c.status === 'fail')
   const passes = (result?.checks ?? []).filter((c) => c.status === 'pass')
   const notes = (result?.checks ?? []).filter((c) => c.status === 'warn')
+  // the bill is in someone else's name: a rented shop proves itself through the landlord
+  const rented = fails.find((c) => c.id === 'address_proof.name' && c.args?.rented)
+
+  function aside() {
+    return (
+      <>
+        {busy && <Card><Working label={busy} /></Card>}
+        <ErrorNote msg={err} />
+
+        {!result && !busy && <Card><p className="text-ink-soft">{t('result_here')}</p></Card>}
+        {result && !busy && (
+          <section className="card p-5" aria-live="polite">
+            <div className="flex justify-center py-2">
+              <Stamp kind={outcome === 'verified' ? 'ok' : outcome === 'fix_needed' ? 'fix' : 'review'}>
+                <span className="text-[22px]">{t(`outcome_${outcome}`)}</span>
+              </Stamp>
+            </div>
+            {fails.length > 0 && (
+              <ul className="mt-4 space-y-3">
+                {fails.map((c: Check) => (
+                  <li key={c.id} className="border-l-4 border-kumkum pl-3">
+                    {/* the owner reads the fix in their own language; the English detail is for reviewers */}
+                    <p className="font-semibold">{c.args?.local_fix ?? c.fix ?? c.message}</p>
+                    {c.args?.local_fix && <p className="text-[13px] text-ink-soft" lang="en">{c.message}</p>}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {rented && (
+              <div className="mt-4 rounded-xl border-2 border-haldi bg-haldi-soft p-4">
+                <p className="font-bold text-haldi-dark">{t('rented_title')}</p>
+                {landlord ? (
+                  <>
+                    <p className="mt-1 text-[15px]">{t('landlord_sent', { phone: landlord.phone_masked })}</p>
+                    <button className="btn-quiet mt-2 border border-dashed border-rule-strong" onClick={() => window.open(landlord.link, '_blank')}>Demo: open the landlord's link</button>
+                  </>
+                ) : (
+                  <>
+                    <label className="mt-2 block">
+                      <span className="mb-1 block text-[15px] font-semibold">{t('landlord_phone')}</span>
+                      <input className="field" inputMode="tel" value={landlordPhone} onChange={(e) => setLandlordPhone(e.target.value)} placeholder="98XXXXXXXX" />
+                    </label>
+                    <button className="btn-primary mt-2 w-full" onClick={askLandlord} disabled={landlordPhone.replace(/\D/g, '').length < 10}>{t('ask_landlord')}</button>
+                  </>
+                )}
+                <p className="mt-3 text-[15px] font-semibold">{t('or_upload_rent')}</p>
+                {order?.specimen === 'K02R' && <button className="btn-quiet mt-1 border border-dashed border-rule-strong" onClick={demoLease}>Demo: upload the specimen rent agreement</button>}
+              </div>
+            )}
+            <details className="mt-4">
+              <summary className="cursor-pointer text-[15px] font-semibold text-ink-soft hover:text-ink">{passes.length} checks passed{notes.length ? `, ${notes.length} ${notes.length === 1 ? 'note' : 'notes'}` : ''}</summary>
+              <ul className="mt-2 space-y-1 text-[14px] text-ink-soft">
+                {passes.map((c) => <li key={c.id}>✓ {c.message}</li>)}
+                {notes.map((c) => <li key={c.id} className="text-haldi-dark">Note: {c.message}</li>)}
+              </ul>
+            </details>
+          </section>
+        )}
+
+        <StickyBar hint={!result && missing && <Hint>{missing}</Hint>}>
+          {outcome === 'verified' ? (
+            <button className="btn-primary w-full" onClick={() => nav(`/order/${id}/pay?key=${key}`)}>{t('continue')}</button>
+          ) : outcome === 'review' ? (
+            <button className="btn-secondary w-full" onClick={() => nav(`/track/${id}?key=${key}`)}>{t('track_title')}</button>
+          ) : (
+            <button className="btn-primary w-full" onClick={verify} disabled={!!busy || !!missing}>{t('verify_now')}</button>
+          )}
+        </StickyBar>
+        <p className="rounded-xl bg-white px-3 py-2 text-[14px] text-ink-soft ring-1 ring-rule">{t('never_ask')}</p>
+
+      </>
+    )
+  }
+
+  const hasDoc = Object.values(docs).some((d) => d.status !== 'empty')
+  const missing = !route ? t('need_route') : !hasDoc ? t('need_doc') : null
 
   return (
-    <Shell title={t('kyc_title')}>
+    <Shell title={t('kyc_title')} width="wide" step="verify">
+      <Split aside={aside()}>
       <p className="text-[17px] text-ink-soft">{t('kyc_intro')}</p>
 
-      <fieldset className="mt-5">
-        <legend className="mb-2 font-bold">{t('route_title')}</legend>
-        <div className="grid gap-2" role="radiogroup">
+      <section className="card mt-5 p-5">
+        <h2 id="route-title" className="section-title mb-3">{t('route_title')}</h2>
+        <div className="grid gap-2 sm:grid-cols-3" role="radiogroup" aria-labelledby="route-title">
           {(['gst', 'udyam', 'shop_licence'] as const).map((r) => (
-            <button key={r} role="radio" aria-checked={route === r} onClick={() => chooseRoute(r)}
-              className={`rounded-xl border-2 px-4 py-3 text-left font-semibold ${route === r ? 'border-ledger bg-ledger-soft text-ledger' : 'border-rule bg-white'}`}>
+            <button key={r} role="radio" aria-checked={route === r} onClick={() => chooseRoute(r)} className="choice">
               {t(r === 'gst' ? 'route_gst' : r === 'udyam' ? 'route_udyam' : 'route_shop')}
             </button>
           ))}
         </div>
         {gstOnly.length > 0 && <p className="mt-2 rounded-lg bg-haldi-soft px-3 py-2 text-[15px] text-haldi-dark">{t('needs_gst')}: {gstOnly.join(', ')}</p>}
-      </fieldset>
+        {route === 'shop_licence' && (
+          <div className="mt-3 rounded-xl border-2 border-leaf bg-leaf/10 p-4">
+            <p className="font-bold text-leaf">{t('udyam_free_title')}</p>
+            <p className="mt-1 text-[15px]">{t('udyam_free_sub')}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <a className="btn-secondary" href="https://udyamregistration.gov.in/UdyamRegistration.aspx" target="_blank" rel="noreferrer">{t('udyam_free_go')}</a>
+              <button className="btn-quiet border border-rule-strong" onClick={() => chooseRoute('udyam')}>{t('i_have_udyam')}</button>
+            </div>
+          </div>
+        )}
+      </section>
 
-      {route === 'gst' && <section className="mt-5 rounded-xl border border-rule bg-white p-4">
+      {route === 'gst' && <section className="card mt-5 p-5">
         <label className="block font-bold" htmlFor="gstin">{t('gstin_label')}</label>
         {order?.gstin_masked && !registry && <p className="text-[15px] text-ink-soft">{order.gstin_masked}</p>}
         <div className="mt-2 flex gap-2">
@@ -141,11 +249,12 @@ export default function Kyc() {
         )}
       </section>}
 
-      <ul className="mt-4 space-y-3">
-        {DOCS.filter((d) => route && ROUTE_DOCS[route].includes(d)).map((d) => {
+      {route && <h2 className="section-title mt-8">{t('documents')}</h2>}
+      <ul className="mt-3 grid gap-3 md:grid-cols-2">
+        {DOCS.filter((d) => route && (ROUTE_DOCS[route].includes(d) || (d === 'rent_agreement' && (rented || docs.rent_agreement.status !== 'empty')))).map((d) => {
           const s = docs[d]
           return (
-            <li key={d} className="rounded-xl border border-rule bg-white p-4">
+            <li key={d} className={`card p-4 ${s.status === 'read' || s.status === 'digilocker' ? 'ring-1 ring-leaf/40' : s.status === 'retake' ? 'ring-1 ring-haldi' : ''}`}>
               <div className="flex items-center justify-between gap-3">
                 <p className="font-bold">{t(`doc_${d}`)}</p>
                 {s.status === 'read' && <Stamp kind="ok">{t('read_ok')}</Stamp>}
@@ -170,7 +279,7 @@ export default function Kyc() {
                 {d === 'udyam_certificate' && (s.status === 'empty' || s.status === 'retake') && (
                   <div className="flex w-full gap-2">
                     <input className="field min-h-[42px] flex-1 text-[15px] uppercase" value={udyam} onChange={(e) => setUdyam(e.target.value.toUpperCase())} placeholder="UDYAM-MH-00-1234567" aria-label="Udyam number" />
-                    <button className="btn-quiet border border-ledger" onClick={digilocker}>{t('digilocker')}</button>
+                    <button className="btn-quiet border border-rule-strong" onClick={digilocker}>{t('digilocker')}</button>
                   </div>
                 )}
               </div>
@@ -180,53 +289,14 @@ export default function Kyc() {
       </ul>
 
       <details className="mt-4 rounded-xl border border-dashed border-rule-strong bg-paper-tint p-4">
-        <summary className="cursor-pointer font-semibold text-ledger">Demo: use a specimen applicant (K01 to K12)</summary>
-        <div className="mt-3 grid grid-cols-6 gap-2">
+        <summary className="cursor-pointer font-semibold text-ink">Demo: use a specimen applicant (K01 to K12, plus our K02R)</summary>
+        <div className="mt-3 grid grid-cols-5 gap-2 sm:grid-cols-7">
           {SPECIMENS.map((k) => <button key={k} className="chip justify-center" onClick={() => specimen(k)}>{k}</button>)}
         </div>
-        <p className="mt-2 text-[13px] text-ink-soft">Uploads the official synthetic documents for that applicant and runs the same checks.</p>
+        <p className="mt-2 text-[13px] text-ink-soft">Uploads the official synthetic documents for that applicant and runs the same checks. K02R is ours: K02's clinic in a rented unit, the bill in the landlord's name.</p>
       </details>
 
-      {busy && <div className="mt-5"><Working label={busy} /></div>}
-      <ErrorNote msg={err} />
-
-      {result && !busy && (
-        <section className="mt-6 rounded-xl border-2 border-rule bg-white p-5" aria-live="polite">
-          <div className="flex justify-center py-2">
-            <Stamp kind={outcome === 'verified' ? 'ok' : outcome === 'fix_needed' ? 'fix' : 'review'}>
-              <span className="text-[22px]">{t(`outcome_${outcome}`)}</span>
-            </Stamp>
-          </div>
-          {fails.length > 0 && (
-            <ul className="mt-4 space-y-3">
-              {fails.map((c: Check) => (
-                <li key={c.id} className="border-l-4 border-kumkum pl-3">
-                  {/* the owner reads the fix in their own language; the English detail is for reviewers */}
-                  <p className="font-semibold">{c.args?.local_fix ?? c.fix ?? c.message}</p>
-                  {c.args?.local_fix && <p className="text-[13px] text-ink-soft" lang="en">{c.message}</p>}
-                </li>
-              ))}
-            </ul>
-          )}
-          <details className="mt-4">
-            <summary className="cursor-pointer text-[15px] text-ledger">{passes.length} checks passed{notes.length ? `, ${notes.length} ${notes.length === 1 ? 'note' : 'notes'}` : ''}</summary>
-            <ul className="mt-2 space-y-1 text-[14px] text-ink-soft">
-              {passes.map((c) => <li key={c.id}>✓ {c.message}</li>)}
-              {notes.map((c) => <li key={c.id} className="text-haldi-dark">Note: {c.message}</li>)}
-            </ul>
-          </details>
-        </section>
-      )}
-
-      <StickyBar>
-        {outcome === 'verified' ? (
-          <button className="btn-primary w-full" onClick={() => nav(`/order/${id}/pay?key=${key}`)}>{t('continue')}</button>
-        ) : outcome === 'review' ? (
-          <button className="btn-secondary w-full" onClick={() => nav(`/track/${id}?key=${key}`)}>{t('track_title')}</button>
-        ) : (
-          <button className="btn-primary w-full" onClick={verify} disabled={!!busy || !Object.values(docs).some((d) => d.status !== 'empty')}>{t('verify_now')}</button>
-        )}
-      </StickyBar>
+      </Split>
     </Shell>
   )
 }

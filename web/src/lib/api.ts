@@ -71,6 +71,19 @@ export type OrderView = {
   specimen: string | null; milestones: Milestone[]; events: { id: number; ts: string; kind: string; title: string; product_id?: string | null; detail: any }[]
   consent?: Record<string, { granted: boolean; since: string; withdrawn_at: string | null }>
   access_key?: string; order_id?: string; phone_masked?: string
+  placed_by?: string; customer?: Customer | null; approvals?: Approval[]
+}
+export type Customer = { since: number; kind: string; account_masked: string; monthly_spend: number; lines: { id: string; masked: string; plan: string }[] }
+export type Approval = { id: string; kind: 'owner' | 'landlord'; status: string; phone_masked: string; link: string; decided_at: string | null; note: string | null }
+
+/** Share a link the way people do in India: the phone's share sheet (WhatsApp), else copy it. */
+export async function shareLink(path: string, text: string): Promise<'shared' | 'copied' | 'failed'> {
+  const url = location.origin + path
+  try {
+    if (navigator.share) { await navigator.share({ text, url }); return 'shared' }
+    await navigator.clipboard.writeText(url)
+    return 'copied'
+  } catch { return 'failed' }
 }
 export type Check = { id: string; level: string; status: string; severity: string; message: string; fix: string | null; args: Record<string, any> }
 export type KycResult = { outcome: string; checks: Check[]; registry: Record<string, any>; extracted: Record<string, any> }

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { SiteFooter, SiteHeader, Svg } from '../components/ui'
+import { JudgeMenu, SiteFooter, SiteHeader, Svg } from '../components/ui'
 import { LANGS } from '../i18n/strings'
 import { myOrders } from '../lib/api'
 import { useLang } from '../lib/i18n'
@@ -38,9 +38,12 @@ export default function Home() {
       <SiteHeader />
 
       <section className="hero-red text-onbrand">
-        <div className="mx-auto grid max-w-site gap-8 px-4 pb-10 pt-8 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:px-8 lg:py-20">
+        <div className="mx-auto grid max-w-site grid-cols-1 gap-8 px-4 pb-10 pt-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-16 lg:px-8 lg:py-20">
           <div className="animate-rise">
-            <p className="eyebrow !text-onbrand/80">Accel Business · Udyam Digital</p>
+            <div className="flex items-center justify-between gap-3">
+              <p className="eyebrow min-w-0 !text-onbrand/80">Accel Business · Udyam Digital</p>
+              <div className="shrink-0 sm:hidden"><JudgeMenu onRed /></div>
+            </div>
             <h1 className="mt-3 text-[30px] font-extrabold leading-[1.12] sm:text-[38px] lg:text-[50px]">{t('tagline')}</h1>
             <p className="mt-4 max-w-xl text-[18px] text-onbrand/90 lg:text-[20px]">{t('time_promise')}</p>
             <ol className="mt-7 hidden gap-3 lg:grid lg:grid-cols-2">
@@ -68,7 +71,7 @@ export default function Home() {
                   <span className="min-w-0 flex-1">
                     {d.primary && <span className="mb-1 inline-block rounded-pill bg-onbrand px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wide text-kumkum">{t('not_sure')}</span>}
                     <span className="block text-[19px] font-bold leading-tight">{d.title}</span>
-                    <span className={`mt-0.5 block truncate text-[15px] leading-snug ${d.primary ? 'text-onbrand/90' : 'text-ink-soft'}`}>{d.sub}</span>
+                    <span className={`mt-0.5 block text-[15px] leading-snug ${d.primary ? 'text-onbrand/90' : 'text-ink-soft'}`}>{d.sub}</span>
                   </span>
                   <span className={`shrink-0 transition group-hover:translate-x-0.5 ${d.primary ? 'text-onbrand' : 'text-ink-faint'}`}><Svg d={ICONS.chevron} /></span>
                 </button>

@@ -66,7 +66,7 @@ const mr: Dict = {
 }
 
 const ta: Dict = {
-  door_help: 'தேர்வு செய்ய உதவுங்கள்', door_help_sub: 'ஏற்றதைப் பரிந்துரைப்போம்.',
+  door_help: 'தேர்வு செய்ய உதவுங்கள்', door_help_sub: 'ஏற்றதைச் சொல்வோம்.',
   door_express: 'எனக்கு என்ன வேண்டும் தெரியும்', door_express_sub: 'ஒரு நிமிடத்தில் விலை.',
   door_person: 'ஒருவரிடம் பேசுங்கள்', door_person_sub: 'உங்கள் மொழியில் அழைப்பு.', door_wa_sub: 'அதே உதவி, சாட்டில்.',
   resume: 'என் ஆர்டரைத் தொடரவும்', express_title: 'தேவையானதைத் தேர்ந்தெடுங்கள்', city_label: 'உங்கள் நகரம்', staff_label: 'தொழிலில் எத்தனை பேர்',
@@ -171,7 +171,7 @@ const bn: Dict = {
 }
 
 const ml: Dict = {
-  door_help: 'തിരഞ്ഞെടുക്കാൻ സഹായിക്കൂ', door_help_sub: 'യോജിച്ചത് പറഞ്ഞുതരാം.',
+  door_help: 'തിരഞ്ഞെടുക്കാൻ സഹായിക്കൂ', door_help_sub: 'യോജിച്ചത് പറയാം.',
   door_express: 'എനിക്ക് എന്ത് വേണമെന്ന് അറിയാം', door_express_sub: 'ഒരു മിനിറ്റിൽ വില.',
   door_person: 'ഒരാളോട് സംസാരിക്കൂ', door_person_sub: 'നിങ്ങളുടെ ഭാഷയിൽ കോൾ.', door_wa_sub: 'അതേ സഹായം, ചാറ്റിൽ.',
   resume: 'എന്റെ ഓർഡർ തുടരുക', express_title: 'വേണ്ടത് തിരഞ്ഞെടുക്കൂ', city_label: 'നിങ്ങളുടെ നഗരം', staff_label: 'ബിസിനസിൽ എത്ര പേർ',

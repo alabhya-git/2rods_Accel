@@ -81,6 +81,45 @@ export function ThemeToggle() {
   )
 }
 
+/** Where judges find the other interfaces: the console, the staff desk with its demo sign-ins, the API. */
+export function JudgeMenu({ onRed = false }: { onRed?: boolean }) {
+  const [open, setOpen] = useState(false)
+  const { lang } = useLang()
+  // Next to the laptop nav the label fits from 1280 px, except beside Malayalam's longer nav labels: there, the icon alone
+  const label = onRed ? 'ml-1.5' : lang === 'ml' ? 'ml-1.5 lg:hidden' : 'ml-1.5 lg:hidden xl:inline'
+  const places = [
+    { to: '/judge', title: 'Judge console', sub: 'Live scenarios, KYC specimens, demo reset' },
+    { to: '/partner', title: 'Partner & reviewer desk', sub: 'Staff sign-in, demo accounts listed there' },
+    { to: '/whatsapp', title: 'WhatsApp simulator', sub: 'The same advisor over chat' },
+    { to: '/docs', title: 'API docs', sub: 'Every endpoint, try it live', ext: true },
+  ]
+  return (
+    <div className="relative">
+      <button onClick={() => setOpen(!open)} aria-expanded={open} aria-haspopup="true" aria-label="For judges" title="For judges"
+        className={onRed ? 'chip whitespace-nowrap !border-onbrand/40 !bg-onbrand/10 !text-onbrand hover:!border-onbrand'
+          : 'flex h-[38px] items-center whitespace-nowrap rounded-pill border border-rule-strong bg-white px-3.5 text-[15px] font-semibold text-ink transition hover:border-ink'}>
+        <Svg size={16} width={2} d={<><path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6z" /><path d="M9 12l2 2 4-4" /></>} />
+        <span className={label}>For judges</span>
+      </button>
+      {open && (
+        <>
+          <button className="fixed inset-0 z-30 cursor-default" aria-label="Close" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 z-40 mt-2 w-72 max-w-[calc(100vw-32px)] animate-rise text-left rounded-2xl border border-rule bg-white p-2 shadow-lift">
+            <p className="px-3 pb-1 pt-2 text-[12px] font-bold uppercase tracking-wide text-ink-faint">Beyond the owner app</p>
+            {places.map((p) => {
+              const body = <><span className="block font-semibold text-ink">{p.title}</span><span className="block text-[13px] text-ink-soft">{p.sub}</span></>
+              const cls = 'block rounded-xl px-3 py-2 hover:bg-paper-tint'
+              return p.ext
+                ? <a key={p.to} href={p.to} className={cls} onClick={() => setOpen(false)}>{body}</a>
+                : <Link key={p.to} to={p.to} className={cls} onClick={() => setOpen(false)}>{body}</Link>
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 /** One header everywhere: on a phone, back + page title; on a laptop, the brand and the four places people look for. */
 export function SiteHeader({ back, title, right }: { back?: string | boolean; title?: string; right?: ReactNode }) {
   const nav = useNavigate()
@@ -110,6 +149,7 @@ export function SiteHeader({ back, title, right }: { back?: string | boolean; ti
         <div className="flex shrink-0 items-center gap-1.5">
           {title && <Link to="/" className="btn-quiet px-2 lg:hidden" aria-label={t('home')} title={t('home')}><Svg d={Icon.home} /></Link>}
           {right}
+          <div className={title || right ? 'hidden lg:block' : 'hidden sm:block'}><JudgeMenu /></div>
           <ThemeToggle />
           <LangSwitch />
         </div>

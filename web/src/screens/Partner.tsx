@@ -6,12 +6,18 @@ import { api, rupees } from '../lib/api'
 type Tab = 'help' | 'queue' | 'reviews' | 'orders' | 'metrics' | 'model'
 const TABS: [Tab, string][] = [['help', 'Call-back requests'], ['queue', 'Leads to call'], ['reviews', 'KYC reviews'], ['orders', 'Orders'], ['metrics', 'Metrics'], ['model', 'Lead score']]
 const SEG: Record<string, string> = { micro: 'Micro retail', prof: 'Professional office', multi: 'Multi-site', mfg: 'Manufacturer' }
-type Who = { token: string; sub: string; role: string; name: string; partner_id: string | null }
+// Demo sign-ins only: production refuses these (security.py).
+const DEMO = [
+  { role: 'Partner (sales shop)', does: 'Sharma Telecom, Jaipur: call-backs, leads to call, its orders, metrics. Can start an assisted order.', id: 'PARTNER-001', pass: 'partner-demo' },
+  { role: 'KYC reviewer', does: 'Accel back office: approves or rejects documents a machine could not settle.', id: 'reviewer-1', pass: 'review-demo' },
+  { role: 'Second KYC reviewer', does: 'Risky overrides need a second, different reviewer to agree. Sign in as this one to confirm.', id: 'reviewer-2', pass: 'review-demo' },
+]
+type Who ={ token: string; sub: string; role: string; name: string; partner_id: string | null }
 
 /** Staff sign in as themselves: every action carries a real name and role, never a shared passcode. */
 export default function Partner() {
   const [who, setWho] = useState<Who | null>(() => { try { return JSON.parse(sessionStorage.getItem('staff') || 'null') } catch { return null } })
-  const [user, setUser] = useState('PARTNER-001')
+  const [user, setUser] = useState('')
   const [secret, setSecret] = useState('')
   const [tab, setTab] = useState<Tab>('help')
   const [err, setErr] = useState<string | null>(null)
@@ -29,16 +35,34 @@ export default function Partner() {
   useEffect(() => { if (who) api.get('/api/staff/me', H).catch(() => { sessionStorage.removeItem('staff'); setWho(null) }) }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!who) return (
-    <div className="mx-auto max-w-sm px-5 pt-16">
+    <div className="mx-auto max-w-md px-5 pb-16 pt-16">
       <Logo />
-      <h1 className="mt-8 text-[24px] font-bold">Partner desk</h1>
-      <p className="text-ink-soft">For Accel field staff, KYC reviewers and channel partners. Demo accounts: PARTNER-001 / partner-demo, reviewer-1 or reviewer-2 / review-demo.</p>
-      <form className="mt-4 space-y-2" onSubmit={(e) => { e.preventDefault(); login() }}>
-        <input className="field w-full" value={user} onChange={(e) => setUser(e.target.value)} placeholder="Staff ID" aria-label="Staff ID" autoComplete="username" />
-        <input className="field w-full" type="password" value={secret} onChange={(e) => setSecret(e.target.value)} placeholder="Passcode" aria-label="Passcode" autoComplete="current-password" />
+      <h1 className="mt-8 text-[24px] font-bold">Partner & reviewer desk</h1>
+      <p className="text-ink-soft">Accel staff sign in as themselves, and each role sees only its own work. The person who sells never approves the documents.</p>
+      <form className="mt-5 space-y-2" onSubmit={(e) => { e.preventDefault(); login() }}>
+        <label className="block text-[14px] font-semibold text-ink-soft">Staff ID
+          <input className="field mt-1 w-full" value={user} onChange={(e) => setUser(e.target.value)} autoComplete="username" />
+        </label>
+        <label className="block text-[14px] font-semibold text-ink-soft">Passcode
+          <input className="field mt-1 w-full" type="password" value={secret} onChange={(e) => setSecret(e.target.value)} autoComplete="current-password" />
+        </label>
         <button className="btn-primary w-full">Sign in</button>
       </form>
       <ErrorNote msg={err} />
+      <h2 className="mt-8 text-[13px] font-bold uppercase tracking-wide text-ink-faint">Demo accounts: tap one to fill it in</h2>
+      <div className="mt-2 space-y-2">
+        {DEMO.map((d) => (
+          <button key={d.id} type="button" onClick={() => { setUser(d.id); setSecret(d.pass); setErr(null) }}
+            className={`w-full rounded-xl border bg-white p-3 text-left transition hover:border-ink ${user === d.id && secret === d.pass ? 'border-kumkum' : 'border-rule'}`}>
+            <span className="flex items-baseline justify-between gap-2"><b>{d.role}</b><span className="text-[13px] font-semibold text-kumkum">{user === d.id && secret === d.pass ? 'Filled in' : 'Use'}</span></span>
+            <span className="block text-[14px] text-ink-soft">{d.does}</span>
+            <span className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
+              <span><span className="text-ink-faint">Staff ID </span><code className="font-semibold text-ink">{d.id}</code></span>
+              <span><span className="text-ink-faint">Passcode </span><code className="font-semibold text-ink">{d.pass}</code></span>
+            </span>
+          </button>
+        ))}
+      </div>
     </div>
   )
 

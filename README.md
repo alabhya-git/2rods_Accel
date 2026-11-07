@@ -8,7 +8,7 @@ Built for Airtel SYNC, Track A: *Project Udyam Digital*. Accel Telecom and Accel
 |---|---|
 | Live demo | https://udyam-demo-ux45wjd45q-el.a.run.app (Cloud Run, Mumbai) |
 | Owner app | `/` (four doors) · `/express` · `/help` · `/orders` |
-| Partner desk | `/partner`: `PARTNER-001` / `partner-demo`, reviewers `reviewer-1` and `reviewer-2` / `review-demo` (demo only) |
+| Partner & reviewer desk | `/partner` (demo sign-ins, also listed on its login page): **partner** (sales shop) ID `PARTNER-001`, passcode `partner-demo`; **KYC reviewers** IDs `reviewer-1` and `reviewer-2`, passcode `review-demo` for both. Two reviewers because risky overrides need a second person |
 | Judge console | `/judge`: advisor scenarios and the 12 KYC specimens, live |
 | API docs | `/docs` |
 

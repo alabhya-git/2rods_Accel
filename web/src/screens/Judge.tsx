@@ -108,7 +108,7 @@ export default function Judge() {
         <section className="grid gap-3 md:grid-cols-3">
           <Link to="/" className="rounded-xl border border-rule bg-white p-4 hover:border-ledger"><b>Owner journey</b><p className="text-ink-soft">Advisor, quote, consent, KYC, payment, tracker</p></Link>
           <Link to="/whatsapp" className="rounded-xl border border-rule bg-white p-4 hover:border-ledger"><b>WhatsApp channel</b><p className="text-ink-soft">The same advisor over chat</p></Link>
-          <Link to="/partner" className="rounded-xl border border-rule bg-white p-4 hover:border-ledger"><b>Partner desk</b><p className="text-ink-soft">Callback queue, reviews, metrics (passcode accel-demo)</p></Link>
+          <Link to="/partner" className="rounded-xl border border-rule bg-white p-4 hover:border-ledger"><b>Partner & reviewer desk</b><p className="text-ink-soft">Call-backs, leads, KYC reviews, metrics. Demo sign-ins are listed on its login page</p></Link>
         </section>
       </main>
     </div>

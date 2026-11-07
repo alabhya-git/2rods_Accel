@@ -5,3 +5,4 @@ var
 .git
 docs/video
 *.log
+**/.env

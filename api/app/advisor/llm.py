@@ -45,7 +45,8 @@ class _Base:
         self.api_key, self.model, self.timeout, self.base_url = api_key, model, timeout, base_url
 
     def run(self, system: str, history: list[dict], tools: list[Tool], execute: Executor, max_steps: int = 5,
-            context: str | None = None) -> tuple[str, list[dict]]:
+            context: str | None = None, stop_after: frozenset = frozenset()) -> tuple[str, list[dict]]:
+        """stop_after: tools whose result ends the loop with no reply text (a call speaks the server's own summary)."""
         raise NotImplementedError
 
 
@@ -63,7 +64,7 @@ class Anthropic(_Base):
         self.client = anthropic.Anthropic(api_key=self.api_key, base_url=self.base_url or None, timeout=self.timeout, max_retries=1)
         self.usage: dict = {}
 
-    def run(self, system, history, tools, execute, max_steps=5, context: str | None = None):
+    def run(self, system, history, tools, execute, max_steps=5, context: str | None = None, stop_after=frozenset()):
         messages: list[dict] = [{"role": "user" if h["role"] == "user" else "assistant", "content": h["text"]} for h in history]
         if context and messages and messages[-1]["role"] == "user":  # volatile facts after the cached prefix
             messages[-1] = {"role": "user", "content": [{"type": "text", "text": messages[-1]["content"]},
@@ -97,6 +98,8 @@ class Anthropic(_Base):
                 out = execute(b.name, dict(args))
                 calls.append({"tool": b.name, "args": args})
                 results.append({"type": "tool_result", "tool_use_id": b.id, "content": json.dumps(out, ensure_ascii=False)})
+            if stop_after & {b.name for b in uses}:
+                return "", calls
             messages.append({"role": "user", "content": results})
         raise LLMError("too many tool steps")
 
@@ -104,7 +107,7 @@ class Anthropic(_Base):
 class Gemini(_Base):
     provider = "gemini"
 
-    def run(self, system, history, tools, execute, max_steps=5, context=None):
+    def run(self, system, history, tools, execute, max_steps=5, context=None, stop_after=frozenset()):
         if context and history:
             history = history[:-1] + [{**history[-1], "text": history[-1]["text"] + "\n" + context}]
         base = self.base_url or "https://generativelanguage.googleapis.com/v1beta"
@@ -131,6 +134,8 @@ class Gemini(_Base):
                     out = execute(fc["name"], fc.get("args") or {})
                     calls.append({"tool": fc["name"], "args": fc.get("args") or {}})
                     responses.append({"functionResponse": {"name": fc["name"], "response": {"result": out}}})
+                if stop_after & {fc["name"] for fc in fcalls}:
+                    return "", calls
                 contents.append({"role": "user", "parts": responses})
         raise LLMError("too many tool steps")
 
@@ -138,7 +143,7 @@ class Gemini(_Base):
 class OpenAICompatible(_Base):
     provider = "openai"
 
-    def run(self, system, history, tools, execute, max_steps=5, context=None):
+    def run(self, system, history, tools, execute, max_steps=5, context=None, stop_after=frozenset()):
         if context and history:
             history = history[:-1] + [{**history[-1], "text": history[-1]["text"] + "\n" + context}]
         url = (self.base_url or "https://api.openai.com/v1").rstrip("/") + "/chat/completions"
@@ -165,6 +170,8 @@ class OpenAICompatible(_Base):
                     out = execute(tc["function"]["name"], args)
                     calls.append({"tool": tc["function"]["name"], "args": args})
                     messages.append({"role": "tool", "tool_call_id": tc["id"], "content": json.dumps(out, ensure_ascii=False)})
+                if stop_after & {tc["function"]["name"] for tc in tcs}:
+                    return "", calls
         raise LLMError("too many tool steps")
 
 

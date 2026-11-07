@@ -25,10 +25,11 @@ export default function Home() {
   const partner = new URLSearchParams(location.search).get('partner')
   const hasOrders = myOrders().length > 0
   const doors = [
-    { key: 'help', title: t('door_help'), sub: t('door_help_sub'), go: () => nav(`/advisor?lang=${lang}${partner ? `&partner=${partner}` : ''}`), primary: true },
-    { key: 'person', title: t('door_person'), sub: t('door_person_sub'), go: () => nav('/help?source=home'), primary: false },
-    { key: 'whatsapp', title: t('on_whatsapp'), sub: t('door_wa_sub'), go: () => nav('/whatsapp'), primary: false },
-    { key: 'express', title: t('door_express'), sub: t('door_express_sub'), go: () => nav('/express'), primary: false },
+    { key: 'help', title: t('door_help'), sub: t('door_help_sub'), go: () => nav(`/advisor?lang=${lang}${partner ? `&partner=${partner}` : ''}`), primary: true, live: false },
+    // a call answered at once by the AI; a person is one tap away inside it
+    { key: 'person', title: t('call_door'), sub: t('call_door_sub'), go: () => nav('/call'), primary: false, live: true },
+    { key: 'whatsapp', title: t('on_whatsapp'), sub: t('door_wa_sub'), go: () => nav('/whatsapp'), primary: false, live: false },
+    { key: 'express', title: t('door_express'), sub: t('door_express_sub'), go: () => nav('/express'), primary: false, live: false },
   ]
   const why = [['clock', t('time_promise')], ['bill', t('one_bill')], ['lock', t('privacy_line')], ['shield', t('never_ask')]]
 
@@ -60,8 +61,9 @@ export default function Home() {
                   className={`group relative flex items-center gap-3 rounded-2xl p-3.5 text-left transition sm:gap-4 sm:p-4 ${d.primary
                     ? 'text-onbrand shadow-brand hover:brightness-105 [background-image:linear-gradient(135deg,#e3162f,#b30c24)]'
                     : 'border-[1.5px] border-rule bg-white hover:border-ink hover:shadow-card'}`}>
-                  <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl sm:h-12 sm:w-12 ${d.primary ? 'bg-onbrand/15' : 'bg-kumkum-soft text-kumkum'}`}>
+                  <span className={`relative grid h-11 w-11 shrink-0 place-items-center rounded-2xl sm:h-12 sm:w-12 ${d.primary ? 'bg-onbrand/15' : 'bg-kumkum-soft text-kumkum'}`}>
                     <Svg d={ICONS[d.key]} size={24} width={2} />
+                    {d.live && <span className="absolute -right-0.5 -top-0.5 flex h-3 w-3" aria-hidden="true"><span className="absolute inset-0 animate-ping rounded-full bg-leaf/70" /><span className="relative h-3 w-3 rounded-full bg-leaf ring-2 ring-white" /></span>}
                   </span>
                   <span className="min-w-0 flex-1">
                     {d.primary && <span className="mb-1 inline-block rounded-pill bg-onbrand px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wide text-kumkum">{t('not_sure')}</span>}

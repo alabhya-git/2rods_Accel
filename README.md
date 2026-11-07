@@ -1,6 +1,6 @@
 # Accel Business · Udyam Digital
 
-**Four doors, one order.** A small business owner chooses *Help me choose*, *I know what I need*, *Talk to a person* or *WhatsApp*: in any of 10 languages, by text or voice, on the web, a phone or WhatsApp. Every door ends in the same honest quote, the right proof route, a booked install, and one account afterwards.
+**Four doors, one order.** A small business owner chooses *Help me choose*, *Call us now* (an AI voice call), *WhatsApp* or *I know what I need*: in any of 10 languages, by text or voice, on the web, a phone or WhatsApp. Every door ends in the same honest quote, the right proof route, a booked install, and one account afterwards.
 
 Built for Airtel SYNC, Track A: *Project Udyam Digital*. Accel Telecom and Accel Business are fictional; all data is the official synthetic pack. Payments run in test mode.
 
@@ -36,6 +36,7 @@ Two independent evaluations (Claude and Codex) found the same blockers. Each is 
 - **Smart KYC:** local OCR (Tesseract + OpenCV) is the first reader. With the owner's separate consent, Claude vision is a second reader for **business documents only** (never ID cards); fields both readers disagree on, or pages that look edited, go to a person. Validators follow the dataset's own rules (PAN 'X', Udyam district 00, 15 July 2026 as "today").
 - **Money:** `engine/schedule.py` turns a quote into dated debits; due today, instalments (summing exactly to setup), mandate limit and invoice lines are read from it.
 - **Voice:** Sarvam speech in 10 languages through the server (key never in the browser), browser speech as fallback; heard words are shown for confirmation. WhatsApp voice notes are transcribed and answered.
+- **AI call (`/call`):** the whole journey as a hands-free call, in 10 languages. The page hears when the owner starts and stops talking (an audio worklet, 300 ms kept from before they spoke), sends one 16 kHz clip per turn to Sarvam `saaras:v4` with key terms (Accel, GST, Udyam, AirFiber…), and speaks replies sentence by sentence (`bulbul:v3`, mp3; fixed lines cached on the server and fetched ahead). The same advisor answers in call mode: two short spoken sentences, the loop ends at `recommend` and the server says the plan from the engine's own bundle, and a plain yes to the plan is taken without a model call. Cards on screen carry what must be tapped (consent, documents, UPI, slot); a flow bar shows where the owner is; *person* at any time books a call-back. Measured: hearing 0.5–0.9 s; a Claude Opus call turn about 2.2 s (a chat turn about 7 s); fixed lines start at once from the cache, new ones in about 1–2 s. Add `?hud=1` to see each turn's timings.
 - **Privacy:** token vault with AES-256-GCM and per-record keys; consent checked per action; self-serve rights (see, download, erase, withdraw); the LLM sees masked text and tokens in chat.
 ## The hidden pain points, from the leads data
 
@@ -71,7 +72,7 @@ Owner web app · WhatsApp · Voice · Partner desk
 cd api && pip install -r requirements-dev.txt && uvicorn app.main:app --reload
 # Web app
 cd web && npm ci && npm run dev        # or npm run build; the API serves web/dist at /
-# Tests: 987, including the 744-case invariant eval and the 10,000-cart money test
+# Tests: 1020, including the 744-case invariant eval and the 10,000-cart money test
 cd api && python -m pytest -q
 ```
 

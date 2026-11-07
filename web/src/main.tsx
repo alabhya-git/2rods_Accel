@@ -17,6 +17,7 @@ import WhatsApp from './screens/WhatsApp'
 import Express from './screens/Express'
 import Orders from './screens/Orders'
 import Help from './screens/Help'
+import Call from './screens/Call'
 import SimVerify from './screens/SimVerify'
 import Approve from './screens/Approve'
 import VerifyCaller from './screens/VerifyCaller'
@@ -39,6 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/express" element={<Express />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/call" element={<Call />} />
           <Route path="/sim/:id" element={<SimVerify />} />
           <Route path="/approve/:token" element={<Approve />} />
           <Route path="/verify" element={<VerifyCaller />} />

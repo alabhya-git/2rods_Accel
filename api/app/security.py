@@ -99,7 +99,9 @@ LIMITS = [  # (method, path prefix or suffix test, bucket, max requests, window 
     ("POST", lambda p: "/kyc/documents" in p, "upload", 30, 60),
     ("POST", lambda p: p == "/api/help", "help", 5, 300),
     ("POST", lambda p: p == "/api/staff/login", "login", 10, 300),
-    ("POST", lambda p: p.startswith("/api/voice/"), "voice", 30, 60),
+    # a call speaks and listens every few seconds; GET speak costs the same as POST, so both count
+    ("POST", lambda p: p.startswith("/api/voice/"), "voice", 120, 60),
+    ("GET", lambda p: p == "/api/voice/speak", "voice", 120, 60),
 ]
 _hits: dict[tuple[str, str], deque] = defaultdict(deque)
 _lock = threading.Lock()

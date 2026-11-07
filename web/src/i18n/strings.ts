@@ -326,9 +326,10 @@ const pa: Dict = {
   erase_confirm: 'ਆਪਣੀ ਨਿੱਜੀ ਜਾਣਕਾਰੀ ਮਿਟਾਉਣੀ ਹੈ? ਦਸਤਾਵੇਜ਼ ਅਤੇ ਪਛਾਣ ਨੰਬਰ ਹਮੇਸ਼ਾ ਲਈ ਨਸ਼ਟ ਹੋ ਜਾਣਗੇ।', no_chasing: 'ਅਪਡੇਟ ਇੱਥੇ ਅਤੇ WhatsApp ʼਤੇ ਆਉਣਗੇ। ਕਾਲ ਕਰਨ ਦੀ ਲੋੜ ਨਹੀਂ।',
 }
 
+import { CALL } from './call'
 import { MORE } from './more'
 import { PEOPLE } from './people'
 import { SITE } from './site'
 
 const base: Record<string, Dict> = { en, hi, mr, ta, te, kn, gu, bn, ml, pa }
-export const STRINGS: Record<string, Dict> = Object.fromEntries(Object.entries(base).map(([k, d]) => [k, { ...d, ...MORE[k], ...PEOPLE[k], ...SITE[k] }]))
+export const STRINGS: Record<string, Dict> = Object.fromEntries(Object.entries(base).map(([k, d]) => [k, { ...d, ...MORE[k], ...PEOPLE[k], ...SITE[k], ...CALL[k] }]))

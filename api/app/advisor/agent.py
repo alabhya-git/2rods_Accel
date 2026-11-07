@@ -220,6 +220,49 @@ def compose(bundle: dict, profile: Profile, lang: str, notes: list[str], short_c
     return "\n".join(out)
 
 
+STOP = {"hi": "।", "bn": "।", "pa": "।"}
+
+
+def spoken_plan(bundle: dict, profile: Profile, lang: str, notes: list[str], short_contract: bool = False) -> str:
+    """The plan as it is heard on a call: name and price, what is in it, the first thing a rule left out. The screen shows the rest."""
+    items = ", ".join(f"{ln['qty']} {ln['name']}" if ln["qty"] > 1 else ln["name"] for ln in bundle["lines"])
+    out = [t("bundle_intro", lang, name=bundle["name"], monthly=rupees(bundle["monthly"]), days=bundle["install_days"]),
+           t("call_includes", lang, items=items)]
+    if bundle["exclusions"]:
+        e = bundle["exclusions"][0]
+        out.append(rule_text(e["rule"], e["args"], e["name"], lang) + STOP.get(lang, "."))
+    if profile.gstin_status in ("Cancelled", "Suspended"):
+        out.append(t("gstin_inactive", lang, status=profile.gstin_status))
+    kept = speed_text(bundle["notes"], lang)
+    for n in bundle["notes"]:
+        if n["code"] == "budget_fit":  # "A -> B" reads badly aloud: say "B instead of A"
+            heard = ", ".join(f"{new} {t('why_instead', lang, instead=old)}" for old, _, new in (c.partition(" -> ") for c in n["changed"]))
+            out.append(t("budget_fit", lang, budget=rupees(n["budget"]), changed=heard))
+        elif n["code"] == "over_budget" and not kept:
+            out.append(t("over_budget", lang, budget=rupees(n["budget"]), monthly=rupees(n["monthly"])))
+    if kept:
+        out.append(kept)
+    if short_contract:
+        out.append(t("contract_note", lang))
+    if notes:
+        out.append(t("assumed", lang, what=", ".join(t(n, lang) for n in notes)))
+    if len(bundle["exclusions"]) > 1:
+        out.append(t("call_see_card", lang))
+    out.append(t("call_plan_ask", lang))
+    return " ".join(out)
+
+
+# a short yes to the plan on a call needs no model; "yes, but cheaper" is a change, not a yes
+PROCEED = re.compile(r"\b(?:go ahead|proceed|place (?:the |my )?order|book it|let'?s do it|sounds good|fine|done|theek hai|thik hai|chalo|aage badho)\b"
+                     r"|ठीक है|चलो|आगे बढ़|कर दो|चालेल|पुढे|சரி|தொடர|సరే|ముందుకు|ಸರಿ|ಮುಂದುವರಿ|ઠીક છે|બરાબર|ચાલો|આગળ વધ|ঠিক আছে|চলুন|এগো|ശരി|മുന്നോട്ട്|ਠੀਕ ਹੈ|ਚਲੋ|ਅੱਗੇ ਵਧ", re.I)
+BUT = re.compile(r"\b(?:but|no|not|change|remove|cheaper|lekin|magar|nahi|nahin)\b"
+                 r"|लेकिन|मगर|नहीं|बदल|पण|नको|ஆனால்|வேண்டாம்|కానీ|వద్దు|ಆದರೆ|ಬೇಡ|પણ|નહીં|কিন্তু|না(?:$|[\s।,.!?])|പക്ഷേ|വേണ്ട|ਪਰ|ਨਹੀਂ", re.I)
+
+
+def accepts(text: str, ex) -> bool:
+    return len(text.split()) <= 7 and (ex.yes or bool(PROCEED.search(text))) and not BUT.search(text)
+
+
 # ---- the advisor -----------------------------------------------------------------
 
 TOOLS = [
@@ -275,11 +318,15 @@ Rules you never break:
 """ + slots.GUIDE
 
 
-def context_for(profile: Profile, lang: str) -> str:
+VOICE_NOTE = (" [Phone call] The owner hears your reply spoken aloud: at most two short sentences, under 35 words, no lists or symbols."
+              " Ask one question at a time. When nothing is still needed, call recommend: the server then says the plan itself.")
+
+
+def context_for(profile: Profile, lang: str, voice: bool = False) -> str:
     facts = {k: v for k, v in profile.to_dict().items() if v not in (None, [], {}, False) and k != "gstin"}
     need = [m for m in ASK_ORDER if m in profile.missing()]
     return (f"[Context, not from the owner] Reply in {LANG_NAMES.get(lang, 'English')}. Current profile: {facts}. "
-            f"Still needed before recommend: {need or 'nothing, call recommend'}")
+            f"Still needed before recommend: {need or 'nothing, call recommend'}" + (VOICE_NOTE if voice else ""))
 
 
 class Advisor:
@@ -287,10 +334,11 @@ class Advisor:
         self.tokenize = tokenize
         self.llm = llm if llm is not None else (get_llm() if use_llm else None)
 
-    def greet(self, lang: str) -> Turn:
-        return Turn(t("greet", lang), lang, "asking", asked="business_type")
+    def greet(self, lang: str, voice: bool = False) -> Turn:
+        return Turn(t("call_greet" if voice else "greet", lang), lang, "asking", asked="business_type")
 
-    def respond(self, state: dict, user_text: str) -> tuple[Turn, dict]:
+    def respond(self, state: dict, user_text: str, voice: bool = False) -> tuple[Turn, dict]:
+        """voice: a call. Replies are short and spoken, the server says the plan, and a plain yes to it is "accepted"."""
         state = dict(state or {})
         profile = Profile.from_dict(state.get("profile"))
         lang = state.get("language") or "en"
@@ -329,9 +377,14 @@ class Advisor:
             turn = Turn(t("handoff", lang), lang, "handoff", trace=trace)
             return self._finish(turn, state, profile, history, asked, n_questions)
 
+        if voice and state.get("bundle") and not changed and not ex.gstin and accepts(user_text, ex):
+            trace.append({"step": "accepted", "source": "rules"})
+            turn = Turn(t("call_accept", lang), lang, "accepted", bundle=state["bundle"], trace=trace)
+            return self._finish(turn, state, profile, history, None, n_questions)
+
         if self.llm:
             try:
-                turn = self._llm_turn(profile, lang, history, trace, ex, state.get("bundle"))
+                turn = self._llm_turn(profile, lang, history, trace, ex, state.get("bundle"), voice)
                 if prefix and turn.stage != "recommended":
                     turn.text = " ".join(prefix) + "\n" + turn.text
                 if turn.bundle:
@@ -363,14 +416,15 @@ class Advisor:
         trace.append({"step": "recommend", "products": [ln["product_id"] for ln in bundle["lines"]],
                       "refused": [{"product": e["product_id"], "rule": e["rule"]} for e in bundle["exclusions"]],
                       "assumed": notes, "monthly": bundle["monthly"]})
-        text = "\n".join(prefix + [compose(bundle, calc, lang, notes, "short_contract" in ex.intents)])
+        text = "\n".join(prefix + [(spoken_plan if voice else compose)(bundle, calc, lang, notes, "short_contract" in ex.intents)])
         turn = Turn(text, lang, "recommended", bundle=bundle, quick_replies=[t("qr_continue", lang), t("qr_person", lang)], trace=trace,
                     refine=refinements(bundle, calc, lang), diff=diff(state.get("bundle"), bundle) if state.get("bundle") else None)
         state["bundle"] = bundle
         return self._finish(turn, state, profile, history, None, n_questions)
 
     # -- agentic path --
-    def _llm_turn(self, profile: Profile, lang: str, history: list[dict], trace: list[dict], ex, previous: dict | None) -> Turn:
+    def _llm_turn(self, profile: Profile, lang: str, history: list[dict], trace: list[dict], ex, previous: dict | None,
+                  voice: bool = False) -> Turn:
         box: dict = {"bundle": None, "handoff": None, "notes": []}
 
         def execute(name: str, args: dict):
@@ -433,7 +487,9 @@ class Advisor:
                 return {"ok": True, "next": "the owner sees a call-back form with time windows"}
             return {"error": "unknown tool"}
 
-        text, calls = self.llm.run(SYSTEM, history[-12:], TOOLS, execute, context=context_for(profile, lang))
+        # on a call the loop ends at recommend and the server says the plan: one model round trip fewer
+        text, calls = self.llm.run(SYSTEM, history[-12:], TOOLS, execute, context=context_for(profile, lang, voice),
+                                   **({"stop_after": frozenset({"recommend"})} if voice else {}))
         if box["handoff"] and box["handoff"] != "prefer_person" and "handoff" not in ex.intents and "business_type" not in profile.missing():
             # the owner did not ask for a person: a blocked rule is the engine's to explain, so recommend (a call-back stays one tap away)
             trace.append({"step": "handoff_declined", "reason": box["handoff"]})
@@ -444,16 +500,20 @@ class Advisor:
         bundle = box["bundle"] or previous
         trace.append({"step": "llm", "provider": self.llm.provider, "model": self.llm.model, "tool_calls": calls,
                       "usage": getattr(self.llm, "usage", None)})
-        issues = slots.problems(text, bundle) if text else ["empty reply"]
-        trace.append({"step": "slot_check", "passed": not issues, "issues": issues})
         calc, notes = assumptions(profile)
+        if voice and box["bundle"] and not box["handoff"]:
+            text, issues = spoken_plan(box["bundle"], calc, lang, notes, "short_contract" in ex.intents), []
+            trace.append({"step": "slot_check", "passed": True, "issues": [], "spoken_by": "server"})
+        else:
+            issues = slots.problems(text, bundle) if text else ["empty reply"]
+            trace.append({"step": "slot_check", "passed": not issues, "issues": issues})
         if issues:  # never show unverified facts: fall back to the template explanation
             if box["bundle"]:
                 text = compose(box["bundle"], calc, lang, notes, "short_contract" in ex.intents)
             else:
                 missing = [m for m in ASK_ORDER if m in profile.missing()]
                 text = t("ask_" + missing[0], lang) if missing else t("greet", lang)
-        else:
+        elif not (voice and box["bundle"] and not box["handoff"]):
             text = slots.render(text, bundle, calc)
             if box["bundle"] and (kept := speed_text(box["bundle"]["notes"], lang)):
                 # a requirement the budget can't meet is stated by the server, never left to the model; before its closing question

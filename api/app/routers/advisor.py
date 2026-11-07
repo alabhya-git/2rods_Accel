@@ -61,14 +61,21 @@ def new_session(body: NewSession, db: Session = Depends(get_db), x_staff_token: 
     claims = verify_staff(x_staff_token) or {}
     # partner credit only from a signed partner sign-in, never from a query string
     partner_id = body.partner_id if body.partner_id and claims.get("partner_id") == body.partner_id else None
-    channel = "partner" if partner_id else ("whatsapp" if body.channel == "whatsapp" else "web")
+    channel = "partner" if partner_id else (body.channel if body.channel in ("whatsapp", "voice") else "web")
     s = AdvisorSession(language=lang, channel=channel, partner_id=partner_id,
                        profile={"language": lang, "_meta": {"lang_locked": body.language in LANGUAGES and body.language != "en"}})
-    turn = advisor_for(db).greet(lang)
+    turn = advisor_for(db).greet(lang, voice=channel == "voice")
     s.messages = [{"role": "assistant", "text": turn.text}]
     db.add(s)
     db.commit()
     return view(s, turn)
+
+
+@router.get("/greeting")
+def greeting(language: str = "en", channel: str = "web"):
+    """The opening line, before any session exists: the call screen fetches its voice while the owner reads the page."""
+    lang = language if language in LANGUAGES else "en"
+    return {"text": Advisor(use_llm=False).greet(lang, voice=channel == "voice").text}
 
 
 @router.get("/sessions/{sid}")
@@ -107,7 +114,7 @@ def message(sid: str, body: Message, db: Session = Depends(get_db)):
     state = load_state(s)
     if body.language in LANGUAGES:
         state["language"], state["lang_locked"] = body.language, True
-    turn, state = advisor_for(db).respond(state, body.text)
+    turn, state = advisor_for(db).respond(state, body.text, voice=s.channel == "voice")
     save_state(s, state, turn)
     db.commit()
     return view(s, turn)

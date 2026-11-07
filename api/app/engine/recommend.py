@@ -200,7 +200,7 @@ class _Builder:
         if for_dependency:
             chain = [p for p in chain if p not in graph.LEASED]
         first = chain[0]
-        explicit = bool(needs & {"dedicated_line", "high_speed"}) or why == "sla" and self.prof.uptime_pct or why == "speed"
+        explicit = bool(needs & {"dedicated_line", "high_speed"}) or why == "sla" and self.prof.uptime_pct or why in ("speed", "gig")
         for i, pid in enumerate(chain):
             v = violations(self.P(pid), self.prof)
             if not v:
@@ -294,6 +294,8 @@ class _Builder:
             return any(pid in self.P(o).requires_one_of and not any(r in self.lines and r != pid for r in self.P(o).requires_one_of) for o in self.lines if o != pid)
 
         dropped: list[str] = []
+        want = min(self.named_speed(), max(self.speed(p) for p in graph.BROADBAND))  # above the fastest line: keep the fastest
+        kept: str | None = None  # a line kept at the speed the owner named, though it costs more than the budget
 
         def drop_optional(max_take: int) -> None:
             while total() > budget:
@@ -320,20 +322,60 @@ class _Builder:
             if old in self.lines and new not in self.lines and not violations(self.P(new), self.prof):
                 if new not in graph.fits((old, new), self.ds.products, self.prof.features, self.prof.data_gb):
                     continue  # never trade away a feature the owner named (roaming, data) to save money
+                if want and old in graph.BROADBAND and self.speed(new) < min(want, self.speed(old)):
+                    kept = old  # nor a speed they named: the budget conflict is said, not settled for them
+                    continue
                 blocked = any(old in self.P(o).requires_one_of and new not in self.P(o).requires_one_of
                               and not any(r in self.lines and r != old for r in self.P(o).requires_one_of)
                               for o in self.lines if o != old)
                 if blocked:
                     continue
                 ln = self.lines.pop(old)
-                self.add(new, ln.source, ln.need, {"code": "budget", "instead_of": old})
-                dropped.append(f"{self.P(old).name} -> {self.P(new).name}")
+                first = ln.reason.get("instead_of", old) if ln.reason.get("code") == "budget" else old
+                self.add(new, ln.source, ln.need, {"code": "budget", "instead_of": first})
+                step = f"{self.P(first).name} -> {self.P(new).name}"
+                if first != old and dropped and dropped[-1].startswith(self.P(first).name + " -> "):
+                    dropped[-1] = step  # one change per line: 1G -> 100, not 1G -> 300 -> 100
+                else:
+                    dropped.append(step)
         # 4. any remaining suggestion
         drop_optional(101)
         if dropped:
             self.notes.append({"code": "budget_fit", "budget": budget, "changed": dropped})
         if total() > budget:
+            if kept in self.lines:
+                self.notes.append(self.speed_conflict(kept, want, budget, total))
             self.notes.append({"code": "over_budget", "budget": budget, "monthly": total()})
+
+    def named_speed(self) -> int:
+        """The speed the owner named: a number they gave, or 1 Gbps when they asked for gigabit."""
+        if "high_speed" in self.prof.needs and "high_speed" not in self.prof.excluded:
+            return max(1000, self.prof.speed_mbps or 0)
+        return self.prof.speed_mbps or 0
+
+    def speed(self, pid: str) -> int:
+        return graph.speed_mbps(self.P(pid).description) or 0
+
+    def speed_conflict(self, kept: str, want: int, budget: int, total) -> dict:
+        """The line kept for the named speed (the one that meets it, or the fastest allowed here), its all-in price, and the
+        fastest allowed line inside the budget (or, when none fits, the cheapest), so the owner chooses between speed and budget."""
+        ln = self.lines[kept]
+        others = sum(o.monthly for p, o in self.lines.items() if p != kept)  # GST is on the bundle total: price each swap whole
+        options = []
+        for pid in graph.BROADBAND:
+            p = self.P(pid)
+            if pid == kept or self.speed(pid) >= self.speed(kept) or violations(p, self.prof):
+                continue
+            m = others + unit_price(p, self.prof.term_months) * quantity(p, self.prof)
+            options.append((pid, m + gst(m)))
+        note = {"code": "speed_kept", "speed": want, "product_id": kept, "product": ln.name, "reaches": self.speed(kept) >= want,
+                "budget": budget, "monthly": total()}
+        fits = [o for o in options if o[1] <= budget]
+        pick = max(fits, key=lambda o: self.speed(o[0])) if fits else min(options, key=lambda o: o[1], default=None)
+        if pick:
+            note.update(option_id=pick[0], option=self.P(pick[0]).name, option_speed=self.speed(pick[0]),
+                        option_monthly=pick[1], option_fits=bool(fits))
+        return note
 
     def cap_per_site(self) -> None:
         """A per-site add-on needs a connection at that site: units can't outnumber connected sites."""

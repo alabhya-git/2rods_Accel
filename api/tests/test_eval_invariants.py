@@ -79,18 +79,23 @@ def test_600_random_profiles_keep_what_the_owner_asked_for():
         b = recommend(p)
         got = {ln.product_id for ln in b.lines}
         wants_sla = "dedicated_line" in p.needs or (p.uptime_pct or 0) >= 99.5 or (
-            p.segment == "mfg" and p.n_employees >= 10 and not p.only and not p.needs & {"high_speed", "dedicated_line"} and "internet" not in p.excluded)
+            # a factory's own line is the line, not an extra: "only internet" still gets it
+            p.segment == "mfg" and p.n_employees >= 10 and not p.needs & {"high_speed", "dedicated_line"} and "internet" not in p.excluded)
         if got & set(graph.LEASED) and not wants_sla:
             broken.append(("leased line not asked for", p.to_dict(), sorted(got)))
         mobile = got & {"P07", "P08"}
         if mobile and (p.features or p.data_gb) and mobile != set(graph.fits(("P07", "P08"), ds.products, p.features, p.data_gb)) & mobile:
             broken.append(("named feature dropped", p.to_dict(), sorted(got)))
         line = got & set(graph.BROADBAND)
-        if p.speed_mbps and not p.budget and line and not got & set(graph.LEASED):
+        if p.speed_mbps and line and not got & set(graph.LEASED):  # with a budget too: the conflict is said, not settled
             fast_enough = [q for q in graph.BROADBAND if (graph.speed_mbps(ds.products[q].description) or 0) >= p.speed_mbps
                            and not violations(ds.products[q], p)]
             if fast_enough and not any((graph.speed_mbps(ds.products[q].description) or 0) >= p.speed_mbps for q in line):
                 broken.append(("slower than asked", p.to_dict(), sorted(got)))
+        kept = next((n for n in b.notes if n["code"] == "speed_kept"), None)
+        if kept and (b.monthly + b.gst_monthly <= p.budget or kept["product_id"] not in got
+                     or kept.get("option_fits") and kept["option_monthly"] > p.budget):
+            broken.append(("speed note wrong", p.to_dict(), kept))
         if p.budget and b.monthly + b.gst_monthly > p.budget and not any(n["code"] == "over_budget" for n in b.notes):
             broken.append(("over budget, not said", p.to_dict(), b.monthly))
     assert not broken, broken[:3]

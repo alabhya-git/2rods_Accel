@@ -65,6 +65,62 @@ def test_the_slowest_line_that_meets_the_speed_asked(want, tier, expect, refused
         assert any(e.product_id == refused for e in b.exclusions)
 
 
+def office(**kw) -> Profile:
+    return prof(**{"segment": "prof", "employees": 5, "city": "Delhi", "has_gstin": True, "gstin_status": "Active", "needs": ["internet"],
+                   "only": True, **kw})
+
+
+@pytest.mark.parametrize("speed, budget, kept, option, fits", [(1000, 1500, "P03", "P01", True), (1000, 2500, "P03", "P02", True),
+                                                               (300, 1500, "P02", "P01", True), (1000, 900, "P03", "P04", False)])
+def test_a_tight_budget_never_trades_away_a_named_speed(speed, budget, kept, option, fits):
+    b = recommend(office(speed_mbps=speed, budget=budget))
+    note = next(n for n in b.notes if n["code"] == "speed_kept")
+    assert ids(b) == {kept} and note["option_id"] == option and note["option_fits"] is fits
+    assert any(n["code"] == "over_budget" for n in b.notes)
+    assert (note["option_monthly"] <= budget) is fits
+
+
+def test_where_the_named_speed_is_not_sold_the_fastest_line_here_is_kept():
+    from app.advisor.agent import speed_text
+    b = recommend(office(city="Jaipur", city_tier=2, speed_mbps=1000, budget=1500))
+    note = next(n for n in b.notes if n["code"] == "speed_kept")
+    assert ids(b) == {"P02"} and not note["reaches"] and any(e.product_id == "P03" for e in b.exclusions)
+    assert "fastest line I can offer here is Biz Fibre 300" in speed_text(b.to_dict()["notes"], "en")
+
+
+def test_without_a_named_speed_the_budget_still_picks_a_cheaper_line():
+    b = recommend(office(budget=1500))
+    assert ids(b) == {"P01"} and not any(n["code"] == "speed_kept" for n in b.notes)
+
+
+def test_a_named_speed_inside_the_budget_needs_no_note():
+    b = recommend(office(speed_mbps=1000, budget=6000))
+    assert ids(b) == {"P03"} and not b.notes
+
+
+def test_a_line_changed_twice_names_the_first_one():
+    b = recommend(office(budget=500))
+    ln = next(ln for ln in b.lines if ln.product_id == "P04")
+    assert ln.reason["instead_of"] == "P02"
+    assert next(n for n in b.notes if n["code"] == "budget_fit")["changed"] == ["Biz Fibre 300 -> Biz 5G AirFiber 100"]
+
+
+def test_the_owner_hears_the_speed_against_the_budget():
+    turn, _ = Advisor(use_llm=False).respond({}, "Clinic in Delhi, 5 staff, GST active. I need 1 Gbps internet only, budget ₹1,500 a month.")
+    assert {ln["product_id"] for ln in turn.bundle["lines"]} == {"P03"}
+    assert "You asked for 1 Gbps" in turn.text and "Biz Fibre 100 (100 Mbps)" in turn.text and "within your budget" in turn.text
+    assert "The closest I can get" not in turn.text  # one sentence about the budget, not two
+
+
+@pytest.mark.parametrize("follow, line", [("ok, 100 Mbps is fine", "P02"), ("fine, stay within budget", "P02"),
+                                          ("the cheaper one please", "P02"), ("ठीक है, बजट में ही रखो", "P02"), ("no, keep 1 Gbps", "P03")])
+def test_the_owner_settles_speed_against_budget(follow, line):
+    adv = Advisor(use_llm=False)
+    _, st = adv.respond({}, "Clinic in Delhi, 5 staff, GST active. I need 1 Gbps internet only, budget 2500 a month.")
+    turn, _ = adv.respond(st, follow)
+    assert {ln["product_id"] for ln in turn.bundle["lines"]} == {line}
+
+
 # ---- understanding: wording that must and must not count ------------------------------
 
 @pytest.mark.parametrize("text", ["GST yes", "gst: yes", "GSTIN - available", "yes we have GST", "haan, gst hai", "registered under GST"])
@@ -168,3 +224,17 @@ def test_the_model_is_told_what_is_still_needed():
 def test_asking_for_a_person_still_hands_off():
     turn, _ = Advisor(llm=HandsOff("other")).respond({}, "please talk to a person, call me")
     assert turn.stage == "handoff"
+
+
+def test_with_the_model_the_server_states_the_speed_against_the_budget():
+    seen = {}
+
+    class Gigabit(HandsOff):
+        def run(self, system, history, tools, execute, max_steps=5, context=None):
+            execute("update_profile", {"business_type": "Clinic", "segment": "prof", "employees": 5, "city": "Delhi", "has_gstin": True,
+                                       "needs": ["high_speed"], "only_these_needs": True, "speed_mbps": 1000, "budget": 1500})
+            seen.update(execute("recommend", {}))
+            return "Here is the line for your clinic: {{product:P03}}, {{monthly_all_in}} a month with GST.", []
+    turn, _ = Advisor(llm=Gigabit(None)).respond({}, "Clinic in Delhi, 5 staff, GST active, 1 Gbps, budget 1500")
+    assert turn.guard["passed"] and "speed_mbps 100 " in seen["speed_vs_budget"]
+    assert turn.text.count("You asked for 1 Gbps") == 1 and "Biz Fibre 100 (100 Mbps)" in turn.text

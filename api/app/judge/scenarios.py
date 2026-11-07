@@ -31,6 +31,7 @@ class Scenario:
     install_days: int | None = None
     setup: int | None = None
     custom: dict[str, int] | None = None  # price an owner-edited cart instead
+    notes: list[str] = field(default_factory=list)  # what the owner must be told (e.g. a speed the budget can't buy)
 
 
 GST_ACTIVE = {"has_gstin": True, "gstin_status": "Active"}
@@ -134,6 +135,10 @@ SCENARIOS: list[Scenario] = [
     Scenario("S32", "99.5% uptime and 1 Gbps, but only 6 staff", "Clinic in Mumbai, 6 staff, GST active: 1 Gbps with 99.5% uptime.",
              {"business_type": "Clinic", "segment": "prof", "employees": 6, "city": "Mumbai", "city_tier": 1, **GST_ACTIVE, "speed_mbps": 1000, "uptime_pct": 99.5},
              include=["P03"], absent=["P05", "P06"], exclude={"P06": "min_employees"}),
+    Scenario("S33", "1 Gbps on a Rs 1,500 budget", "Clinic in Delhi, 5 staff, GST active. I need 1 Gbps internet only, budget Rs 1,500 a month.",
+             {"business_type": "Clinic", "segment": "prof", "employees": 5, "city": "Delhi", "city_tier": 1, **GST_ACTIVE,
+              "needs": {"high_speed"}, "only": True, "speed_mbps": 1000, "budget": 1500},
+             only=["P03"], notes=["speed_kept", "over_budget"]),
 ]
 
 
@@ -171,6 +176,9 @@ def _check(s: Scenario) -> tuple[bool, list[str], dict]:
             problems.append(f"expected {pid} contract {months}, got {ln.contract_months if ln else None}")
     if s.install_days is not None and bundle.install_days != s.install_days:
         problems.append(f"install days {bundle.install_days}, expected {s.install_days}")
+    for code in s.notes:
+        if not any(n["code"] == code for n in bundle.notes):
+            problems.append(f"expected the owner to be told: {code}")
     if prof.term_months >= 24:
         for ln in bundle.lines:
             if ln.unit_price != store().products[ln.product_id].price_min:

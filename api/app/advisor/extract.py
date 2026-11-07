@@ -11,6 +11,7 @@ import unicodedata
 from dataclasses import dataclass, field
 
 from ..data_store import store
+from ..engine import graph
 from .normalise import loanword_needs
 
 # ---- language ------------------------------------------------------------------
@@ -176,6 +177,9 @@ CLAUSE_SPLIT = r"[,;!?।\n]+|\.(?=\s|$)|\b(?:but|lekin|par|however|except)\b|�
 HANDOFF = r"talk to (?:a )?(?:human|person|agent|someone|executive)|call me|speak to (?:a )?(?:person|human)|baat kar|किसी से बात|कॉल करो"
 TERM24 = r"24[- ]?months?|2 years|two years|do saal|दो साल"
 SHORT_CONTRACT = r"one[- ]month|1[- ]month|monthly contract|no contract|no lock-?in"
+BUDGET_FIRST = (r"\b(?:stay|keep(?: it)?|fit|go|remain)\s+(?:with)?in\s+(?:my |the |our )?budget\b|\bbudget (?:is )?(?:more important|first|matters more)\b|"
+                r"\b(?:the )?cheaper (?:one|option|line|plan)\b|\bwithin (?:my |the )?budget (?:is )?(?:fine|ok|okay|please)\b|"
+                r"बजट में ही|बजट में रखो|बजट ज़्यादा ज़रूरी|सस्ता वाला|sasta wala|budget me(?:in)? hi")
 
 CITY_ALIASES = {
     "bangalore": "Bengaluru", "bengaluru": "Bengaluru", "bombay": "Mumbai", "calcutta": "Kolkata", "madras": "Chennai",
@@ -333,6 +337,13 @@ def extract(raw: str) -> Extracted:
         e.speed_mbps = int(sm.group(1))
     if re.search(r"1\s?gbps|1\s?gig|gigabit|\b1\s?g\b", scrub):
         e.speed_mbps = 1000
+    if e.speed_mbps is None:  # "go with Biz Fibre 100": the line they pick names its speed
+        for pid in graph.BROADBAND:
+            p = store().products[pid]
+            if p.name.lower() in scrub:
+                e.speed_mbps = graph.speed_mbps(p.description)
+    if e.speed_mbps is None and "high_speed" not in e.needs and re.search(BUDGET_FIRST, scrub):
+        e.intents.add("budget_first")  # "stay within budget" after a speed it can't pay for: the budget wins
     um = re.search(r"(99(?:\.\d+)?)\s?%", scrub)
     if um:
         e.uptime_pct = float(um.group(1))

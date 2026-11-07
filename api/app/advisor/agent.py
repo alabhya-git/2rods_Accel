@@ -66,6 +66,16 @@ def _city_from_address(address: str) -> str | None:
     return None
 
 
+def drop_gigabit(profile: Profile) -> bool:
+    """An earlier "1 Gbps" gives way to a lower speed named later: the line stays, the gigabit ask goes."""
+    if "high_speed" not in profile.needs:
+        return False
+    profile.needs.discard("high_speed")
+    if "internet" not in profile.excluded:
+        profile.needs.add("internet")
+    return True
+
+
 def merge(profile: Profile, ex, asked: str | None) -> list[str]:
     """Merge an extraction into the profile; returns the fields that changed."""
     changed = []
@@ -87,6 +97,13 @@ def merge(profile: Profile, ex, asked: str | None) -> list[str]:
     if ex.features - profile.features:
         profile.features |= ex.features
         changed.append("features")
+    # the newer word on speed wins: "100 Mbps is fine" after "1 Gbps", or "stay within budget"
+    if "budget_first" in ex.intents and (profile.speed_mbps or "high_speed" in profile.needs):
+        profile.speed_mbps = None
+        drop_gigabit(profile)
+        changed.append("speed_mbps")
+    elif ex.speed_mbps is not None and ex.speed_mbps < 1000 and "high_speed" not in ex.needs and drop_gigabit(profile):
+        changed.append("needs")
     for k, v in ex.qty.items():
         profile.qty[k] = v
     profile.sanitised()
@@ -157,6 +174,22 @@ def rule_text(rule: str, args: dict, product: str, lang: str) -> str:
              requires=" / ".join(args.get("requires", [])), option=args.get("option", ""))
 
 
+def mbps(n: int) -> str:
+    return f"{n // 1000} Gbps" if n >= 1000 and n % 1000 == 0 else f"{n} Mbps"
+
+
+def speed_text(bundle_notes: list[dict], lang: str) -> str:
+    """The speed the owner named costs more than their budget: say so, with the best line inside it."""
+    n = next((n for n in bundle_notes if n["code"] == "speed_kept"), None)
+    if not n:
+        return ""
+    out = t("speed_kept" if n["reaches"] else "speed_kept_best", lang, speed=mbps(n["speed"]), product=n["product"], monthly=rupees(n["monthly"]), budget=rupees(n["budget"]))
+    if n.get("option"):
+        out += " " + t("speed_option_fits" if n["option_fits"] else "speed_option_closest", lang, option=n["option"],
+                       option_speed=mbps(n["option_speed"]), option_monthly=rupees(n["option_monthly"]))
+    return out
+
+
 def compose(bundle: dict, profile: Profile, lang: str, notes: list[str], short_contract: bool) -> str:
     out = [t("bundle_intro", lang, name=bundle["name"], monthly=rupees(bundle["monthly"]), days=bundle["install_days"])]
     for ln in bundle["lines"]:
@@ -169,11 +202,14 @@ def compose(bundle: dict, profile: Profile, lang: str, notes: list[str], short_c
             out.append(f"• {rule_text(e['rule'], e['args'], e['name'], lang)}")
     if profile.gstin_status in ("Cancelled", "Suspended"):
         out.append(t("gstin_inactive", lang, status=profile.gstin_status))
+    kept = speed_text(bundle["notes"], lang)
     for n in bundle["notes"]:
         if n["code"] == "budget_fit":
             out.append(t("budget_fit", lang, budget=rupees(n["budget"]), changed=", ".join(n["changed"])))
-        elif n["code"] == "over_budget":
+        elif n["code"] == "over_budget" and not kept:  # the speed note already says the price and the budget
             out.append(t("over_budget", lang, budget=rupees(n["budget"]), monthly=rupees(n["monthly"])))
+    if kept:
+        out.append(kept)
     if bundle["monthly_other_term"] < bundle["monthly"]:
         out.append(t("twentyfour", lang, other=rupees(bundle["monthly_other_term"])))
     if short_contract:
@@ -349,6 +385,8 @@ class Advisor:
                     if hasattr(profile, k) and v is not None and k not in ("needs", "excluded", "qty", "only", "features"):
                         setattr(profile, k, v)
                 profile.apply_needs(needs & set(graph.NEED_CHAIN), remove & set(graph.NEED_CHAIN), replace=only)
+                if (args.get("speed_mbps") or 1000) < 1000 and "high_speed" not in needs:
+                    drop_gigabit(profile)
                 if only:
                     profile.only = True
                 profile.qty.update({k: v for k, v in qty.items() if v})
@@ -372,6 +410,11 @@ class Advisor:
                         "not_included": [{"id": e["product_id"], "rule": e["reason"], "alternative_id": e["alternative_id"]} for e in b["exclusions"]],
                         "price_questions": [r["question"] for r in refinements(b, calc, lang)],
                         "notes": [n["code"] for n in b["notes"]], "assumed": notes,
+                        **({"speed_vs_budget": "the speed they named costs more than their budget, so the line that meets it was kept. "
+                                               "The server adds the sentence with both prices and the option inside the budget: don't repeat it, "
+                                               "and don't call the bundle within budget. If they take the option, call update_profile with "
+                                               f"speed_mbps {kept['option_speed']} and remove_needs [\"high_speed\"]."}
+                           if (kept := next((n for n in b["notes"] if n["code"] == "speed_kept" and n.get("option")), None)) else {}),
                         "money": "use slots only: {{monthly}}, {{monthly_all_in}}, {{line:ID}}, {{setup}}, {{due_today}}"}
             if name == "explain_product":
                 q = (args.get("name") or "").lower()
@@ -412,6 +455,10 @@ class Advisor:
                 text = t("ask_" + missing[0], lang) if missing else t("greet", lang)
         else:
             text = slots.render(text, bundle, calc)
+            if box["bundle"] and (kept := speed_text(box["bundle"]["notes"], lang)):
+                # a requirement the budget can't meet is stated by the server, never left to the model; before its closing question
+                body, _, last = text.rstrip().rpartition("\n")
+                text = f"{body}\n{kept}\n\n{last}" if body and last.rstrip().endswith("?") else f"{text}\n{kept}"
         guard_info = {"passed": not issues, "issues": issues}
         if box["handoff"]:
             return Turn(text or t("handoff", lang), lang, "handoff", trace=trace, llm_used=True, guard=guard_info)

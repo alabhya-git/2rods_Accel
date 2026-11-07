@@ -34,16 +34,16 @@ export default function Home() {
     <div className="flex min-h-full flex-col bg-white">
       <SiteHeader />
 
-      <section className="hero-red text-white">
+      <section className="hero-red text-onbrand">
         <div className="mx-auto grid max-w-site gap-8 px-4 pb-10 pt-8 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:px-8 lg:py-20">
           <div className="animate-rise">
-            <p className="eyebrow !text-white/80">Accel Business · Udyam Digital</p>
+            <p className="eyebrow !text-onbrand/80">Accel Business · Udyam Digital</p>
             <h1 className="mt-3 text-[30px] font-extrabold leading-[1.12] sm:text-[38px] lg:text-[50px]">{t('tagline')}</h1>
-            <p className="mt-4 max-w-xl text-[18px] text-white/90 lg:text-[20px]">{t('time_promise')}</p>
+            <p className="mt-4 max-w-xl text-[18px] text-onbrand/90 lg:text-[20px]">{t('time_promise')}</p>
             <ol className="mt-7 hidden gap-3 lg:grid lg:grid-cols-2">
               {['how_1', 'how_2', 'how_3', 'how_4'].map((k, i) => (
-                <li key={k} className="flex items-start gap-3 rounded-2xl bg-white/10 px-4 py-3 ring-1 ring-white/15">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white text-[14px] font-bold text-kumkum">{i + 1}</span>
+                <li key={k} className="flex items-start gap-3 rounded-2xl bg-onbrand/10 px-4 py-3 ring-1 ring-onbrand/15">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-onbrand text-[14px] font-bold text-kumkum">{i + 1}</span>
                   <span className="text-[16px] leading-snug">{t(k)}</span>
                 </li>
               ))}
@@ -56,17 +56,17 @@ export default function Home() {
               {doors.map((d) => (
                 <button key={d.key} onClick={d.go}
                   className={`group relative flex items-center gap-4 rounded-2xl p-4 text-left transition ${d.primary
-                    ? 'text-white shadow-brand hover:brightness-105 [background-image:linear-gradient(135deg,#e3162f,#b30c24)]'
+                    ? 'text-onbrand shadow-brand hover:brightness-105 [background-image:linear-gradient(135deg,#e3162f,#b30c24)]'
                     : 'border-[1.5px] border-rule bg-white hover:border-ink hover:shadow-card'}`}>
-                  <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl ${d.primary ? 'bg-white/15' : 'bg-kumkum-soft text-kumkum'}`}>
+                  <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl ${d.primary ? 'bg-onbrand/15' : 'bg-kumkum-soft text-kumkum'}`}>
                     <Svg d={ICONS[d.key]} size={24} width={2} />
                   </span>
                   <span className="min-w-0 flex-1">
-                    {d.primary && <span className="mb-1 inline-block rounded-pill bg-white px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wide text-kumkum">{t('not_sure')}</span>}
+                    {d.primary && <span className="mb-1 inline-block rounded-pill bg-onbrand px-2.5 py-0.5 text-[12px] font-bold uppercase tracking-wide text-kumkum">{t('not_sure')}</span>}
                     <span className="block text-[19px] font-bold leading-tight">{d.title}</span>
-                    <span className={`mt-0.5 block text-[15px] leading-snug ${d.primary ? 'text-white/90' : 'text-ink-soft'}`}>{d.sub}</span>
+                    <span className={`mt-0.5 block text-[15px] leading-snug ${d.primary ? 'text-onbrand/90' : 'text-ink-soft'}`}>{d.sub}</span>
                   </span>
-                  <span className={`shrink-0 transition group-hover:translate-x-0.5 ${d.primary ? 'text-white' : 'text-ink-faint'}`}><Svg d={ICONS.chevron} /></span>
+                  <span className={`shrink-0 transition group-hover:translate-x-0.5 ${d.primary ? 'text-onbrand' : 'text-ink-faint'}`}><Svg d={ICONS.chevron} /></span>
                 </button>
               ))}
             </nav>
@@ -96,7 +96,7 @@ export default function Home() {
           <ol className="mt-5 space-y-3">
             {['how_1', 'how_2', 'how_3', 'how_4'].map((k, i) => (
               <li key={k} className="flex items-start gap-3">
-                <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-kumkum text-[15px] font-bold text-white">{i + 1}</span>
+                <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-kumkum text-[15px] font-bold text-onbrand">{i + 1}</span>
                 <span className="text-[17px]">{t(k)}</span>
               </li>
             ))}
@@ -110,7 +110,7 @@ export default function Home() {
         <div className="mt-4 grid grid-cols-5 gap-2 lg:grid-cols-10">
           {LANGS.map((l) => (
             <button key={l.code} onClick={() => setLang(l.code)} aria-pressed={l.code === lang}
-              className={`h-12 rounded-xl border-[1.5px] text-[15px] font-bold transition ${l.code === lang ? 'border-kumkum bg-kumkum text-white shadow-brand' : 'border-rule bg-white text-ink hover:border-ink'}`}
+              className={`h-12 rounded-xl border-[1.5px] text-[15px] font-bold transition ${l.code === lang ? 'border-kumkum bg-kumkum text-onbrand shadow-brand' : 'border-rule bg-white text-ink hover:border-ink'}`}
               style={{ fontFamily: `'${l.font}', 'Baloo 2'` }} lang={l.code}>
               {l.name}
             </button>

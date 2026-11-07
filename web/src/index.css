@@ -2,35 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Theme colours as RGB triplets; Tailwind reads them through tailwind.config.js. */
 :root {
   --font: 'Baloo 2';
-  --rule: #d5deee;
-  --margin: #d50f2b;
   --row: 36px;
+  --c-surface: 255 255 255; --c-page: 245 246 248;
+  --c-ink: 21 23 31; --c-ink-soft: 75 81 98; --c-ink-faint: 134 139 155;
+  --c-rule: 227 230 236; --c-rule-strong: 199 204 214;
+  --c-ledger: 35 70 138; --c-ledger-soft: 235 240 249;
+  --c-red: 213 15 43; --c-red-dark: 168 12 34; --c-red-soft: 253 237 239;
+  --c-haldi-dark: 154 107 0; --c-haldi-soft: 255 245 219;
+  --c-leaf: 24 121 75; --c-leaf-soft: 228 244 235;
+  --rule: #d5deee; --margin: #d50f2b;
+  --shadow-card: 0 1px 2px rgba(16,24,40,.04), 0 2px 10px rgba(16,24,40,.05);
+  --shadow-lift: 0 12px 32px -8px rgba(16,24,40,.18), 0 2px 6px rgba(16,24,40,.06);
+  color-scheme: light;
+}
+/* Night: deep slate surfaces, the same red a touch brighter, soft tints darkened so text keeps its contrast. */
+.dark {
+  --c-surface: 23 26 35; --c-page: 13 15 21;
+  --c-ink: 236 238 243; --c-ink-soft: 178 184 198; --c-ink-faint: 128 134 150;
+  --c-rule: 43 48 60; --c-rule-strong: 62 69 85;
+  --c-ledger: 143 176 240; --c-ledger-soft: 27 37 64;
+  --c-red: 232 38 61; --c-red-dark: 255 138 150; --c-red-soft: 58 18 24;
+  --c-haldi-dark: 245 196 81; --c-haldi-soft: 58 46 10;
+  --c-leaf: 61 190 126; --c-leaf-soft: 15 46 31;
+  --rule: #2b3346; --margin: #e8263d;
+  --shadow-card: 0 1px 2px rgba(0,0,0,.4), 0 2px 10px rgba(0,0,0,.25);
+  --shadow-lift: 0 12px 32px -8px rgba(0,0,0,.6), 0 2px 6px rgba(0,0,0,.3);
+  color-scheme: dark;
 }
 
 html, body, #root { height: 100%; }
 body {
-  @apply bg-paper-tint text-ink antialiased;
+  @apply bg-paper-tint text-ink antialiased transition-colors;
   font-family: var(--font), system-ui, sans-serif;
   font-size: 17px;
   line-height: 1.5;
   -webkit-tap-highlight-color: transparent;
 }
 h1, h2, h3 { letter-spacing: -0.01em; }
-:focus-visible { outline: 3px solid #15171f; outline-offset: 2px; border-radius: 8px; }
+:focus-visible { outline: 3px solid rgb(var(--c-ink)); outline-offset: 2px; border-radius: 8px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
 /* The khata page: blue ruled lines and a red margin, as in an Indian account book. */
 .khata {
   position: relative;
-  background-color: #fff;
+  background-color: rgb(var(--c-surface));
   background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--row) - 1px), var(--rule) calc(var(--row) - 1px), var(--rule) var(--row));
   background-position: 0 14px;
   padding: 14px 18px 18px 60px;
-  border: 1px solid #e3e6ec;
+  border: 1px solid rgb(var(--c-rule));
   border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 2px 10px rgba(16,24,40,.05);
+  box-shadow: var(--shadow-card);
 }
 .khata::before {
   content: '';
@@ -40,7 +64,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .khata .row { height: var(--row); display: flex; align-items: center; position: relative; }
 .khata .row-free { min-height: var(--row); display: flex; align-items: center; }
 /* a tick box sitting in the red margin, like ticking an entry in a ledger */
-.tick { position: absolute; left: -48px; top: 6px; width: 24px; height: 24px; border-radius: 6px; border: 2px solid #c7ccd6; background: #fff;
+.tick { position: absolute; left: -48px; top: 6px; width: 24px; height: 24px; border-radius: 6px; border: 2px solid rgb(var(--c-rule-strong)); background: rgb(var(--c-surface));
   display: grid; place-items: center; color: #fff; }
 .tick[aria-checked="true"] { background: #18794b; border-color: #18794b; }
 .tick:disabled { opacity: .45; cursor: not-allowed; }
@@ -50,7 +74,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
   display: inline-flex; align-items: center; gap: .4rem;
   border: 2.5px solid currentColor; border-radius: 8px; padding: .1rem .7rem;
   font-weight: 800; letter-spacing: .02em; transform: rotate(-4deg);
-  box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 3.5px currentColor;
+  box-shadow: inset 0 0 0 2px rgb(var(--c-surface)), inset 0 0 0 3.5px currentColor;
   opacity: .92;
 }
 .stamp-in { animation: stamp .38s cubic-bezier(.2,1.6,.4,1) both; }
@@ -61,7 +85,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 
 /* Buttons: one red action per view; everything else is quiet. */
 .btn { @apply inline-flex items-center justify-center gap-2 rounded-pill font-semibold transition disabled:cursor-not-allowed; min-height: 48px; padding: 0 1.4rem; }
-.btn-primary { @apply btn text-white shadow-brand hover:brightness-[1.06] active:brightness-95 disabled:bg-none disabled:bg-rule-strong disabled:text-white disabled:shadow-none;
+.btn-primary { @apply btn text-onbrand shadow-brand hover:brightness-[1.06] active:brightness-95 disabled:bg-none disabled:bg-rule-strong disabled:text-onbrand disabled:shadow-none;
   background-image: linear-gradient(180deg, #e3162f 0%, #c40d26 100%); background-color: #d50f2b; }
 .btn-secondary { @apply btn border-[1.5px] border-rule-strong bg-white text-ink hover:border-ink disabled:opacity-50; }
 .btn-quiet { @apply btn text-ink-soft hover:bg-paper-tint hover:text-ink disabled:opacity-50; min-height: 40px; padding: 0 .9rem; }
@@ -72,7 +96,7 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 
 /* a choice card (radio or toggle): selected = red border, tint and a tick */
 .choice { @apply relative rounded-2xl border-[1.5px] border-rule bg-white px-4 py-3 text-left font-semibold text-ink transition hover:border-ink-faint; }
-.choice[aria-checked="true"], .choice[aria-pressed="true"] { @apply border-kumkum bg-kumkum-soft text-kumkum-dark; box-shadow: inset 0 0 0 1px #d50f2b; }
+.choice[aria-checked="true"], .choice[aria-pressed="true"] { @apply border-kumkum bg-kumkum-soft text-kumkum-dark; box-shadow: inset 0 0 0 1px rgb(var(--c-red)); }
 
 .field { @apply w-full rounded-xl border-[1.5px] border-rule-strong bg-white px-4 text-ink transition placeholder:text-ink-faint hover:border-ink-faint focus:border-ink focus:outline-none focus:ring-4 focus:ring-ink/10; min-height: 50px; }
 .label { @apply mb-1.5 block text-[15px] font-semibold text-ink; }

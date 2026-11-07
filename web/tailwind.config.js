@@ -1,23 +1,29 @@
 /** @type {import('tailwindcss').Config} */
+// Every colour is a CSS variable (index.css), so light and dark are one switch on <html class="dark">.
+const v = (name) => `rgb(var(--c-${name}) / <alpha-value>)`
+
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
         // near-black ink and neutral surfaces; red is the one brand colour, used for action and emphasis
-        ink: { DEFAULT: '#15171F', soft: '#4B5162', faint: '#868B9B' },
-        paper: { DEFAULT: '#FFFFFF', tint: '#F5F6F8', warm: '#FBF8F7' },
-        rule: { DEFAULT: '#E3E6EC', strong: '#C7CCD6' },
-        ledger: { DEFAULT: '#23468A', soft: '#EBF0F9' },
-        kumkum: { DEFAULT: '#D50F2B', dark: '#A80C22', deep: '#6E0614', soft: '#FDEDEF' },
-        haldi: { DEFAULT: '#F2A900', dark: '#9A6B00', soft: '#FFF5DB' },
-        leaf: { DEFAULT: '#18794B', soft: '#E4F4EB' },
+        white: v('surface'), // cards and fields: white by day, deep slate at night
+        onbrand: '#FFFFFF', // text on red stays white in both themes
+        ink: { DEFAULT: v('ink'), soft: v('ink-soft'), faint: v('ink-faint') },
+        paper: { DEFAULT: v('surface'), tint: v('page'), warm: v('page') },
+        rule: { DEFAULT: v('rule'), strong: v('rule-strong') },
+        ledger: { DEFAULT: v('ledger'), soft: v('ledger-soft') },
+        kumkum: { DEFAULT: v('red'), dark: v('red-dark'), deep: '#6E0614', soft: v('red-soft') },
+        haldi: { DEFAULT: '#F2A900', dark: v('haldi-dark'), soft: v('haldi-soft') },
+        leaf: { DEFAULT: v('leaf'), soft: v('leaf-soft') },
       },
       fontFamily: { sans: ['var(--font)', 'system-ui', 'sans-serif'] },
       borderRadius: { slip: '6px', pill: '999px' },
       boxShadow: {
-        card: '0 1px 2px rgba(16,24,40,.04), 0 2px 10px rgba(16,24,40,.05)',
-        lift: '0 12px 32px -8px rgba(16,24,40,.18), 0 2px 6px rgba(16,24,40,.06)',
+        card: 'var(--shadow-card)',
+        lift: 'var(--shadow-lift)',
         brand: '0 8px 20px -6px rgba(213,15,43,.45)',
       },
       maxWidth: { site: '1200px', form: '720px' },

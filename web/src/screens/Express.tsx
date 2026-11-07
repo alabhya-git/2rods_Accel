@@ -117,7 +117,7 @@ export default function Express() {
                         <span className="mt-2 block text-[14px] font-semibold text-ink">{t('from_month', { amount: rupees(p.price_min) })}</span>
                         {why && <span className="mt-1 block text-[14px] font-semibold text-kumkum-dark">{why}</span>}
                       </span>
-                      <span className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md border-2 ${on ? 'border-kumkum bg-kumkum text-white' : 'border-rule-strong bg-white'}`} aria-hidden="true">
+                      <span className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md border-2 ${on ? 'border-kumkum bg-kumkum text-onbrand' : 'border-rule-strong bg-white'}`} aria-hidden="true">
                         {on && <Svg d={<path d="M5 12.5l4.5 4.5L19 7" />} size={15} width={3.5} />}
                       </span>
                     </button>

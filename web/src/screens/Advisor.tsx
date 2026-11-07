@@ -158,7 +158,7 @@ export default function Advisor() {
             <form className="flex items-center gap-2" onSubmit={(e) => { e.preventDefault(); send(text) }}>
               {voice.supported && (
                 <button type="button" onClick={voice.listening ? voice.stop : voice.start} aria-label={voice.listening ? t('listening') : t('speak')}
-                  className={`grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 ${voice.listening ? 'animate-pulse border-kumkum bg-kumkum text-white' : 'border-rule text-ledger'}`}>
+                  className={`grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 ${voice.listening ? 'animate-pulse border-kumkum bg-kumkum text-onbrand' : 'border-rule text-ledger'}`}>
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
                 </button>
               )}

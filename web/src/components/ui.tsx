@@ -15,8 +15,8 @@ export function Logo({ small = false, light = false }: { small?: boolean; light?
         <path d="M22 36 H42" stroke="#F2A900" strokeWidth="6" strokeLinecap="round" />
       </svg>
       <span className="leading-none">
-        <span className={`block text-[19px] font-extrabold tracking-tight ${light ? 'text-white' : 'text-ink'}`}>Accel Business</span>
-        {!small && <span className={`mt-0.5 block text-[12px] font-semibold tracking-wide ${light ? 'text-white/75' : 'text-ink-faint'}`}>Udyam Digital</span>}
+        <span className={`block text-[19px] font-extrabold tracking-tight ${light ? 'text-onbrand' : 'text-ink'}`}>Accel Business</span>
+        {!small && <span className={`mt-0.5 block text-[12px] font-semibold tracking-wide ${light ? 'text-onbrand/75' : 'text-ink-faint'}`}>Udyam Digital</span>}
       </span>
     </Link>
   )
@@ -28,7 +28,7 @@ export function LangSwitch({ onRed = false }: { onRed?: boolean }) {
   const current = LANGS.find((l) => l.code === lang)!
   return (
     <div className="relative">
-      <button className={`chip whitespace-nowrap ${onRed ? '!border-white/40 !bg-white/10 !text-white hover:!border-white' : ''}`}
+      <button className={`chip whitespace-nowrap ${onRed ? '!border-onbrand/40 !bg-onbrand/10 !text-onbrand hover:!border-onbrand' : ''}`}
         onClick={() => setOpen(!open)} aria-expanded={open} aria-haspopup="true" aria-label="Change language">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mr-1.5" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18" /></svg>
         {current.name}
@@ -60,6 +60,27 @@ export function Svg({ d, size = 22, width = 2.2 }: { d: ReactNode; size?: number
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={width} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{d}</svg>
 }
 
+/** Light or dark, remembered on this device. theme.js applies it before the first paint. */
+export function ThemeToggle() {
+  const { t } = useLang()
+  const [dark, setDark] = useState(() => document.documentElement.classList.contains('dark'))
+  const flip = () => {
+    const next = !dark
+    document.documentElement.classList.toggle('dark', next)
+    try { localStorage.setItem('theme', next ? 'dark' : 'light') } catch { /* private mode: still switches for this visit */ }
+    setDark(next)
+  }
+  const label = t(dark ? 'light_mode' : 'dark_mode')
+  return (
+    <button onClick={flip} aria-label={label} title={label} aria-pressed={dark}
+      className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-pill border border-rule-strong bg-white text-ink transition hover:border-ink">
+      {dark
+        ? <Svg size={18} d={<><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></>} />
+        : <Svg size={18} d={<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />} />}
+    </button>
+  )
+}
+
 /** One header everywhere: on a phone, back + page title; on a laptop, the brand and the four places people look for. */
 export function SiteHeader({ back, title, right }: { back?: string | boolean; title?: string; right?: ReactNode }) {
   const nav = useNavigate()
@@ -89,6 +110,7 @@ export function SiteHeader({ back, title, right }: { back?: string | boolean; ti
         <div className="flex shrink-0 items-center gap-1.5">
           {title && <Link to="/" className="btn-quiet px-2 lg:hidden" aria-label={t('home')} title={t('home')}><Svg d={Icon.home} /></Link>}
           {right}
+          <ThemeToggle />
           <LangSwitch />
         </div>
       </div>
@@ -119,7 +141,7 @@ export function Steps({ current }: { current: StepKey }) {
         <ol className="hidden items-center lg:flex">
           {JOURNEY.map((s, j) => (
             <li key={s} className="flex flex-1 items-center last:flex-none" aria-current={j === i ? 'step' : undefined}>
-              <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-[14px] font-bold ${j < i ? 'bg-kumkum text-white' : j === i ? 'bg-white text-kumkum ring-2 ring-kumkum' : 'bg-paper-tint text-ink-faint ring-1 ring-rule'}`}>
+              <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-[14px] font-bold ${j < i ? 'bg-kumkum text-onbrand' : j === i ? 'bg-white text-kumkum ring-2 ring-kumkum' : 'bg-paper-tint text-ink-faint ring-1 ring-rule'}`}>
                 {j < i ? <Svg d={Icon.check} size={16} width={3} /> : j + 1}
               </span>
               <span className={`ml-2.5 whitespace-nowrap text-[15px] ${j === i ? 'font-bold text-ink' : j < i ? 'font-semibold text-ink-soft' : 'text-ink-faint'}`}>{t('step_' + s)}</span>

@@ -1,38 +1,41 @@
-# Data privacy and security choices
+# Dukaan Connect — Privacy and security choices
 
-**Dukaan Connect** — designed to the Digital Personal Data Protection Act, 2023 and the DPDP Rules, 2025 (notified 13 November 2025; most obligations apply from about May 2027). Data is synthetic, but treated as real.
+**Track A: Project Udyam Digital | Submission note | 8 November 2026**
 
-**1. Collect only what each step needs.**
+The case asks for data minimisation, consent before KYC, masked identifiers and a document-retention period. This note describes the implemented prototype and its production boundaries. All supplied businesses, people and identifiers are synthetic.
 
-| Step | Data | Why |
-|---|---|---|
-| Advisor | Business type, staff, sites, city, pin code, GSTIN (optional) | Pick an eligible bundle; GSTIN pre-fills the business from the registry |
-| Order | Mobile number | Updates and the signatory SIM-swap check |
-| KYC | Only what the chosen route needs: GSTIN, or Udyam, or a shop licence; a bill; from the ID only name, ID number, validity | Verify the business and signatory; no GST is a route, not a refusal |
-| Business SIMs | Each SIM user's name and mobile number; they verify themselves through their own link | DoT requires end-user KYC before a business SIM goes live |
+## 1. Collect for a specific purpose
 
-Never collected: Aadhaar number, face images, date of birth, bank details (UPI handles payment).
+Discovery uses business type, staff, locations, city and service needs; GSTIN is optional. Checkout needs a contact number and service address. KYC follows the chosen GST, Udyam or shop-licence route, with address/signatory proof. SIM users supply their own name and number. We do not request biometrics, card details or a UPI PIN. Uploaded images can contain extra personal information; redaction needs review before real-data use.
 
-**2. Consent before processing.** A standalone notice in the owner's language, one switch per purpose: verify my business and install and bill (needed); AI reading of business documents, updates about this order, and offers (optional; offers off by default). Each choice is stored with notice version, time and channel. Withdrawal is one tap in the tracker, as easy as giving it. Nothing is uploaded or detokenised for a purpose without a live consent for it.
+## 2. Consent before KYC
 
-**3. Tokens in transit.** Raw identifiers enter once, at the API, and are replaced by random tokens (`tok_gstin_…`). Orders, tracker, back-office, analytics and the language model only see tokens or masked values (`37LD********1ZB`). Only the KYC service and fulfilment may detokenise, each for its own purpose; every attempt, allowed or denied, is audited. A keyed hash (HMAC-SHA256) supports lookups and duplicate checks without the raw value.
+A notice in the selected language separates verification/service delivery from optional AI document reading, order updates and marketing. Optional choices start off. The ledger records purpose, notice version, language, channel and time. Uploads and KYC require live verification consent. Tracker withdrawal blocks subsequent processing for that purpose.
 
-**4. Encryption at rest.** AES-256-GCM envelope encryption: every vault entry and every document has its own data key, wrapped by a key-encryption key derived from a master key held in Secret Manager or KMS. Buckets and databases hold only ciphertext. TLS on every hop.
+## 3. Mask identifiers; restrict access
 
-**5. The AI boundary.** In chat, the language model receives masked text and tokens, never a raw GSTIN or phone number. Documents are read on our own servers first (Tesseract). Only if the owner says yes to *AI reading of business documents* does Claude (Anthropic, outside India) also read GST, Udyam, shop-licence or bill photos; **ID card photos are never sent**. Saying no costs time, not access: our reader and a person check instead. The model cannot set prices or products: it writes slots that the server fills from the rules engine, and any number, price, product name or promise in its own words is rejected.
+GSTIN, Udyam and phone values become random vault tokens in service flows. UI, logs and model history apply identifier masking. Detokenisation checks actor, purpose and order consent; allowed/refused attempts are audited. Partners see their own work; risky reviewer overrides need two people. Pattern masking does not anonymise all free text.
 
-**6. Who sees what.** The owner: everything about their own order. Staff sign in as themselves with a role (partner, reviewer, ops, admin); every action is audited under their name. Partners: only their own leads and call-back requests, masked; calls go through a masked virtual number. Reviewers: masked identifiers and the failed checks; risky overrides need a second reviewer. Engineers: masked logs (a filter redacts GSTIN, PAN, phone, Aadhaar-like and ID patterns). Tokens are never shared between orders, so erasing one order cannot affect another.
+## 4. Encrypt sensitive records
 
-**7. Retention.** Document photos are crypto-shredded (data key destroyed, file deleted) 30 days after upload, unless telecom KYC record-keeping requires longer; checked fields stay encrypted for the contract. Abandoned conversations are purged after 30 days. An hourly job enforces this.
+Vault values and document-photo files use AES-256-GCM with a random data key per record/file and authenticated key wrapping. The deployed master key comes from Secret Manager; direct Cloud KMS wrapping is a production integration. The public service uses HTTPS. Business metadata, masked transcripts and extracted fields are not all application-encrypted.
 
-**8. Rights.** From the tracker: see and download my data, withdraw any consent, erase my data (identifiers and documents are crypto-shredded). Grievances are answered within the 90 days the Rules allow; we target 7.
+## 5. Disclose AI and voice processing
 
-**9. Breach response.** Tell affected owners without delay; initial notice to the Data Protection Board without delay and a detailed report within 72 hours (Rule 7). Audit logs and per-record keys limit the blast radius.
+The chat model receives masked history and business context. Local Tesseract/OpenCV is the first document reader. Separate opt-in permits Anthropic to read business-document photos, never signatory IDs; the notice discloses processing outside India. Calls send clips to Sarvam before transcript masking, and send reply text for speech; browser speech is the fallback. Input recordings are not retained as application records; generated speech can be cached in memory. Vendor retention/location require contractual verification.
 
-**10. Fraud controls.** GSTIN checksum and live registry status (22 customers last quarter held a cancelled or suspended GSTIN), cross-document name and address matching, tamper signals, SIM swap in the last 72 hours on the signatory's number, and a human review queue.
+## 6. Retain only for a stated window
 
-**Tested, not just written.** The test suite checks that the advisor never sees a raw identifier, that detokenising for the wrong purpose is refused and audited, that withdrawn consent blocks KYC, and that erasure leaves only ciphertext with no key.
+Photos expire 30 days after upload; an hourly task deletes files and their wrapped keys while the service runs. Open advisor sessions inactive for 30 days have history/profile cleared and associated tokens shredded. Quoted sessions, order records, extracted fields and backups are not covered by a blanket 30-day purge. Production needs a full schedule, durable cleanup and notice wording aligned with the upload-based deadline.
 
-**11. Security.** Signed staff tokens, rate limits, a strict Content Security Policy, signed and deduplicated WhatsApp webhooks, and a production start-up check that refuses demo settings (judge mode, demo staff, open CORS, mock adapters).
+## 7. Give owners control; verify safeguards
 
-**Prototype vs production.** Real: rules engine, payment schedule, OCR, KYC decisions, vault, consent ledger, staff roles, call-back tasks; Claude and Sarvam when keys are set. Mocked: GSTIN and Udyam registries (the supplied data), DigiLocker, end-user e-KYC, SIM swap, masked calling, payments (test mode). Production: Cloud Run and Cloud SQL in Mumbai with backups in Delhi; master key in Secret Manager with a Cloud KMS key ring provisioned for envelope wrapping; data-processing terms with every vendor (Google Cloud, Anthropic, Sarvam, Meta, Razorpay).
+Order-access links support data viewing/export, consent withdrawal, access history and erasure of order documents/core identifier keys. Other records need lifecycle review before promising complete erasure. Tests exercise consent gates, masking, encryption, purpose-bound access, crypto-shredding and excluding IDs from vision AI. Signed staff tokens, rate limits and webhook-signature checks add protection.
+
+## 8. Separate prototype from production
+
+Registries, DigiLocker, telecom verification, masked calling and payments are mocked/test-mode. Real-data rollout needs processor/transfer agreements, image/free-text minimisation, access-link and backup/key review, and operational grievance/breach processes under applicable DPDP and telecom requirements. This is a design note, not a compliance certification.
+
+**Basis:** Airtel_SYNC_Case.pdf pp. 3–4; data-pack README “Privacy expectations”; implementation in `api/app/privacy`, `api/app/kyc`, `api/app/voice` and `api/app/routers`.
+
+**Reference:** [MeitY: DPDP Rules, 2025 — official Gazette](https://www.meity.gov.in/static/uploads/2025/11/53450e6e5dc0bfa85ebd78686cadad39.pdf). Commencement is phased; confirm the provisions applicable at production launch.

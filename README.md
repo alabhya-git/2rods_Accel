@@ -95,4 +95,11 @@ Pain-point demos: on the quote, use **9876500001** (an existing Dukaan Connect c
 - `.github/workflows/ci.yml`: tests, web build, gitleaks, Semgrep, pip-audit, Trivy; canary deploy of the judge demo via Workload Identity Federation (no keys in CI).
 - See [deploy/cloud-run.md](deploy/cloud-run.md) for the manual path.
 
-**Submission documents:** [business case deck](docs/deck/dukaan-connect-business-case.pdf) · [demo video](docs/video/dukaan-connect-demo.mp4) · [architecture](docs/architecture.svg) · [privacy note](docs/privacy-note.md)
+**Submission documents:** [business case deck](docs/deck/dukaan-connect-business-case.pdf) · [demo video](docs/video/dukaan-connect-demo.mp4) · [architecture](docs/architecture.svg) · [privacy note (1-page PDF)](docs/privacy-note.pdf) · [privacy note source](docs/privacy-note.md)
+
+The privacy note follows the Track A case (pp. 3–4) and data-pack README. Its Markdown is the source for the PDF, including the current AI-document and voice-processing disclosures. Regenerate it after editing:
+
+```bash
+python docs/src/build_privacy_note.py
+python docs/src/render.py docs/src/privacy-note.html docs/privacy-note.pdf
+```

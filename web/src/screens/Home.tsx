@@ -18,6 +18,16 @@ const ICONS: Record<string, ReactNode> = {
   chevron: <path d="M9 5l7 7-7 7" />,
 }
 
+/** The 2-minute overview for first-time owners: the problem, then the six steps. */
+function OverviewVideo() {
+  return (
+    <video className="aspect-video w-full rounded-2xl bg-black shadow-lift ring-1 ring-black/10" controls playsInline preload="metadata"
+      poster="/videos/dukaan-connect-overview-poster.jpg">
+      <source src="/videos/dukaan-connect-overview.mp4" type="video/mp4" />
+    </video>
+  )
+}
+
 /** Four doors, one order: the owner chooses how to buy, not the AI. */
 export default function Home() {
   const { lang, setLang, t } = useLang()
@@ -46,14 +56,10 @@ export default function Home() {
             </div>
             <h1 className="mt-3 text-[30px] font-extrabold leading-[1.12] sm:text-[38px] lg:text-[50px]">{t('tagline')}</h1>
             <p className="mt-4 max-w-xl text-[18px] text-onbrand/90 lg:text-[20px]">{t('time_promise')}</p>
-            <ol className="mt-7 hidden gap-3 lg:grid lg:grid-cols-2">
-              {['how_1', 'how_2', 'how_3', 'how_4'].map((k, i) => (
-                <li key={k} className="flex items-start gap-3 rounded-2xl bg-onbrand/10 px-4 py-3 ring-1 ring-onbrand/15">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-onbrand text-[14px] font-bold text-kumkum">{i + 1}</span>
-                  <span className="text-[16px] leading-snug">{t(k)}</span>
-                </li>
-              ))}
-            </ol>
+            <div className="mt-7 hidden lg:block">
+              <OverviewVideo />
+              <p className="mt-2 text-[15px] text-onbrand/85">{t('how_video')}</p>
+            </div>
           </div>
 
           <div className="animate-rise rounded-3xl bg-white p-3 text-ink shadow-lift sm:p-6">
@@ -97,14 +103,8 @@ export default function Home() {
       <section className="border-y border-rule bg-paper-tint lg:hidden">
         <div className="mx-auto max-w-site px-4 py-10">
           <h2 className="text-[24px] font-extrabold">{t('how_title')}</h2>
-          <ol className="mt-5 space-y-3">
-            {['how_1', 'how_2', 'how_3', 'how_4'].map((k, i) => (
-              <li key={k} className="flex items-start gap-3">
-                <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-kumkum text-[15px] font-bold text-onbrand">{i + 1}</span>
-                <span className="text-[17px]">{t(k)}</span>
-              </li>
-            ))}
-          </ol>
+          <div className="mt-5"><OverviewVideo /></div>
+          <p className="mt-2 text-[15px] text-ink-soft">{t('how_video')}</p>
         </div>
       </section>
 

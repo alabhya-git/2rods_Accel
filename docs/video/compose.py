@@ -17,7 +17,7 @@ SHOTS = HERE / "shots"
 FRAMES = HERE / "frames"
 BUILD = HERE / "build"
 FONTS = HERE / "fonts"
-OUT = HERE / "udyam-digital-demo.mp4"
+OUT = HERE / "dukaan-connect-demo.mp4"
 W, H, FPS = 1920, 1080, 30
 
 BG, BG_RULE, MARGIN = (18, 21, 43), (27, 32, 62), (120, 22, 40)
@@ -235,7 +235,7 @@ SCENES = [
     ]),
     ("close", [
         dict(kind="card", dur=11.0, kicker="Dukaan Connect", big=["One sitting on a phone, in the owner's language."],
-             grid=[("~12 minutes", "designed journey, against 17.6 days today"), ("28 of 28", "advisor scenarios pass, with or without an LLM"),
+             grid=[("~12 minutes", "designed journey, against 17.6 days today"), ("33 of 33", "advisor scenarios pass, with or without an LLM"),
                    ("12 of 12", "KYC specimens correct, 0 false rejections"), ("15%", "conversion target, under Rs 4,000 per activation")],
              foot="Code, live link and business case are on the submission page. Dukaan Connect is our product prototype; all data is the official synthetic pack."),
     ]),
@@ -266,7 +266,7 @@ def encode_scene(i, name, shots, start, first, last):
     dur = sum(s["dur"] for s in shots)
     vf = [f"fps={FPS}", "format=yuv420p"]
     if name in CLOCK:
-        fontfile = str(FONTS / "Baloo2-700.ttf")
+        fontfile = os.path.relpath(FONTS / "Baloo2-700.ttf").replace("\\", "/").replace(":", "\\:")
         clock = (f"drawtext=fontfile={fontfile}:fontsize=46:fontcolor=white:x=w-tw-60:y=62:"
                  f"text='%{{eif\\:floor((t+{start:.3f})/60)\\:d}}\\:%{{eif\\:mod(floor(t+{start:.3f})\\,60)\\:d\\:2}}'")
         vf.append(clock)
@@ -300,7 +300,7 @@ def write_srt():
                 cues.append([t, t + s["dur"], text])
             t += s["dur"]
     out = [f"{i}\n{srt_time(a)} --> {srt_time(b)}\n{txt}\n" for i, (a, b, txt) in enumerate(cues, 1)]
-    (HERE / "captions.srt").write_text("\n".join(out), encoding="utf-8")
+    (HERE / "captions.srt").write_text("\n".join(out), encoding="utf-8", newline="\n")
     return t
 
 

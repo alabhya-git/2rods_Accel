@@ -127,11 +127,11 @@ for i, (n, d) in enumerate(flows):
 out.append(f'<rect x="1360" y="716" width="500" height="196" rx="12" fill="{LEDGER}" fill-opacity="0.06" stroke="{LEDGER}" stroke-width="1.5"/>')
 text(1378, 746, "Deployment", 18, 700, SOFT)
 for i, ln in enumerate(["One Docker image on Cloud Run, asia-south1 (Mumbai)", "autoscaling 1 to 10 instances, min 1 warm",
-                        "Postgres and Redis; secrets in Secret Manager", "CI: 82 tests (28 scenarios, 12 KYC specimens)",
+                        "Postgres and Redis; secrets in Secret Manager", "CI: 1,020 tests (33 scenarios, 12 KYC specimens)",
                         "works with no LLM key: rules-only mode"]):
     text(1378, 782 + i * 27, ln, 17, 400, INK)
 
 text(60, 960, "Dukaan Connect is our product prototype; all data is the official synthetic pack. Airtel SYNC, Track A: Project Udyam Digital.", 16, 400, "#8A8FA8")
 out.append("</svg>")
-Path(__file__).resolve().parents[1].joinpath("architecture.svg").write_text("\n".join(out), encoding="utf-8")
+Path(__file__).resolve().parents[1].joinpath("architecture.svg").write_text("\n".join(out), encoding="utf-8", newline="\n")
 print("ok")

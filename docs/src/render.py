@@ -34,7 +34,7 @@ async def main(src: str, dst: str, w: int, h: int, scale: float):
     tmp = s.with_suffix(".render.html")
     tmp.write_text(html, encoding="utf-8")
     async with async_playwright() as p:
-        br = await p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--no-sandbox", "--allow-file-access-from-files"])
+        br = await p.chromium.launch(args=["--no-sandbox", "--allow-file-access-from-files"])
         pg = await br.new_page(viewport={"width": w, "height": h}, device_scale_factor=scale)
         await pg.goto(tmp.as_uri())
         await pg.wait_for_timeout(600)

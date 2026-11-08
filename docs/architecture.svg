@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1000" viewBox="0 0 1920 1000" font-family="&quot;Baloo 2&quot;, sans-serif">
 <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4A4F6E"/></marker><marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#C8102E"/></marker><marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1E7B4F"/></marker></defs>
 <rect width="1920" height="1000" fill="#fff"/>
-<text x="60" y="78" font-size="42" font-weight="800" fill="#1B1F3B" text-anchor="start">Udyam Digital: solution architecture</text>
+<text x="60" y="78" font-size="42" font-weight="800" fill="#1B1F3B" text-anchor="start">Dukaan Connect: solution architecture</text>
 <text x="60" y="118" font-size="22" font-weight="400" fill="#4A4F6E" text-anchor="start">Raw identifiers stop at the gateway. Only Smart KYC and fulfilment detokenise; the language model sees masked text only.</text>
 <text x="60" y="168" font-size="18" font-weight="700" fill="#4A4F6E" text-anchor="start">Channels</text>
 <rect x="60" y="190" width="300" height="108" rx="10" fill="#fff" stroke="#D5DEEE" stroke-width="1.5"/>
@@ -172,7 +172,7 @@
 <text x="1378" y="782" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">One Docker image on Cloud Run, asia-south1 (Mumbai)</text>
 <text x="1378" y="809" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">autoscaling 1 to 10 instances, min 1 warm</text>
 <text x="1378" y="836" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">Postgres and Redis; secrets in Secret Manager</text>
-<text x="1378" y="863" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">CI: 82 tests (28 scenarios, 12 KYC specimens)</text>
+<text x="1378" y="863" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">CI: 1,020 tests (33 scenarios, 12 KYC specimens)</text>
 <text x="1378" y="890" font-size="17" font-weight="400" fill="#1B1F3B" text-anchor="start">works with no LLM key: rules-only mode</text>
-<text x="60" y="960" font-size="16" font-weight="400" fill="#8A8FA8" text-anchor="start">Accel Telecom and Accel Business are fictional; all data is the official synthetic pack. Airtel SYNC, Track A: Project Udyam Digital.</text>
+<text x="60" y="960" font-size="16" font-weight="400" fill="#8A8FA8" text-anchor="start">Dukaan Connect is our product prototype; all data is the official synthetic pack. Airtel SYNC, Track A: Project Udyam Digital.</text>
 </svg>

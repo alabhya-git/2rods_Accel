@@ -1,4 +1,4 @@
-"""Builds docs/deck/udyam-digital-business-case.pptx on the official SYNC template.
+"""Builds docs/deck/dukaan-connect-business-case.pptx on the official SYNC template.
 
 Every number is computed from the official data pack or produced by the prototype; see the
 source line under each exhibit. Run: python docs/src/build_deck.py <template.pptx>
@@ -22,7 +22,7 @@ from pptx.util import Emu, Inches, Pt
 ROOT = Path(__file__).resolve().parents[2]
 SRC = Path(__file__).resolve().parent
 SHOTS = ROOT / "docs" / "screens" / "deck"
-OUT = ROOT / "docs" / "deck" / "udyam-digital-business-case.pptx"
+OUT = ROOT / "docs" / "deck" / "dukaan-connect-business-case.pptx"
 TEMPLATE = Path(sys.argv[1])
 
 RED, INK, SOFT, FAINT, RULE, TINT, WHITE, GREEN, GREY = (
@@ -287,7 +287,7 @@ text(s, 0.68, 3.86, 3.8, 0.7,
      "Dukaan Connect sells, verifies and installs small-business bundles on a phone, in the owner's own language.",
      size=13, color=RGBColor(0xE6, 0xE6, 0xEA))
 text(s, 0.68, 4.72, 3.9, 0.55, [
-    [("Working prototype: ", {"bold": True, "color": WHITE}), ("10 languages, 28 of 28 advisor scenarios, 12 of 12 KYC specimens, DPDP controls in code", {})],
+    [("Working prototype: ", {"bold": True, "color": WHITE}), ("10 languages, 33 of 33 advisor scenarios, 12 of 12 KYC specimens, DPDP controls in code", {})],
     [("Track A: Project Udyam Digital. Alabhya, IIIT-Delhi", {"color": RGBColor(0xB8, 0xBC, 0xC8)})],
 ], size=10.5, color=RGBColor(0xE6, 0xE6, 0xEA), spacing=3)
 s.notes_slide.notes_text_frame.text = (
@@ -427,7 +427,7 @@ text(s, 6.1, 2.62, 3.4, 1.0, [
     "GST-only products without an active GSTIN: 22",
     "Static IP without fibre: 9",
     "Below the minimum headcount: 8"], size=10, color=INK, spacing=2)
-stat(s, 6.1, 3.62, 3.4, "28 of 28", "judge-style scenarios pass, tampered carts included. Zero eligibility violations, with or without an LLM", color=GREEN, label_h=0.7)
+stat(s, 6.1, 3.62, 3.4, "33 of 33", "judge-style scenarios pass, tampered carts included. Zero eligibility violations, with or without an LLM", color=GREEN, label_h=0.7)
 
 # ---------------------------------------------------------------- 7. KYC
 s = content_slide("KYC in minutes, private by design",

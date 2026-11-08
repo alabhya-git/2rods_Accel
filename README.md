@@ -95,4 +95,4 @@ Pain-point demos: on the quote, use **9876500001** (an existing Dukaan Connect c
 - `.github/workflows/ci.yml`: tests, web build, gitleaks, Semgrep, pip-audit, Trivy; canary deploy of the judge demo via Workload Identity Federation (no keys in CI).
 - See [deploy/cloud-run.md](deploy/cloud-run.md) for the manual path.
 
-**Submission documents:** [business case deck](docs/deck/udyam-digital-business-case.pdf) · [demo video](docs/video/udyam-digital-demo.mp4) · [architecture](docs/architecture.svg) · [privacy note](docs/privacy-note.md)
+**Submission documents:** [business case deck](docs/deck/dukaan-connect-business-case.pdf) · [demo video](docs/video/dukaan-connect-demo.mp4) · [architecture](docs/architecture.svg) · [privacy note](docs/privacy-note.md)

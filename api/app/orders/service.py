@@ -109,7 +109,7 @@ def complete_if_all_live(db: Session, order: Order) -> bool:
     live = {e.product_id for e in db.scalars(select(OrderEvent).where(OrderEvent.order_id == order.id, OrderEvent.kind == "product_active"))}
     if order.status != "active" and all(ln["product_id"] in live for ln in order.bundle.get("lines", [])):
         order.status = "active"
-        add_event(db, order, "order_active", "Everything is live. Welcome to Accel Business!")
+        add_event(db, order, "order_active", "Everything is live. Welcome to Dukaan Connect!")
         return True
     return False
 
@@ -128,7 +128,7 @@ def advance(db: Session, order: Order, blocked=lambda pid: None, hold=lambda pid
             remaining = [x for x in order.bundle["lines"] if x["product_id"] not in done | {ln["product_id"]}]
             if not remaining:
                 order.status = "active"
-                add_event(db, order, "order_active", "Everything is live. Welcome to Accel Business!")
+                add_event(db, order, "order_active", "Everything is live. Welcome to Dukaan Connect!")
             return ev
     return None
 

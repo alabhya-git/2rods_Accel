@@ -111,7 +111,7 @@ def ask_for_help(body: HelpIn, db: Session = Depends(get_db)):
 
 @router.get("/verify-caller")
 def verify_caller(q: str = Query(..., min_length=3, max_length=40), db: Session = Depends(get_db)):
-    """Someone called saying they are from Accel: check the partner ID they gave, or the number that called."""
+    """Someone called saying they are from Dukaan Connect: check the partner ID they gave, or the number that called."""
     raw = q.strip().upper()
     acct = accounts().get(raw)
     if acct and acct.get("role") == "partner":
@@ -291,13 +291,13 @@ class ExistingIn(BaseModel):
 
 @router.post("/orders/{oid}/sim-users/existing")
 def move_existing_numbers(oid: str, body: ExistingIn, key: str = Query(...), db: Session = Depends(get_db)):
-    """An existing Accel customer's numbers become business SIMs: no new SIM, and each user's KYC
-    is already on file with Accel, so nobody has to chase a verification link."""
+    """An existing Dukaan Connect customer's numbers become business SIMs: no new SIM, and each user's KYC
+    is already on file with Dukaan Connect, so nobody has to chase a verification link."""
     o = owner_order(db, oid, key)
     phone = vault.detokenize(db, o.phone_token, "fulfilment", "service_delivery", o.id) if o.phone_token else ""
     acct = accel_account(phone)
     if not acct:
-        raise HTTPException(404, "No Accel account on this order's verified number")
+        raise HTTPException(404, "No Dukaan Connect account on this order's verified number")
     lines = {i: (n, plan) for i, n, plan in acct["lines"]}
     if any(i not in lines for i in body.line_ids):
         raise HTTPException(422, "Unknown line")
@@ -309,11 +309,11 @@ def move_existing_numbers(oid: str, body: ExistingIn, key: str = Query(...), db:
         raise HTTPException(422, f"This order has {len(slots)} business SIM(s)")
     for n, i in enumerate(picked):
         num = lines[i][0]
-        db.add(SimUser(order_id=o.id, name_token=vault.tokenize(db, "name", f"Accel line {i}"), phone_token=vault.tokenize(db, "phone", num),
+        db.add(SimUser(order_id=o.id, name_token=vault.tokenize(db, "name", f"Dukaan Connect line {i}"), phone_token=vault.tokenize(db, "phone", num),
                        phone_masked=mask_phone(num), product_id=slots[len(existing) + n], status="verified", method="accel_kyc_on_file", verified_at=now()))
     db.add(AuditLog(actor="owner", action="existing_numbers_moved", target=o.id, purpose="service_delivery", detail={"lines": len(picked)}))
     if picked:
-        add_event(db, o, "sim_users_verified", f"{len(picked)} existing Accel number(s) moved to business SIMs, KYC already on file")
+        add_event(db, o, "sim_users_verified", f"{len(picked)} existing Dukaan Connect number(s) moved to business SIMs, KYC already on file")
     db.flush()
     for pid in {pid for pid, _ in sim_lines(o)}:
         _switch_on(db, o, pid)

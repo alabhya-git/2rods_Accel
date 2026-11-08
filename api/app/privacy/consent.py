@@ -27,7 +27,7 @@ PURPOSES = {
                        "use": "Send order updates on WhatsApp and let a partner call you if you get stuck.",
                        "retention": "Until the order is live, or you withdraw."},
     "marketing": {"required": False, "data": ["contact number", "business type"],
-                   "use": "Offers on other Accel products.", "retention": "Until you withdraw."},
+                   "use": "Offers on other Dukaan Connect products.", "retention": "Until you withdraw."},
 }
 
 

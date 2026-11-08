@@ -281,17 +281,17 @@ def stat(slide, x, y, w, big, label, color=RED, big_size=30, label_size=12, labe
 
 # ---------------------------------------------------------------- 1. title
 s = title_slide
-text(s, 0.68, 2.82, 3.9, 0.6, "Udyam Digital", size=34, bold=True, color=WHITE, name="Title")
+text(s, 0.68, 2.82, 3.9, 0.6, "Dukaan Connect", size=34, bold=True, color=WHITE, name="Title")
 text(s, 0.68, 3.42, 3.9, 0.4, "From 17.6 days to one sitting", size=20, color=RGBColor(0xFF, 0xC9, 0xC9))
 text(s, 0.68, 3.86, 3.8, 0.7,
-     "Accel Business sells, verifies and installs small-business bundles on a phone, in the owner's own language.",
+     "Dukaan Connect sells, verifies and installs small-business bundles on a phone, in the owner's own language.",
      size=13, color=RGBColor(0xE6, 0xE6, 0xEA))
 text(s, 0.68, 4.72, 3.9, 0.55, [
     [("Working prototype: ", {"bold": True, "color": WHITE}), ("10 languages, 28 of 28 advisor scenarios, 12 of 12 KYC specimens, DPDP controls in code", {})],
     [("Track A: Project Udyam Digital. Alabhya, IIIT-Delhi", {"color": RGBColor(0xB8, 0xBC, 0xC8)})],
 ], size=10.5, color=RGBColor(0xE6, 0xE6, 0xEA), spacing=3)
 s.notes_slide.notes_text_frame.text = (
-    "Udyam Digital takes a small-business owner from first message to a verified, paid, booked installation in one sitting, "
+    "Dukaan Connect takes a small-business owner from first message to a verified, paid, booked installation in one sitting, "
     "in their own language. Everything in this deck is built and running; the numbers come from the official data pack.")
 
 # ---------------------------------------------------------------- 2. the problem

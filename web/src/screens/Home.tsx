@@ -41,7 +41,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-site grid-cols-1 gap-8 px-4 pb-10 pt-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-16 lg:px-8 lg:py-20">
           <div className="animate-rise">
             <div className="flex items-center justify-between gap-3">
-              <p className="eyebrow min-w-0 !text-onbrand/80">Accel Business · Udyam Digital</p>
+              <p className="eyebrow min-w-0 !text-onbrand/80">Dukaan Connect</p>
               <div className="shrink-0 sm:hidden"><JudgeMenu onRed /></div>
             </div>
             <h1 className="mt-3 text-[30px] font-extrabold leading-[1.12] sm:text-[38px] lg:text-[50px]">{t('tagline')}</h1>

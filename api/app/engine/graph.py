@@ -4,7 +4,7 @@
     Product --requires_one_of--> Product          (from the catalogue)
     Product --eligible_if--> Rule                 (tier, staff, sites, GSTIN, feasibility)
 
-Needs are what the owner cares about ("UPI must not fail"); products are what Accel sells.
+Needs are what the owner cares about ("UPI must not fail"); products are what Dukaan Connect sells.
 Segment defaults are grounded in what last quarter's activated customers actually bought.
 """
 from __future__ import annotations

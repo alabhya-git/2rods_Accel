@@ -3,13 +3,13 @@
 type Dict = Record<string, string>
 
 const en: Dict = {
-  call_door: 'Call us now', call_door_sub: 'Our AI picks up instantly.', call_title: 'Call Accel Business',
+  call_door: 'Call us now', call_door_sub: 'Our AI picks up instantly.', call_title: 'Call Dukaan Connect',
   call_sub: 'Talk to our AI assistant in your language. It finds your plan, takes your documents and books your installation, all in one call.',
   call_start: 'Start call', call_person_cta: "Prefer a person? We'll call you back",
   call_ai_note: 'You\'ll be talking to an AI assistant. Say "person" at any time and a human calls you back.',
   call_privacy: 'Your voice is turned into text in India and not kept. Nothing is ordered until you tap.',
   call_no_mic: 'The microphone is off, so type your answers. The assistant still speaks.', call_connecting: 'Connecting…',
-  call_ai_label: 'Accel AI assistant', call_speaking: 'Speaking', call_listening: 'Your turn, go ahead', call_hearing: 'Listening…',
+  call_ai_label: 'Dukaan Connect AI assistant', call_speaking: 'Speaking', call_listening: 'Your turn, go ahead', call_hearing: 'Listening…',
   call_thinking: 'Thinking…', call_muted: 'Microphone off', call_mute: 'Mute', call_unmute: 'Unmute', call_keyboard: 'Type', call_end: 'End',
   call_person: 'Person', call_done_talking: 'Send now', call_interrupt: 'Tap to interrupt', call_you: 'You', call_type_ph: 'Type your answer',
   call_flow_business: 'Business', call_flow_plan: 'Plan', call_flow_consent: 'Consent', call_flow_documents: 'Documents', call_flow_pay: 'Payment',
@@ -28,7 +28,7 @@ const en: Dict = {
   call_pay: 'Now set up UPI autopay for {due} due today. Type your UPI ID on the card.',
   call_paid: 'Payment set up. Now pick a time for the installation.',
   call_wait_owner: 'The owner has a link to approve this order. Nothing is charged until they sign.',
-  call_done: 'All done! Your installation is booked for {slot}. You can track everything from the link on your screen. Thank you for calling Accel Business.',
+  call_done: 'All done! Your installation is booked for {slot}. You can track everything from the link on your screen. Thank you for calling Dukaan Connect.',
   call_step_help: 'Let\'s finish this step on the card on your screen. Say "person" if you\'d like someone to call you.',
   call_didnt_hear: "Sorry, I didn't catch that. Could you say it again?", call_filler: 'One moment.',
   call_handoff: 'Sure. Put your number on the card and pick a time. A person will call you back.',
@@ -36,13 +36,13 @@ const en: Dict = {
 }
 
 const hi: Dict = {
-  call_door: 'अभी कॉल करें', call_door_sub: 'हमारा AI तुरंत जवाब देगा।', call_title: 'Accel Business को कॉल करें',
+  call_door: 'अभी कॉल करें', call_door_sub: 'हमारा AI तुरंत जवाब देगा।', call_title: 'Dukaan Connect को कॉल करें',
   call_sub: 'अपनी भाषा में हमारे AI सहायक से बात करें। एक ही कॉल में प्लान, दस्तावेज़ और इंस्टॉलेशन बुकिंग।',
   call_start: 'कॉल शुरू करें', call_person_cta: 'किसी व्यक्ति से बात करनी है? हम कॉल करेंगे',
   call_ai_note: 'आप AI सहायक से बात करेंगे। कभी भी "व्यक्ति" बोलें, कोई इंसान आपको कॉल करेगा।',
   call_privacy: 'आपकी आवाज़ भारत में ही टेक्स्ट में बदली जाती है और रखी नहीं जाती। आपके टैप के बिना कुछ ऑर्डर नहीं होता।',
   call_no_mic: 'माइक बंद है, इसलिए जवाब टाइप करें। सहायक फिर भी बोलेगा।', call_connecting: 'जुड़ रहे हैं…',
-  call_ai_label: 'Accel AI सहायक', call_speaking: 'सुनिए', call_listening: 'अब आप बोलिए', call_hearing: 'सुन रहे हैं…',
+  call_ai_label: 'Dukaan Connect AI सहायक', call_speaking: 'सुनिए', call_listening: 'अब आप बोलिए', call_hearing: 'सुन रहे हैं…',
   call_thinking: 'सोच रहे हैं…', call_muted: 'माइक बंद', call_mute: 'म्यूट', call_unmute: 'माइक चालू', call_keyboard: 'टाइप', call_end: 'खत्म',
   call_person: 'व्यक्ति', call_done_talking: 'अभी भेजें', call_interrupt: 'बीच में बोलने के लिए टैप करें', call_you: 'आप', call_type_ph: 'अपना जवाब लिखें',
   call_flow_business: 'व्यवसाय', call_flow_plan: 'प्लान', call_flow_consent: 'सहमति', call_flow_documents: 'दस्तावेज़', call_flow_pay: 'भुगतान',
@@ -61,7 +61,7 @@ const hi: Dict = {
   call_pay: 'अब आज के {due} के लिए UPI ऑटोपे सेट कीजिए। कार्ड पर अपनी UPI ID लिखिए।',
   call_paid: 'भुगतान सेट हो गया। अब इंस्टॉलेशन का समय चुनिए।',
   call_wait_owner: 'मालिक को इस ऑर्डर को मंज़ूर करने का लिंक भेजा गया है। उनके हस्ताक्षर तक कोई पैसा नहीं कटेगा।',
-  call_done: 'सब हो गया! आपका इंस्टॉलेशन {slot} के लिए बुक है। स्क्रीन के लिंक से सब ट्रैक कर सकते हैं। Accel Business को कॉल करने के लिए धन्यवाद।',
+  call_done: 'सब हो गया! आपका इंस्टॉलेशन {slot} के लिए बुक है। स्क्रीन के लिंक से सब ट्रैक कर सकते हैं। Dukaan Connect को कॉल करने के लिए धन्यवाद।',
   call_step_help: 'यह कदम स्क्रीन के कार्ड पर पूरा करते हैं। किसी व्यक्ति से बात करनी हो तो "व्यक्ति" बोलिए।',
   call_didnt_hear: 'माफ़ कीजिए, ठीक से सुनाई नहीं दिया। एक बार फिर बोलिए?', call_filler: 'एक पल।',
   call_handoff: 'ज़रूर। कार्ड पर अपना नंबर और समय चुनिए, कोई व्यक्ति आपको कॉल करेगा।',
@@ -69,13 +69,13 @@ const hi: Dict = {
 }
 
 const mr: Dict = {
-  call_door: 'आत्ता कॉल करा', call_door_sub: 'आमचा AI लगेच उत्तर देतो.', call_title: 'Accel Business ला कॉल करा',
+  call_door: 'आत्ता कॉल करा', call_door_sub: 'आमचा AI लगेच उत्तर देतो.', call_title: 'Dukaan Connect ला कॉल करा',
   call_sub: 'तुमच्या भाषेत आमच्या AI सहाय्यकाशी बोला. एकाच कॉलमध्ये प्लॅन, कागदपत्रे आणि इन्स्टॉलेशन बुकिंग.',
   call_start: 'कॉल सुरू करा', call_person_cta: 'व्यक्तीशी बोलायचे आहे? आम्ही कॉल करू',
   call_ai_note: 'तुम्ही AI सहाय्यकाशी बोलाल. कधीही "व्यक्ती" म्हणा, एक माणूस तुम्हाला कॉल करेल.',
   call_privacy: 'तुमचा आवाज भारतातच मजकुरात बदलला जातो आणि ठेवला जात नाही. तुमच्या टॅपशिवाय काहीही ऑर्डर होत नाही.',
   call_no_mic: 'माइक बंद आहे, म्हणून उत्तरे टाइप करा. सहाय्यक तरीही बोलेल.', call_connecting: 'जोडत आहोत…',
-  call_ai_label: 'Accel AI सहाय्यक', call_speaking: 'ऐका', call_listening: 'आता तुम्ही बोला', call_hearing: 'ऐकत आहोत…',
+  call_ai_label: 'Dukaan Connect AI सहाय्यक', call_speaking: 'ऐका', call_listening: 'आता तुम्ही बोला', call_hearing: 'ऐकत आहोत…',
   call_thinking: 'विचार करत आहोत…', call_muted: 'माइक बंद', call_mute: 'म्यूट', call_unmute: 'माइक चालू', call_keyboard: 'टाइप', call_end: 'संपवा',
   call_person: 'व्यक्ती', call_done_talking: 'आत्ता पाठवा', call_interrupt: 'मध्येच बोलण्यासाठी टॅप करा', call_you: 'तुम्ही', call_type_ph: 'तुमचे उत्तर लिहा',
   call_flow_business: 'व्यवसाय', call_flow_plan: 'प्लॅन', call_flow_consent: 'संमती', call_flow_documents: 'कागदपत्रे', call_flow_pay: 'पेमेंट',
@@ -94,7 +94,7 @@ const mr: Dict = {
   call_pay: 'आता आजच्या {due} साठी UPI ऑटोपे सेट करा. कार्डवर तुमचा UPI ID लिहा.',
   call_paid: 'पेमेंट सेट झाले. आता इन्स्टॉलेशनची वेळ निवडा.',
   call_wait_owner: 'मालकाला ही ऑर्डर मंजूर करण्याची लिंक पाठवली आहे. त्यांच्या सहीपर्यंत काहीही कापले जाणार नाही.',
-  call_done: 'सर्व झाले! तुमचे इन्स्टॉलेशन {slot} साठी बुक आहे. स्क्रीनवरील लिंकवरून सर्व ट्रॅक करा. Accel Business ला कॉल केल्याबद्दल धन्यवाद.',
+  call_done: 'सर्व झाले! तुमचे इन्स्टॉलेशन {slot} साठी बुक आहे. स्क्रीनवरील लिंकवरून सर्व ट्रॅक करा. Dukaan Connect ला कॉल केल्याबद्दल धन्यवाद.',
   call_step_help: 'ही पायरी स्क्रीनवरील कार्डवर पूर्ण करूया. व्यक्तीशी बोलायचे असल्यास "व्यक्ती" म्हणा.',
   call_didnt_hear: 'माफ करा, नीट ऐकू आले नाही. पुन्हा एकदा सांगाल?', call_filler: 'एक क्षण.',
   call_handoff: 'नक्की. कार्डवर तुमचा नंबर आणि वेळ निवडा, एक व्यक्ती तुम्हाला कॉल करेल.',
@@ -102,13 +102,13 @@ const mr: Dict = {
 }
 
 const ta: Dict = {
-  call_door: 'இப்போதே அழையுங்கள்', call_door_sub: 'AI உடனே பேசும்.', call_title: 'Accel Business-ஐ அழையுங்கள்',
+  call_door: 'இப்போதே அழையுங்கள்', call_door_sub: 'AI உடனே பேசும்.', call_title: 'Dukaan Connect-ஐ அழையுங்கள்',
   call_sub: 'உங்கள் மொழியில் எங்கள் AI உதவியாளருடன் பேசுங்கள். ஒரே அழைப்பில் திட்டம், ஆவணங்கள், நிறுவல் முன்பதிவு.',
   call_start: 'அழைப்பைத் தொடங்கு', call_person_cta: 'ஒருவரிடம் பேச வேண்டுமா? நாங்கள் அழைப்போம்',
   call_ai_note: 'நீங்கள் AI உதவியாளருடன் பேசுவீர்கள். எப்போது வேண்டுமானாலும் "ஒருவர்" என்று சொல்லுங்கள், ஒருவர் உங்களை அழைப்பார்.',
   call_privacy: 'உங்கள் குரல் இந்தியாவிலேயே எழுத்தாக மாற்றப்படுகிறது, சேமிக்கப்படுவதில்லை. நீங்கள் தட்டாமல் எதுவும் ஆர்டர் ஆகாது.',
   call_no_mic: 'மைக் அணைந்துள்ளது, எனவே பதில்களைத் தட்டச்சு செய்யுங்கள். உதவியாளர் பேசுவார்.', call_connecting: 'இணைக்கிறோம்…',
-  call_ai_label: 'Accel AI உதவியாளர்', call_speaking: 'கேளுங்கள்', call_listening: 'இப்போது நீங்கள் பேசுங்கள்', call_hearing: 'கேட்கிறோம்…',
+  call_ai_label: 'Dukaan Connect AI உதவியாளர்', call_speaking: 'கேளுங்கள்', call_listening: 'இப்போது நீங்கள் பேசுங்கள்', call_hearing: 'கேட்கிறோம்…',
   call_thinking: 'யோசிக்கிறோம்…', call_muted: 'மைக் அணைந்துள்ளது', call_mute: 'மியூட்', call_unmute: 'மைக் இயக்கு', call_keyboard: 'தட்டச்சு', call_end: 'முடி',
   call_person: 'ஒருவர்', call_done_talking: 'இப்போது அனுப்பு', call_interrupt: 'இடையில் பேச தட்டுங்கள்', call_you: 'நீங்கள்', call_type_ph: 'உங்கள் பதிலை எழுதுங்கள்',
   call_flow_business: 'தொழில்', call_flow_plan: 'திட்டம்', call_flow_consent: 'ஒப்புதல்', call_flow_documents: 'ஆவணங்கள்', call_flow_pay: 'கட்டணம்',
@@ -127,7 +127,7 @@ const ta: Dict = {
   call_pay: 'இப்போது இன்று செலுத்த வேண்டிய {due}-க்கு UPI ஆட்டோபே அமையுங்கள். அட்டையில் உங்கள் UPI ID-ஐ எழுதுங்கள்.',
   call_paid: 'கட்டணம் அமைந்தது. இப்போது நிறுவல் நேரத்தைத் தேர்ந்தெடுங்கள்.',
   call_wait_owner: 'உரிமையாளருக்கு இந்த ஆர்டரை ஒப்புக்கொள்ள இணைப்பு அனுப்பப்பட்டுள்ளது. அவர் கையொப்பமிடும் வரை கட்டணம் இல்லை.',
-  call_done: 'எல்லாம் முடிந்தது! உங்கள் நிறுவல் {slot}-க்கு முன்பதிவு ஆனது. திரையில் உள்ள இணைப்பில் எல்லாவற்றையும் பார்க்கலாம். Accel Business-ஐ அழைத்ததற்கு நன்றி.',
+  call_done: 'எல்லாம் முடிந்தது! உங்கள் நிறுவல் {slot}-க்கு முன்பதிவு ஆனது. திரையில் உள்ள இணைப்பில் எல்லாவற்றையும் பார்க்கலாம். Dukaan Connect-ஐ அழைத்ததற்கு நன்றி.',
   call_step_help: 'இந்தப் படியைத் திரையில் உள்ள அட்டையில் முடிப்போம். ஒருவரிடம் பேச வேண்டுமென்றால் "ஒருவர்" என்று சொல்லுங்கள்.',
   call_didnt_hear: 'மன்னிக்கவும், சரியாகக் கேட்கவில்லை. மீண்டும் ஒருமுறை சொல்வீர்களா?', call_filler: 'ஒரு நொடி.',
   call_handoff: 'நிச்சயமாக. அட்டையில் உங்கள் எண்ணையும் நேரத்தையும் தேர்ந்தெடுங்கள், ஒருவர் உங்களை அழைப்பார்.',
@@ -135,13 +135,13 @@ const ta: Dict = {
 }
 
 const te: Dict = {
-  call_door: 'ఇప్పుడే కాల్ చేయండి', call_door_sub: 'మా AI వెంటనే జవాబిస్తుంది.', call_title: 'Accel Business కి కాల్ చేయండి',
+  call_door: 'ఇప్పుడే కాల్ చేయండి', call_door_sub: 'మా AI వెంటనే జవాబిస్తుంది.', call_title: 'Dukaan Connect కి కాల్ చేయండి',
   call_sub: 'మీ భాషలో మా AI అసిస్టెంట్‌తో మాట్లాడండి. ఒకే కాల్‌లో ప్లాన్, పత్రాలు, ఇన్‌స్టాలేషన్ బుకింగ్.',
   call_start: 'కాల్ ప్రారంభించండి', call_person_cta: 'వ్యక్తితో మాట్లాడాలా? మేమే కాల్ చేస్తాం',
   call_ai_note: 'మీరు AI అసిస్టెంట్‌తో మాట్లాడతారు. ఎప్పుడైనా "వ్యక్తి" అనండి, ఒక మనిషి మీకు కాల్ చేస్తారు.',
   call_privacy: 'మీ గొంతు భారతదేశంలోనే అక్షరాలుగా మారుతుంది, నిల్వ చేయబడదు. మీరు నొక్కకుండా ఏదీ ఆర్డర్ కాదు.',
   call_no_mic: 'మైక్ ఆఫ్‌లో ఉంది, కాబట్టి జవాబులు టైప్ చేయండి. అసిస్టెంట్ మాట్లాడుతుంది.', call_connecting: 'కలుపుతున్నాం…',
-  call_ai_label: 'Accel AI అసిస్టెంట్', call_speaking: 'వినండి', call_listening: 'ఇప్పుడు మీరు మాట్లాడండి', call_hearing: 'వింటున్నాం…',
+  call_ai_label: 'Dukaan Connect AI అసిస్టెంట్', call_speaking: 'వినండి', call_listening: 'ఇప్పుడు మీరు మాట్లాడండి', call_hearing: 'వింటున్నాం…',
   call_thinking: 'ఆలోచిస్తున్నాం…', call_muted: 'మైక్ ఆఫ్', call_mute: 'మ్యూట్', call_unmute: 'మైక్ ఆన్', call_keyboard: 'టైప్', call_end: 'ముగించు',
   call_person: 'వ్యక్తి', call_done_talking: 'ఇప్పుడే పంపు', call_interrupt: 'మధ్యలో మాట్లాడటానికి నొక్కండి', call_you: 'మీరు', call_type_ph: 'మీ జవాబు రాయండి',
   call_flow_business: 'వ్యాపారం', call_flow_plan: 'ప్లాన్', call_flow_consent: 'సమ్మతి', call_flow_documents: 'పత్రాలు', call_flow_pay: 'చెల్లింపు',
@@ -160,7 +160,7 @@ const te: Dict = {
   call_pay: 'ఇప్పుడు ఈరోజు చెల్లించాల్సిన {due} కోసం UPI ఆటోపే సెట్ చేయండి. కార్డ్‌పై మీ UPI ID రాయండి.',
   call_paid: 'చెల్లింపు సెట్ అయింది. ఇప్పుడు ఇన్‌స్టాలేషన్ సమయం ఎంచుకోండి.',
   call_wait_owner: 'యజమానికి ఈ ఆర్డర్ ఆమోదించడానికి లింక్ పంపాం. వారు సంతకం చేసే వరకు ఏమీ కట్ కాదు.',
-  call_done: 'అంతా పూర్తయింది! మీ ఇన్‌స్టాలేషన్ {slot} కి బుక్ అయింది. స్క్రీన్‌పై లింక్ నుండి అన్నీ ట్రాక్ చేయండి. Accel Business కి కాల్ చేసినందుకు ధన్యవాదాలు.',
+  call_done: 'అంతా పూర్తయింది! మీ ఇన్‌స్టాలేషన్ {slot} కి బుక్ అయింది. స్క్రీన్‌పై లింక్ నుండి అన్నీ ట్రాక్ చేయండి. Dukaan Connect కి కాల్ చేసినందుకు ధన్యవాదాలు.',
   call_step_help: 'ఈ దశను స్క్రీన్‌పై కార్డ్‌లో పూర్తి చేద్దాం. వ్యక్తితో మాట్లాడాలంటే "వ్యక్తి" అనండి.',
   call_didnt_hear: 'క్షమించండి, సరిగ్గా వినిపించలేదు. మళ్ళీ ఒకసారి చెబుతారా?', call_filler: 'ఒక్క క్షణం.',
   call_handoff: 'తప్పకుండా. కార్డ్‌పై మీ నంబర్, సమయం ఎంచుకోండి, ఒక వ్యక్తి మీకు కాల్ చేస్తారు.',
@@ -168,13 +168,13 @@ const te: Dict = {
 }
 
 const kn: Dict = {
-  call_door: 'ಈಗಲೇ ಕರೆ ಮಾಡಿ', call_door_sub: 'ನಮ್ಮ AI ತಕ್ಷಣ ಉತ್ತರಿಸುತ್ತದೆ.', call_title: 'Accel Business ಗೆ ಕರೆ ಮಾಡಿ',
+  call_door: 'ಈಗಲೇ ಕರೆ ಮಾಡಿ', call_door_sub: 'ನಮ್ಮ AI ತಕ್ಷಣ ಉತ್ತರಿಸುತ್ತದೆ.', call_title: 'Dukaan Connect ಗೆ ಕರೆ ಮಾಡಿ',
   call_sub: 'ನಿಮ್ಮ ಭಾಷೆಯಲ್ಲಿ ನಮ್ಮ AI ಅಸಿಸ್ಟೆಂಟ್ ಜೊತೆ ಮಾತನಾಡಿ. ಒಂದೇ ಕರೆಯಲ್ಲಿ ಪ್ಲಾನ್, ದಾಖಲೆಗಳು, ಇನ್‌ಸ್ಟಾಲೇಶನ್ ಬುಕಿಂಗ್.',
   call_start: 'ಕರೆ ಆರಂಭಿಸಿ', call_person_cta: 'ವ್ಯಕ್ತಿಯೊಂದಿಗೆ ಮಾತನಾಡಬೇಕೆ? ನಾವೇ ಕರೆ ಮಾಡುತ್ತೇವೆ',
   call_ai_note: 'ನೀವು AI ಅಸಿಸ್ಟೆಂಟ್ ಜೊತೆ ಮಾತನಾಡುತ್ತೀರಿ. ಯಾವಾಗ ಬೇಕಾದರೂ "ವ್ಯಕ್ತಿ" ಎನ್ನಿ, ಒಬ್ಬ ಮನುಷ್ಯ ನಿಮಗೆ ಕರೆ ಮಾಡುತ್ತಾರೆ.',
   call_privacy: 'ನಿಮ್ಮ ಧ್ವನಿ ಭಾರತದಲ್ಲೇ ಪಠ್ಯವಾಗಿ ಬದಲಾಗುತ್ತದೆ, ಇಟ್ಟುಕೊಳ್ಳುವುದಿಲ್ಲ. ನೀವು ಒತ್ತದೆ ಏನೂ ಆರ್ಡರ್ ಆಗುವುದಿಲ್ಲ.',
   call_no_mic: 'ಮೈಕ್ ಆಫ್ ಆಗಿದೆ, ಹಾಗಾಗಿ ಉತ್ತರಗಳನ್ನು ಟೈಪ್ ಮಾಡಿ. ಅಸಿಸ್ಟೆಂಟ್ ಮಾತನಾಡುತ್ತದೆ.', call_connecting: 'ಸಂಪರ್ಕಿಸುತ್ತಿದ್ದೇವೆ…',
-  call_ai_label: 'Accel AI ಅಸಿಸ್ಟೆಂಟ್', call_speaking: 'ಕೇಳಿ', call_listening: 'ಈಗ ನೀವು ಮಾತನಾಡಿ', call_hearing: 'ಕೇಳುತ್ತಿದ್ದೇವೆ…',
+  call_ai_label: 'Dukaan Connect AI ಅಸಿಸ್ಟೆಂಟ್', call_speaking: 'ಕೇಳಿ', call_listening: 'ಈಗ ನೀವು ಮಾತನಾಡಿ', call_hearing: 'ಕೇಳುತ್ತಿದ್ದೇವೆ…',
   call_thinking: 'ಯೋಚಿಸುತ್ತಿದ್ದೇವೆ…', call_muted: 'ಮೈಕ್ ಆಫ್', call_mute: 'ಮ್ಯೂಟ್', call_unmute: 'ಮೈಕ್ ಆನ್', call_keyboard: 'ಟೈಪ್', call_end: 'ಮುಗಿಸಿ',
   call_person: 'ವ್ಯಕ್ತಿ', call_done_talking: 'ಈಗ ಕಳುಹಿಸಿ', call_interrupt: 'ನಡುವೆ ಮಾತನಾಡಲು ಒತ್ತಿ', call_you: 'ನೀವು', call_type_ph: 'ನಿಮ್ಮ ಉತ್ತರ ಬರೆಯಿರಿ',
   call_flow_business: 'ವ್ಯವಹಾರ', call_flow_plan: 'ಪ್ಲಾನ್', call_flow_consent: 'ಸಮ್ಮತಿ', call_flow_documents: 'ದಾಖಲೆಗಳು', call_flow_pay: 'ಪಾವತಿ',
@@ -193,7 +193,7 @@ const kn: Dict = {
   call_pay: 'ಈಗ ಇಂದು ಪಾವತಿಸಬೇಕಾದ {due} ಗಾಗಿ UPI ಆಟೋಪೇ ಹೊಂದಿಸಿ. ಕಾರ್ಡ್‌ನಲ್ಲಿ ನಿಮ್ಮ UPI ID ಬರೆಯಿರಿ.',
   call_paid: 'ಪಾವತಿ ಹೊಂದಿಸಲಾಗಿದೆ. ಈಗ ಇನ್‌ಸ್ಟಾಲೇಶನ್ ಸಮಯ ಆರಿಸಿ.',
   call_wait_owner: 'ಮಾಲೀಕರಿಗೆ ಈ ಆರ್ಡರ್ ಅನುಮೋದಿಸಲು ಲಿಂಕ್ ಕಳುಹಿಸಲಾಗಿದೆ. ಅವರು ಸಹಿ ಮಾಡುವವರೆಗೆ ಏನೂ ಕಡಿತವಾಗುವುದಿಲ್ಲ.',
-  call_done: 'ಎಲ್ಲವೂ ಮುಗಿಯಿತು! ನಿಮ್ಮ ಇನ್‌ಸ್ಟಾಲೇಶನ್ {slot} ಕ್ಕೆ ಬುಕ್ ಆಗಿದೆ. ಪರದೆಯ ಮೇಲಿನ ಲಿಂಕ್‌ನಿಂದ ಎಲ್ಲವನ್ನೂ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ. Accel Business ಗೆ ಕರೆ ಮಾಡಿದ್ದಕ್ಕೆ ಧನ್ಯವಾದ.',
+  call_done: 'ಎಲ್ಲವೂ ಮುಗಿಯಿತು! ನಿಮ್ಮ ಇನ್‌ಸ್ಟಾಲೇಶನ್ {slot} ಕ್ಕೆ ಬುಕ್ ಆಗಿದೆ. ಪರದೆಯ ಮೇಲಿನ ಲಿಂಕ್‌ನಿಂದ ಎಲ್ಲವನ್ನೂ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ. Dukaan Connect ಗೆ ಕರೆ ಮಾಡಿದ್ದಕ್ಕೆ ಧನ್ಯವಾದ.',
   call_step_help: 'ಈ ಹಂತವನ್ನು ಪರದೆಯ ಮೇಲಿನ ಕಾರ್ಡ್‌ನಲ್ಲಿ ಮುಗಿಸೋಣ. ವ್ಯಕ್ತಿಯೊಂದಿಗೆ ಮಾತನಾಡಲು "ವ್ಯಕ್ತಿ" ಎನ್ನಿ.',
   call_didnt_hear: 'ಕ್ಷಮಿಸಿ, ಸರಿಯಾಗಿ ಕೇಳಿಸಲಿಲ್ಲ. ಮತ್ತೊಮ್ಮೆ ಹೇಳುತ್ತೀರಾ?', call_filler: 'ಒಂದು ಕ್ಷಣ.',
   call_handoff: 'ಖಂಡಿತ. ಕಾರ್ಡ್‌ನಲ್ಲಿ ನಿಮ್ಮ ಸಂಖ್ಯೆ ಮತ್ತು ಸಮಯ ಆರಿಸಿ, ಒಬ್ಬ ವ್ಯಕ್ತಿ ನಿಮಗೆ ಕರೆ ಮಾಡುತ್ತಾರೆ.',
@@ -201,13 +201,13 @@ const kn: Dict = {
 }
 
 const gu: Dict = {
-  call_door: 'હમણાં કૉલ કરો', call_door_sub: 'અમારું AI તરત જવાબ આપે છે.', call_title: 'Accel Business ને કૉલ કરો',
+  call_door: 'હમણાં કૉલ કરો', call_door_sub: 'અમારું AI તરત જવાબ આપે છે.', call_title: 'Dukaan Connect ને કૉલ કરો',
   call_sub: 'તમારી ભાષામાં અમારા AI સહાયક સાથે વાત કરો. એક જ કૉલમાં પ્લાન, દસ્તાવેજો અને ઇન્સ્ટોલેશન બુકિંગ.',
   call_start: 'કૉલ શરૂ કરો', call_person_cta: 'વ્યક્તિ સાથે વાત કરવી છે? અમે કૉલ કરીશું',
   call_ai_note: 'તમે AI સહાયક સાથે વાત કરશો. ક્યારેય પણ "વ્યક્તિ" બોલો, એક માણસ તમને કૉલ કરશે.',
   call_privacy: 'તમારો અવાજ ભારતમાં જ લખાણમાં ફેરવાય છે અને રાખવામાં આવતો નથી. તમારા ટૅપ વિના કંઈ ઓર્ડર થતું નથી.',
   call_no_mic: 'માઇક બંધ છે, તેથી જવાબ ટાઇપ કરો. સહાયક બોલશે.', call_connecting: 'જોડાઈ રહ્યા છીએ…',
-  call_ai_label: 'Accel AI સહાયક', call_speaking: 'સાંભળો', call_listening: 'હવે તમે બોલો', call_hearing: 'સાંભળી રહ્યા છીએ…',
+  call_ai_label: 'Dukaan Connect AI સહાયક', call_speaking: 'સાંભળો', call_listening: 'હવે તમે બોલો', call_hearing: 'સાંભળી રહ્યા છીએ…',
   call_thinking: 'વિચારી રહ્યા છીએ…', call_muted: 'માઇક બંધ', call_mute: 'મ્યૂટ', call_unmute: 'માઇક ચાલુ', call_keyboard: 'ટાઇપ', call_end: 'સમાપ્ત',
   call_person: 'વ્યક્તિ', call_done_talking: 'હમણાં મોકલો', call_interrupt: 'વચ્ચે બોલવા ટૅપ કરો', call_you: 'તમે', call_type_ph: 'તમારો જવાબ લખો',
   call_flow_business: 'વ્યવસાય', call_flow_plan: 'પ્લાન', call_flow_consent: 'સંમતિ', call_flow_documents: 'દસ્તાવેજો', call_flow_pay: 'ચુકવણી',
@@ -226,7 +226,7 @@ const gu: Dict = {
   call_pay: 'હવે આજે ચૂકવવાના {due} માટે UPI ઑટોપે સેટ કરો. કાર્ડ પર તમારું UPI ID લખો.',
   call_paid: 'ચુકવણી સેટ થઈ ગઈ. હવે ઇન્સ્ટોલેશનનો સમય પસંદ કરો.',
   call_wait_owner: 'માલિકને આ ઓર્ડર મંજૂર કરવાની લિંક મોકલી છે. તેમની સહી સુધી કંઈ કપાશે નહીં.',
-  call_done: 'બધું થઈ ગયું! તમારું ઇન્સ્ટોલેશન {slot} માટે બુક છે. સ્ક્રીન પરની લિંકથી બધું ટ્રૅક કરો. Accel Business ને કૉલ કરવા બદલ આભાર.',
+  call_done: 'બધું થઈ ગયું! તમારું ઇન્સ્ટોલેશન {slot} માટે બુક છે. સ્ક્રીન પરની લિંકથી બધું ટ્રૅક કરો. Dukaan Connect ને કૉલ કરવા બદલ આભાર.',
   call_step_help: 'આ પગલું સ્ક્રીન પરના કાર્ડ પર પૂરું કરીએ. વ્યક્તિ સાથે વાત કરવી હોય તો "વ્યક્તિ" બોલો.',
   call_didnt_hear: 'માફ કરશો, બરાબર સંભળાયું નહીં. ફરી એક વાર બોલશો?', call_filler: 'એક ક્ષણ.',
   call_handoff: 'ચોક્કસ. કાર્ડ પર તમારો નંબર અને સમય પસંદ કરો, એક વ્યક્તિ તમને કૉલ કરશે.',
@@ -234,13 +234,13 @@ const gu: Dict = {
 }
 
 const bn: Dict = {
-  call_door: 'এখনই কল করুন', call_door_sub: 'আমাদের AI সঙ্গে সঙ্গে উত্তর দেয়।', call_title: 'Accel Business-এ কল করুন',
+  call_door: 'এখনই কল করুন', call_door_sub: 'আমাদের AI সঙ্গে সঙ্গে উত্তর দেয়।', call_title: 'Dukaan Connect-এ কল করুন',
   call_sub: 'আপনার ভাষায় আমাদের AI সহকারীর সঙ্গে কথা বলুন। একটি কলেই প্ল্যান, নথি আর ইনস্টলেশন বুকিং।',
   call_start: 'কল শুরু করুন', call_person_cta: 'কোনো মানুষের সঙ্গে কথা বলবেন? আমরা কল করব',
   call_ai_note: 'আপনি একটি AI সহকারীর সঙ্গে কথা বলবেন। যেকোনো সময় "মানুষ" বলুন, একজন আপনাকে কল করবেন।',
   call_privacy: 'আপনার কণ্ঠ ভারতেই লেখায় রূপান্তরিত হয় এবং রাখা হয় না। আপনার ট্যাপ ছাড়া কিছুই অর্ডার হয় না।',
   call_no_mic: 'মাইক বন্ধ আছে, তাই উত্তর টাইপ করুন। সহকারী কথা বলবে।', call_connecting: 'যুক্ত হচ্ছে…',
-  call_ai_label: 'Accel AI সহকারী', call_speaking: 'শুনুন', call_listening: 'এবার আপনি বলুন', call_hearing: 'শুনছি…',
+  call_ai_label: 'Dukaan Connect AI সহকারী', call_speaking: 'শুনুন', call_listening: 'এবার আপনি বলুন', call_hearing: 'শুনছি…',
   call_thinking: 'ভাবছি…', call_muted: 'মাইক বন্ধ', call_mute: 'মিউট', call_unmute: 'মাইক চালু', call_keyboard: 'টাইপ', call_end: 'শেষ',
   call_person: 'মানুষ', call_done_talking: 'এখনই পাঠান', call_interrupt: 'মাঝে কথা বলতে ট্যাপ করুন', call_you: 'আপনি', call_type_ph: 'আপনার উত্তর লিখুন',
   call_flow_business: 'ব্যবসা', call_flow_plan: 'প্ল্যান', call_flow_consent: 'সম্মতি', call_flow_documents: 'নথি', call_flow_pay: 'পেমেন্ট',
@@ -259,7 +259,7 @@ const bn: Dict = {
   call_pay: 'এবার আজকের {due}-এর জন্য UPI অটোপে সেট করুন। কার্ডে আপনার UPI ID লিখুন।',
   call_paid: 'পেমেন্ট সেট হয়েছে। এবার ইনস্টলেশনের সময় বেছে নিন।',
   call_wait_owner: 'মালিককে এই অর্ডার অনুমোদনের লিংক পাঠানো হয়েছে। তাঁর স্বাক্ষর না হওয়া পর্যন্ত কিছু কাটা হবে না।',
-  call_done: 'সব হয়ে গেছে! আপনার ইনস্টলেশন {slot}-এর জন্য বুক হয়েছে। স্ক্রিনের লিংক থেকে সব ট্র্যাক করুন। Accel Business-এ কল করার জন্য ধন্যবাদ।',
+  call_done: 'সব হয়ে গেছে! আপনার ইনস্টলেশন {slot}-এর জন্য বুক হয়েছে। স্ক্রিনের লিংক থেকে সব ট্র্যাক করুন। Dukaan Connect-এ কল করার জন্য ধন্যবাদ।',
   call_step_help: 'এই ধাপটি স্ক্রিনের কার্ডে শেষ করি। কারও সঙ্গে কথা বলতে চাইলে "মানুষ" বলুন।',
   call_didnt_hear: 'দুঃখিত, ঠিক শুনতে পাইনি। আরেকবার বলবেন?', call_filler: 'এক মুহূর্ত।',
   call_handoff: 'নিশ্চয়ই। কার্ডে আপনার নম্বর আর সময় বেছে নিন, একজন আপনাকে কল করবেন।',
@@ -267,13 +267,13 @@ const bn: Dict = {
 }
 
 const ml: Dict = {
-  call_door: 'ഇപ്പോൾ വിളിക്കൂ', call_door_sub: 'AI ഉടൻ മറുപടി തരും.', call_title: 'Accel Business-നെ വിളിക്കൂ',
+  call_door: 'ഇപ്പോൾ വിളിക്കൂ', call_door_sub: 'AI ഉടൻ മറുപടി തരും.', call_title: 'Dukaan Connect-നെ വിളിക്കൂ',
   call_sub: 'നിങ്ങളുടെ ഭാഷയിൽ ഞങ്ങളുടെ AI അസിസ്റ്റന്റുമായി സംസാരിക്കൂ. ഒറ്റ കോളിൽ പ്ലാൻ, രേഖകൾ, ഇൻസ്റ്റലേഷൻ ബുക്കിംഗ്.',
   call_start: 'കോൾ തുടങ്ങൂ', call_person_cta: 'ഒരാളോട് സംസാരിക്കണോ? ഞങ്ങൾ വിളിക്കാം',
   call_ai_note: 'നിങ്ങൾ ഒരു AI അസിസ്റ്റന്റുമായാണ് സംസാരിക്കുന്നത്. എപ്പോൾ വേണമെങ്കിലും "ആൾ" എന്ന് പറയൂ, ഒരാൾ നിങ്ങളെ വിളിക്കും.',
   call_privacy: 'നിങ്ങളുടെ ശബ്ദം ഇന്ത്യയിൽ തന്നെ എഴുത്താക്കി മാറ്റുന്നു, സൂക്ഷിക്കുന്നില്ല. നിങ്ങൾ ടാപ്പ് ചെയ്യാതെ ഒന്നും ഓർഡർ ആകില്ല.',
   call_no_mic: 'മൈക്ക് ഓഫാണ്, അതിനാൽ മറുപടി ടൈപ്പ് ചെയ്യൂ. അസിസ്റ്റന്റ് സംസാരിക്കും.', call_connecting: 'ബന്ധിപ്പിക്കുന്നു…',
-  call_ai_label: 'Accel AI അസിസ്റ്റന്റ്', call_speaking: 'കേൾക്കൂ', call_listening: 'ഇനി നിങ്ങൾ പറയൂ', call_hearing: 'കേൾക്കുന്നു…',
+  call_ai_label: 'Dukaan Connect AI അസിസ്റ്റന്റ്', call_speaking: 'കേൾക്കൂ', call_listening: 'ഇനി നിങ്ങൾ പറയൂ', call_hearing: 'കേൾക്കുന്നു…',
   call_thinking: 'ആലോചിക്കുന്നു…', call_muted: 'മൈക്ക് ഓഫ്', call_mute: 'മ്യൂട്ട്', call_unmute: 'മൈക്ക് ഓൺ', call_keyboard: 'ടൈപ്പ്', call_end: 'നിർത്തൂ',
   call_person: 'ആൾ', call_done_talking: 'ഇപ്പോൾ അയയ്ക്കൂ', call_interrupt: 'ഇടയ്ക്ക് സംസാരിക്കാൻ ടാപ്പ് ചെയ്യൂ', call_you: 'നിങ്ങൾ', call_type_ph: 'നിങ്ങളുടെ മറുപടി എഴുതൂ',
   call_flow_business: 'ബിസിനസ്', call_flow_plan: 'പ്ലാൻ', call_flow_consent: 'സമ്മതം', call_flow_documents: 'രേഖകൾ', call_flow_pay: 'പേയ്‌മെന്റ്',
@@ -292,7 +292,7 @@ const ml: Dict = {
   call_pay: 'ഇനി ഇന്ന് അടയ്ക്കേണ്ട {due}-ന് UPI ഓട്ടോപേ സജ്ജമാക്കൂ. കാർഡിൽ നിങ്ങളുടെ UPI ID എഴുതൂ.',
   call_paid: 'പേയ്‌മെന്റ് സജ്ജമായി. ഇനി ഇൻസ്റ്റലേഷൻ സമയം തിരഞ്ഞെടുക്കൂ.',
   call_wait_owner: 'ഉടമയ്ക്ക് ഈ ഓർഡർ അംഗീകരിക്കാൻ ലിങ്ക് അയച്ചിട്ടുണ്ട്. അവർ ഒപ്പിടുന്നതുവരെ ഒന്നും ഈടാക്കില്ല.',
-  call_done: 'എല്ലാം കഴിഞ്ഞു! നിങ്ങളുടെ ഇൻസ്റ്റലേഷൻ {slot}-ന് ബുക്ക് ചെയ്തു. സ്ക്രീനിലെ ലിങ്കിൽ എല്ലാം ട്രാക്ക് ചെയ്യാം. Accel Business-നെ വിളിച്ചതിന് നന്ദി.',
+  call_done: 'എല്ലാം കഴിഞ്ഞു! നിങ്ങളുടെ ഇൻസ്റ്റലേഷൻ {slot}-ന് ബുക്ക് ചെയ്തു. സ്ക്രീനിലെ ലിങ്കിൽ എല്ലാം ട്രാക്ക് ചെയ്യാം. Dukaan Connect-നെ വിളിച്ചതിന് നന്ദി.',
   call_step_help: 'ഈ ഘട്ടം സ്ക്രീനിലെ കാർഡിൽ പൂർത്തിയാക്കാം. ഒരാളോട് സംസാരിക്കണമെങ്കിൽ "ആൾ" എന്ന് പറയൂ.',
   call_didnt_hear: 'ക്ഷമിക്കണം, ശരിയായി കേട്ടില്ല. ഒന്നുകൂടി പറയാമോ?', call_filler: 'ഒരു നിമിഷം.',
   call_handoff: 'തീർച്ചയായും. കാർഡിൽ നിങ്ങളുടെ നമ്പറും സമയവും തിരഞ്ഞെടുക്കൂ, ഒരാൾ നിങ്ങളെ വിളിക്കും.',
@@ -300,13 +300,13 @@ const ml: Dict = {
 }
 
 const pa: Dict = {
-  call_door: 'ਹੁਣੇ ਕਾਲ ਕਰੋ', call_door_sub: 'ਸਾਡਾ AI ਤੁਰੰਤ ਜਵਾਬ ਦਿੰਦਾ ਹੈ।', call_title: 'Accel Business ਨੂੰ ਕਾਲ ਕਰੋ',
+  call_door: 'ਹੁਣੇ ਕਾਲ ਕਰੋ', call_door_sub: 'ਸਾਡਾ AI ਤੁਰੰਤ ਜਵਾਬ ਦਿੰਦਾ ਹੈ।', call_title: 'Dukaan Connect ਨੂੰ ਕਾਲ ਕਰੋ',
   call_sub: 'ਆਪਣੀ ਭਾਸ਼ਾ ਵਿੱਚ ਸਾਡੇ AI ਸਹਾਇਕ ਨਾਲ ਗੱਲ ਕਰੋ। ਇੱਕੋ ਕਾਲ ਵਿੱਚ ਪਲਾਨ, ਦਸਤਾਵੇਜ਼ ਅਤੇ ਇੰਸਟਾਲੇਸ਼ਨ ਬੁਕਿੰਗ।',
   call_start: 'ਕਾਲ ਸ਼ੁਰੂ ਕਰੋ', call_person_cta: 'ਕਿਸੇ ਵਿਅਕਤੀ ਨਾਲ ਗੱਲ ਕਰਨੀ ਹੈ? ਅਸੀਂ ਕਾਲ ਕਰਾਂਗੇ',
   call_ai_note: 'ਤੁਸੀਂ AI ਸਹਾਇਕ ਨਾਲ ਗੱਲ ਕਰੋਗੇ। ਕਦੇ ਵੀ "ਵਿਅਕਤੀ" ਬੋਲੋ, ਕੋਈ ਇਨਸਾਨ ਤੁਹਾਨੂੰ ਕਾਲ ਕਰੇਗਾ।',
   call_privacy: 'ਤੁਹਾਡੀ ਆਵਾਜ਼ ਭਾਰਤ ਵਿੱਚ ਹੀ ਲਿਖਤ ਵਿੱਚ ਬਦਲੀ ਜਾਂਦੀ ਹੈ ਅਤੇ ਰੱਖੀ ਨਹੀਂ ਜਾਂਦੀ। ਤੁਹਾਡੇ ਟੈਪ ਤੋਂ ਬਿਨਾਂ ਕੁਝ ਆਰਡਰ ਨਹੀਂ ਹੁੰਦਾ।',
   call_no_mic: 'ਮਾਈਕ ਬੰਦ ਹੈ, ਇਸ ਲਈ ਜਵਾਬ ਟਾਈਪ ਕਰੋ। ਸਹਾਇਕ ਬੋਲੇਗਾ।', call_connecting: 'ਜੁੜ ਰਹੇ ਹਾਂ…',
-  call_ai_label: 'Accel AI ਸਹਾਇਕ', call_speaking: 'ਸੁਣੋ', call_listening: 'ਹੁਣ ਤੁਸੀਂ ਬੋਲੋ', call_hearing: 'ਸੁਣ ਰਹੇ ਹਾਂ…',
+  call_ai_label: 'Dukaan Connect AI ਸਹਾਇਕ', call_speaking: 'ਸੁਣੋ', call_listening: 'ਹੁਣ ਤੁਸੀਂ ਬੋਲੋ', call_hearing: 'ਸੁਣ ਰਹੇ ਹਾਂ…',
   call_thinking: 'ਸੋਚ ਰਹੇ ਹਾਂ…', call_muted: 'ਮਾਈਕ ਬੰਦ', call_mute: 'ਮਿਊਟ', call_unmute: 'ਮਾਈਕ ਚਾਲੂ', call_keyboard: 'ਟਾਈਪ', call_end: 'ਖ਼ਤਮ',
   call_person: 'ਵਿਅਕਤੀ', call_done_talking: 'ਹੁਣੇ ਭੇਜੋ', call_interrupt: 'ਵਿੱਚ ਬੋਲਣ ਲਈ ਟੈਪ ਕਰੋ', call_you: 'ਤੁਸੀਂ', call_type_ph: 'ਆਪਣਾ ਜਵਾਬ ਲਿਖੋ',
   call_flow_business: 'ਕਾਰੋਬਾਰ', call_flow_plan: 'ਪਲਾਨ', call_flow_consent: 'ਸਹਿਮਤੀ', call_flow_documents: 'ਦਸਤਾਵੇਜ਼', call_flow_pay: 'ਭੁਗਤਾਨ',
@@ -325,7 +325,7 @@ const pa: Dict = {
   call_pay: 'ਹੁਣ ਅੱਜ ਦੇ {due} ਲਈ UPI ਆਟੋਪੇ ਸੈੱਟ ਕਰੋ। ਕਾਰਡ ʼਤੇ ਆਪਣੀ UPI ID ਲਿਖੋ।',
   call_paid: 'ਭੁਗਤਾਨ ਸੈੱਟ ਹੋ ਗਿਆ। ਹੁਣ ਇੰਸਟਾਲੇਸ਼ਨ ਦਾ ਸਮਾਂ ਚੁਣੋ।',
   call_wait_owner: 'ਮਾਲਕ ਨੂੰ ਇਹ ਆਰਡਰ ਮਨਜ਼ੂਰ ਕਰਨ ਦਾ ਲਿੰਕ ਭੇਜਿਆ ਗਿਆ ਹੈ। ਉਨ੍ਹਾਂ ਦੇ ਦਸਤਖ਼ਤ ਤੱਕ ਕੁਝ ਨਹੀਂ ਕੱਟਿਆ ਜਾਵੇਗਾ।',
-  call_done: 'ਸਭ ਹੋ ਗਿਆ! ਤੁਹਾਡੀ ਇੰਸਟਾਲੇਸ਼ਨ {slot} ਲਈ ਬੁੱਕ ਹੈ। ਸਕ੍ਰੀਨ ਦੇ ਲਿੰਕ ਤੋਂ ਸਭ ਟ੍ਰੈਕ ਕਰੋ। Accel Business ਨੂੰ ਕਾਲ ਕਰਨ ਲਈ ਧੰਨਵਾਦ।',
+  call_done: 'ਸਭ ਹੋ ਗਿਆ! ਤੁਹਾਡੀ ਇੰਸਟਾਲੇਸ਼ਨ {slot} ਲਈ ਬੁੱਕ ਹੈ। ਸਕ੍ਰੀਨ ਦੇ ਲਿੰਕ ਤੋਂ ਸਭ ਟ੍ਰੈਕ ਕਰੋ। Dukaan Connect ਨੂੰ ਕਾਲ ਕਰਨ ਲਈ ਧੰਨਵਾਦ।',
   call_step_help: 'ਇਹ ਕਦਮ ਸਕ੍ਰੀਨ ਦੇ ਕਾਰਡ ʼਤੇ ਪੂਰਾ ਕਰੀਏ। ਕਿਸੇ ਵਿਅਕਤੀ ਨਾਲ ਗੱਲ ਕਰਨੀ ਹੋਵੇ ਤਾਂ "ਵਿਅਕਤੀ" ਬੋਲੋ।',
   call_didnt_hear: 'ਮਾਫ਼ ਕਰਨਾ, ਠੀਕ ਸੁਣਾਈ ਨਹੀਂ ਦਿੱਤਾ। ਇੱਕ ਵਾਰ ਫਿਰ ਬੋਲੋਗੇ?', call_filler: 'ਇੱਕ ਪਲ।',
   call_handoff: 'ਜ਼ਰੂਰ। ਕਾਰਡ ʼਤੇ ਆਪਣਾ ਨੰਬਰ ਅਤੇ ਸਮਾਂ ਚੁਣੋ, ਕੋਈ ਵਿਅਕਤੀ ਤੁਹਾਨੂੰ ਕਾਲ ਕਰੇਗਾ।',

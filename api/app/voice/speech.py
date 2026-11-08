@@ -28,7 +28,7 @@ MAX_TTS_CHARS = 1500
 TTS_MODEL = "bulbul:v3"  # bulbul:v2 was retired by Sarvam; v4-flash measured slower for our lines
 STT_MODEL = "saaras:v4"  # Sarvam's current model: same 0.6 s as saarika:v2.5, and it takes key terms
 # words owners say that a general model spells many ways: heard as written here, the extractor matches them directly
-KEY_TERMS = ["Accel", "Biz Fibre", "AirFiber", "broadband", "fibre", "leased line", "Wi-Fi", "SIM", "postpaid", "Mbps", "Gbps",
+KEY_TERMS = ["Dukaan Connect", "Biz Fibre", "AirFiber", "broadband", "fibre", "leased line", "Wi-Fi", "SIM", "postpaid", "Mbps", "Gbps",
              "GST", "GSTIN", "Udyam", "UPI", "DigiLocker", "Aadhaar", "PAN", "WhatsApp", "CCTV", "POS", "static IP", "firewall",
              "SD-WAN", "toll-free", "cloud", "email", "kirana", "clinic", "CA firm"]
 FORMATS = {"wav": "audio/wav", "mp3": "audio/mpeg"}  # a call takes mp3 at 16 kHz: a third of the bytes, measured no slower

@@ -38,7 +38,7 @@ W, H = 1920, 1000
 out.append(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" font-family="&quot;Baloo 2&quot;, sans-serif">')
 out.append('<defs>' + "".join(f'<marker id="{i}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="{c}"/></marker>' for i, c in (("a", SOFT), ("r", KUMKUM), ("g", LEAF))) + '</defs>')
 out.append(f'<rect width="{W}" height="{H}" fill="#fff"/>')
-text(60, 78, "Udyam Digital: solution architecture", 42, 800)
+text(60, 78, "Dukaan Connect: solution architecture", 42, 800)
 text(60, 118, "Raw identifiers stop at the gateway. Only Smart KYC and fulfilment detokenise; the language model sees masked text only.", 22, 400, SOFT)
 
 # channels
@@ -131,7 +131,7 @@ for i, ln in enumerate(["One Docker image on Cloud Run, asia-south1 (Mumbai)", "
                         "works with no LLM key: rules-only mode"]):
     text(1378, 782 + i * 27, ln, 17, 400, INK)
 
-text(60, 960, "Accel Telecom and Accel Business are fictional; all data is the official synthetic pack. Airtel SYNC, Track A: Project Udyam Digital.", 16, 400, "#8A8FA8")
+text(60, 960, "Dukaan Connect is our product prototype; all data is the official synthetic pack. Airtel SYNC, Track A: Project Udyam Digital.", 16, 400, "#8A8FA8")
 out.append("</svg>")
 Path(__file__).resolve().parents[1].joinpath("architecture.svg").write_text("\n".join(out), encoding="utf-8")
 print("ok")

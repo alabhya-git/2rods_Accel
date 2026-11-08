@@ -1,4 +1,4 @@
-"""Accel Business · Udyam Digital API. One stateless container: API under /api, the phone app at /."""
+"""Dukaan Connect API. One stateless container: API under /api, the phone app at /."""
 from __future__ import annotations
 
 import asyncio
@@ -60,7 +60,7 @@ async def lifespan(app: FastAPI):
     task.cancel()
 
 
-app = FastAPI(title="Accel Business · Udyam Digital", version=VERSION, lifespan=lifespan,
+app = FastAPI(title="Dukaan Connect", version=VERSION, lifespan=lifespan,
               description="Digital-first acquisition and onboarding for small businesses (Airtel SYNC, Enterprise Track A).")
 st = get_settings()
 app.add_middleware(GZipMiddleware, minimum_size=1024)

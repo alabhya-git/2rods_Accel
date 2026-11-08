@@ -1,9 +1,9 @@
-"""Mocked telco-native APIs. In production these call Accel's own network:
+"""Mocked telco-native APIs. In production these call Dukaan Connect's own network:
 
 * fibre serviceability by pin code (OSS inventory)
 * SIM Swap check (GSMA Open Gateway / CAMARA; Indian operators launched it in 2025)
 * Number Verification (CAMARA) instead of SMS OTP
-* masked calling through Accel CPaaS virtual numbers, so partners never see a customer's number
+* masked calling through Dukaan Connect CPaaS virtual numbers, so partners never see a customer's number
 """
 from __future__ import annotations
 
@@ -38,11 +38,11 @@ def number_verify(phone: str, device_hint: str | None = None) -> dict:
 
 
 def number_verify_for(phone: str) -> dict:
-    """An Accel SIM answers the network check silently; other networks fall back to an OTP."""
+    """An Dukaan Connect SIM answers the network check silently; other networks fall back to an OTP."""
     return number_verify(phone, device_hint="accel_sim" if accel_account(phone) else None)
 
 
-# Accel's own subscriber base (BSS/CRM). 38% of leads already use Accel, yet each one starts
+# Dukaan Connect's own subscriber base (BSS/CRM). 38% of leads already use Dukaan Connect, yet each one starts
 # as a stranger. Demo numbers below; production reads the CRM by the verified number.
 ACCOUNTS = {
     "9876500001": {"account": "ACC-20191184", "since": 2019, "kind": "mobile", "monthly_spend": 1150,

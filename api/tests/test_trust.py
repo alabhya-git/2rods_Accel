@@ -62,7 +62,7 @@ def test_four_screenshots_through_the_real_upload_and_ocr_are_rejected():
         c.post(f"/api/orders/{oid}/consent?key={key}", json={"choices": {"kyc_verification": True, "service_delivery": True}})
         c.post(f"/api/orders/{oid}/kyc/identifiers?key={key}", json={"gstin": K09})
         for dt in ("gst_certificate", "udyam_certificate", "address_proof", "signatory_id"):
-            files = {"file": (f"{dt}.png", photo(f"Accel Business\nYour order\nTrack status\n{dt}"), "image/png")}
+            files = {"file": (f"{dt}.png", photo(f"Dukaan Connect\nYour order\nTrack status\n{dt}"), "image/png")}
             assert c.post(f"/api/orders/{oid}/kyc/documents?key={key}", data={"doc_type": dt}, files=files).status_code == 200
         res = c.post(f"/api/orders/{oid}/kyc/evaluate?key={key}").json()["result"]
         assert res["outcome"] != "verified"

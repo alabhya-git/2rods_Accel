@@ -5,18 +5,18 @@ import { useLang } from '../lib/i18n'
 
 export function Logo({ small = false, light = false }: { small?: boolean; light?: boolean }) {
   return (
-    <Link to="/" className="flex items-center gap-2.5" aria-label="Accel Business home">
+    <Link to="/" className="flex items-center gap-2.5" aria-label="Dukaan Connect home">
       <svg width={small ? 30 : 36} height={small ? 30 : 36} viewBox="0 0 64 64" aria-hidden="true">
         <defs>
           <linearGradient id="lg-mark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#E3162F" /><stop offset="1" stopColor="#A80C22" /></linearGradient>
         </defs>
         <rect width="64" height="64" rx="16" fill={light ? '#fff' : 'url(#lg-mark)'} />
-        <path d="M14 46 L32 14 L50 46" fill="none" stroke={light ? '#D50F2B' : '#fff'} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M22 36 H42" stroke="#F2A900" strokeWidth="6" strokeLinecap="round" />
+        <path d="M21 15 H30 C43 15 50 21 50 32 C50 43 43 49 30 49 H21 Z" fill="none" stroke={light ? '#D50F2B' : '#fff'} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M21 32 H34" stroke="#F2A900" strokeWidth="6" strokeLinecap="round" />
       </svg>
       <span className="leading-none">
-        <span className={`block text-[19px] font-extrabold tracking-tight ${light ? 'text-onbrand' : 'text-ink'}`}>Accel Business</span>
-        {!small && <span className={`mt-0.5 block text-[12px] font-semibold tracking-wide ${light ? 'text-onbrand/75' : 'text-ink-faint'}`}>Udyam Digital</span>}
+        <span className={`block text-[19px] font-extrabold tracking-tight ${light ? 'text-onbrand' : 'text-ink'}`}>Dukaan Connect</span>
+        {!small && <span className={`mt-0.5 block text-[12px] font-semibold tracking-wide ${light ? 'text-onbrand/75' : 'text-ink-faint'}`}>For your business</span>}
       </span>
     </Link>
   )
@@ -258,7 +258,7 @@ export function SiteFooter({ always = false }: { always?: boolean }) {
           <Link className="hover:text-ink" to="/partner">{t('partner_mode')}</Link>
           <Link className="hover:text-ink" to="/judge">Judge console</Link>
         </nav>
-        <p className="w-full text-[13px] text-ink-faint">Accel Telecom and Accel Business are fictional. All data is synthetic, built for the Airtel SYNC hackathon. Payments run in test mode.</p>
+        <p className="w-full text-[13px] text-ink-faint">Dukaan Connect is a prototype built for the Airtel SYNC hackathon. All data is synthetic. Payments run in test mode.</p>
       </div>
     </footer>
   )

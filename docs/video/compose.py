@@ -69,8 +69,8 @@ def rounded(img: Image.Image, r: int) -> Image.Image:
 
 
 def chrome(im, d, desktop=False):
-    d.text((60, H - 62), "Accel Business", font=font(700, 26), fill=WHITE)
-    d.text((60 + d.textlength("Accel Business", font=font(700, 26)) + 14, H - 62), "Udyam Digital, working prototype",
+    d.text((60, H - 62), "Dukaan Connect", font=font(700, 26), fill=WHITE)
+    d.text((60 + d.textlength("Dukaan Connect", font=font(700, 26)) + 14, H - 62), "Working prototype",
            font=font(500, 26), fill=SOFT)
     d.text((W - 60, 34), "demo clock", font=font(500, 22), fill=SOFT, anchor="ra")
 
@@ -123,7 +123,7 @@ def desk_frame(s):
     im.paste(rounded(shot, 14), (sx, sy), rounded(shot, 14))
     d.text((sx, 40), s["title"], font=font(800, 52), fill=WHITE)
     paragraph(d, (sx, 108), s.get("caption", ""), font(500, 32), sw - 120, TEXT, 40)
-    d.text((W - 60, H - 62), "Accel Business, partner and judge views", font=font(500, 24), fill=SOFT, anchor="ra")
+    d.text((W - 60, H - 62), "Dukaan Connect, partner and judge views", font=font(500, 24), fill=SOFT, anchor="ra")
     d.text((W - 60, 34), "demo clock", font=font(500, 22), fill=SOFT, anchor="ra")
     return im
 
@@ -158,15 +158,15 @@ def card_frame(s):
 K09 = "Specimen applicant K09: Kaveri Insurance Advisors, Visakhapatnam. Official synthetic data."
 SCENES = [
     ("open", [
-        dict(kind="card", dur=5.5, kicker="Accel Business, April to June 2026", big=["7 in 100 small-business leads became customers."],
+        dict(kind="card", dur=5.5, kicker="Dukaan Connect, April to June 2026", big=["7 in 100 small-business leads became customers."],
              lines=["They waited 17.6 days, and called three times to ask where their order was."]),
-        dict(kind="card", dur=5.0, kicker="Accel Business, April to June 2026", big=["7 in 100 small-business leads became customers."],
+        dict(kind="card", dur=5.0, kicker="Dukaan Connect, April to June 2026", big=["7 in 100 small-business leads became customers."],
              lines=["They waited 17.6 days, and called three times to ask where their order was.",
                     "Watch Anita, who runs an insurance agency in Visakhapatnam, do it in one sitting, on her phone."]),
     ]),
     ("advisor", [
-        dict(img="home_en", dur=3.0, step=0, title="Her language", caption="Anita opens Accel Business on her phone. Ten Indian languages; she picks Telugu.", note=K09),
-        dict(img="home_te", dur=2.5, step=0, title="Her language", caption="Anita opens Accel Business on her phone. Ten Indian languages; she picks Telugu.", note=K09),
+        dict(img="home_en", dur=3.0, step=0, title="Her language", caption="Anita opens Dukaan Connect on her phone. Ten Indian languages; she picks Telugu.", note=K09),
+        dict(img="home_te", dur=2.5, step=0, title="Her language", caption="Anita opens Dukaan Connect on her phone. Ten Indian languages; she picks Telugu.", note=K09),
         dict(img="adv_greet", dur=2.5, step=0, title="Advisor", caption="She describes her business as she would to a person. Voice works too; here she types."),
         *[dict(img=f"adv_type1_{i}", dur=0.3, step=0, title="Advisor", caption="She describes her business as she would to a person. Voice works too; here she types.") for i in range(1, 7)],
         dict(img="adv_wait1", dur=0.6, step=0, title="Advisor", caption="She describes her business as she would to a person. Voice works too; here she types."),
@@ -234,10 +234,10 @@ SCENES = [
              caption="All 12 specimen applicants through the real OCR: six planted defects caught, six clean applicants passed, no false rejections."),
     ]),
     ("close", [
-        dict(kind="card", dur=11.0, kicker="Udyam Digital", big=["One sitting on a phone, in the owner's language."],
+        dict(kind="card", dur=11.0, kicker="Dukaan Connect", big=["One sitting on a phone, in the owner's language."],
              grid=[("~12 minutes", "designed journey, against 17.6 days today"), ("28 of 28", "advisor scenarios pass, with or without an LLM"),
                    ("12 of 12", "KYC specimens correct, 0 false rejections"), ("15%", "conversion target, under Rs 4,000 per activation")],
-             foot="Code, live link and business case are on the submission page. Accel Telecom and Accel Business are fictional; all data is the official synthetic pack."),
+             foot="Code, live link and business case are on the submission page. Dukaan Connect is our product prototype; all data is the official synthetic pack."),
     ]),
 ]
 CLOCK = {"advisor", "quote", "consent", "kyc", "pay_track", "partner", "judge"}

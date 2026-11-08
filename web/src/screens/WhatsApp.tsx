@@ -6,7 +6,7 @@ type Msg = { me: boolean; text: string; quote?: string }
 
 export default function WhatsApp() {
   const [from] = useState(() => store('wa_from') || store('wa_from', '98' + String(Math.floor(10000000 + Math.random() * 89999999)))!)
-  const [msgs, setMsgs] = useState<Msg[]>([{ me: false, text: 'Namaste! This is Accel Business on WhatsApp. Tell me about your business in any language.' }])
+  const [msgs, setMsgs] = useState<Msg[]>([{ me: false, text: 'Namaste! This is Dukaan Connect on WhatsApp. Tell me about your business in any language.' }])
   const [text, setText] = useState('')
   const [busy, setBusy] = useState(false)
   const end = useRef<HTMLDivElement>(null)
@@ -30,7 +30,7 @@ export default function WhatsApp() {
       <header className="flex h-16 items-center gap-3 bg-[#075E54] px-4 text-white">
         <Link to="/" aria-label="Back" className="text-[22px]">‹</Link>
         <div className="grid h-10 w-10 place-items-center rounded-full bg-kumkum font-bold">A</div>
-        <div><p className="font-bold leading-tight">Accel Business</p><p className="text-[13px] opacity-80">Verified business account (simulator)</p></div>
+        <div><p className="font-bold leading-tight">Dukaan Connect</p><p className="text-[13px] opacity-80">Verified business account (simulator)</p></div>
       </header>
       <div className="mx-auto w-full max-w-[480px] flex-1 space-y-2 overflow-y-auto px-3 py-4">
         {msgs.map((m, i) => (

@@ -3,7 +3,7 @@ import { ErrorNote, Shell, Stamp } from '../components/ui'
 import { api } from '../lib/api'
 import { useLang } from '../lib/i18n'
 
-/** "Someone called saying they are from Accel": check the partner ID or the number before sharing anything. */
+/** "Someone called saying they are from Dukaan Connect": check the partner ID or the number before sharing anything. */
 export default function VerifyCaller() {
   const { t } = useLang()
   const [q, setQ] = useState('')

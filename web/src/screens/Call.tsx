@@ -727,10 +727,10 @@ function Mark({ small = false }: { small?: boolean }) {
     <span className="flex items-center gap-2">
       <svg width={small ? 34 : 30} height={small ? 34 : 30} viewBox="0 0 64 64" aria-hidden="true">
         <rect width="64" height="64" rx="16" fill="#D50F2B" />
-        <path d="M14 46 L32 14 L50 46" fill="none" stroke="#fff" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M22 36 H42" stroke="#F2A900" strokeWidth="6" strokeLinecap="round" />
+        <path d="M21 15 H30 C43 15 50 21 50 32 C50 43 43 49 30 49 H21 Z" fill="none" stroke="#fff" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M21 32 H34" stroke="#F2A900" strokeWidth="6" strokeLinecap="round" />
       </svg>
-      {!small && <span className="text-[17px] font-extrabold tracking-tight">Accel Business</span>}
+      {!small && <span className="text-[17px] font-extrabold tracking-tight">Dukaan Connect</span>}
     </span>
   )
 }
@@ -888,8 +888,8 @@ function Orb({ engine, voice, size }: { engine: CallEngine | null; voice: Voice;
     <div className="relative" style={{ width: size, height: size }}>
       <canvas ref={ref} style={{ width: size, height: size }} aria-hidden="true" />
       <svg className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" width={size * 0.22} height={size * 0.22} viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M14 46 L32 14 L50 46" fill="none" stroke="#fff" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M22 36 H42" stroke="#F2A900" strokeWidth="6" strokeLinecap="round" />
+        <path d="M21 15 H30 C43 15 50 21 50 32 C50 43 43 49 30 49 H21 Z" fill="none" stroke="#fff" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M21 32 H34" stroke="#F2A900" strokeWidth="6" strokeLinecap="round" />
       </svg>
     </div>
   )

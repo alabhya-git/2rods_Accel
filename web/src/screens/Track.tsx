@@ -159,7 +159,7 @@ export default function Track() {
 
       {toast && (
         <div className="fixed inset-x-4 top-20 z-40 mx-auto max-w-[440px] animate-rise rounded-2xl bg-ink px-4 py-3 text-white shadow-lift lg:left-auto lg:right-8 lg:top-24" role="status">
-          <p className="text-[13px] opacity-70">Accel Business (also sent on WhatsApp)</p>
+          <p className="text-[13px] opacity-70">Dukaan Connect Business (also sent on WhatsApp)</p>
           <p className="font-semibold">{toast}</p>
         </div>
       )}

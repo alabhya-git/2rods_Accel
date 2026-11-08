@@ -36,7 +36,7 @@ export function SimUsers({ orderId, orderKey, lines, tick }: { orderId: string; 
       setRows([])
     } catch (e: any) { setErr(e.message) }
   }
-  // an existing Accel customer's numbers: no new SIM, KYC already on file, live at once
+  // an existing Dukaan Connect customer's numbers: no new SIM, KYC already on file, live at once
   const moveMine = async () => {
     setErr(null)
     try {

@@ -9,7 +9,7 @@ const SEG: Record<string, string> = { micro: 'Micro retail', prof: 'Professional
 // Demo sign-ins only: production refuses these (security.py).
 const DEMO = [
   { role: 'Partner (sales shop)', does: 'Sharma Telecom, Jaipur: call-backs, leads to call, its orders, metrics. Can start an assisted order.', id: 'PARTNER-001', pass: 'partner-demo' },
-  { role: 'KYC reviewer', does: 'Accel back office: approves or rejects documents a machine could not settle.', id: 'reviewer-1', pass: 'review-demo' },
+  { role: 'KYC reviewer', does: 'Dukaan Connect back office: approves or rejects documents a machine could not settle.', id: 'reviewer-1', pass: 'review-demo' },
   { role: 'Second KYC reviewer', does: 'Risky overrides need a second, different reviewer to agree. Sign in as this one to confirm.', id: 'reviewer-2', pass: 'review-demo' },
 ]
 type Who ={ token: string; sub: string; role: string; name: string; partner_id: string | null }
@@ -38,7 +38,7 @@ export default function Partner() {
     <div className="mx-auto max-w-md px-5 pb-16 pt-16">
       <Logo />
       <h1 className="mt-8 text-[24px] font-bold">Partner & reviewer desk</h1>
-      <p className="text-ink-soft">Accel staff sign in as themselves, and each role sees only its own work. The person who sells never approves the documents.</p>
+      <p className="text-ink-soft">Dukaan Connect staff sign in as themselves, and each role sees only its own work. The person who sells never approves the documents.</p>
       <form className="mt-5 space-y-2" onSubmit={(e) => { e.preventDefault(); login() }}>
         <label className="block text-[14px] font-semibold text-ink-soft">Staff ID
           <input className="field mt-1 w-full" value={user} onChange={(e) => setUser(e.target.value)} autoComplete="username" />

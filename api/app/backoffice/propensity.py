@@ -24,7 +24,7 @@ CAT = ["lead_source", "segment", "city_tier", "preferred_language", "has_gstin",
 NUM = ["employee_count", "num_sites", "monthly_telecom_spend_inr", "n_interest"]
 
 ACTION = {
-    "Unreachable after 3 attempts": ("WhatsApp", "Send a WhatsApp resume link from the verified Accel Business number"),
+    "Unreachable after 3 attempts": ("WhatsApp", "Send a WhatsApp resume link from the verified Dukaan Connect number"),
     "Wrong or invalid number": ("Partner visit", "Verify the number on a partner visit; switch to network number check at sign-up"),
     "Not interested on first call": ("WhatsApp", "Send a 2-minute advisor link with a segment bundle"),
     "Owner had no time for a visit": ("WhatsApp", "Send the self-serve advisor link; no visit needed"),

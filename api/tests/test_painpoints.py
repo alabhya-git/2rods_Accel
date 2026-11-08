@@ -1,5 +1,5 @@
 """The hidden pain points: the owner isn't the one ordering, the shop is rented, the customer is
-already with Accel, scam calls, and products that are live but never set up."""
+already with Dukaan Connect, scam calls, and products that are live but never set up."""
 from pathlib import Path
 
 import pytest
@@ -161,7 +161,7 @@ def test_owner_can_say_no():
         assert any(m["kind"] == "owner_approved" and m["status"] == "attention" for m in v["milestones"])
 
 
-# ---- existing Accel customers --------------------------------------------------------------------
+# ---- existing Dukaan Connect customers --------------------------------------------------------------------
 
 def test_existing_customer_is_recognised_and_their_numbers_become_business_sims():
     with TestClient(app) as c:

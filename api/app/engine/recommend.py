@@ -443,7 +443,7 @@ def recommend(prof: Profile) -> Bundle:
     monthly_other = sum(unit_price(b.P(ln.product_id), other_prof.term_months) * ln.qty for ln in lines)
     setup = sum(ln.setup for ln in lines)
     return Bundle(
-        name=BUNDLE_NAMES.get(prof.segment or "", "Your Accel bundle"),
+        name=BUNDLE_NAMES.get(prof.segment or "", "Your Dukaan Connect bundle"),
         segment=prof.segment,
         term_months=prof.term_months,
         lines=lines,
@@ -485,7 +485,7 @@ def price_custom(prof: Profile, items: dict[str, int]) -> Bundle:
     setup = sum(ln.setup for ln in lines)
     chosen = {ln.product_id for ln in lines}
     return Bundle(
-        name=BUNDLE_NAMES.get(prof.segment or "", "Your Accel bundle"), segment=prof.segment, term_months=prof.term_months,
+        name=BUNDLE_NAMES.get(prof.segment or "", "Your Dukaan Connect bundle"), segment=prof.segment, term_months=prof.term_months,
         lines=lines, exclusions=b.exclusions, addons=build_addons(prof, chosen, set(prof.needs)),
         monthly=monthly, monthly_other_term=monthly_other, setup=setup, setup_emi=setup_emi(setup),
         gst_monthly=gst(monthly), first_payment=monthly + gst(monthly) + setup + gst(setup),

@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    app_name: str = "Accel Business · Udyam Digital"
+    app_name: str = "Dukaan Connect"
     environment: str = "dev"  # dev | prod
     data_dir: Path = ROOT / "data"
     storage_dir: Path = ROOT / "var" / "storage"

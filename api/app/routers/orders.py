@@ -105,7 +105,7 @@ class OrderIn(BaseModel):
 
 
 def existing_customer(phone: str) -> dict | None:
-    """Masked view of the Accel account behind a just-verified number."""
+    """Masked view of the Dukaan Connect account behind a just-verified number."""
     acct = accel_account(phone)
     if not acct:
         return None
@@ -148,14 +148,14 @@ def place_order(body: OrderIn, db: Session = Depends(get_db), x_staff_token: str
     if s:
         s.status = "ordered"
     verify = number_verify_for(phone)
-    add_event(db, order, "number_verified", "Mobile number verified" + (" by the Accel network, no OTP" if verify["method"] == "network" else ""),
+    add_event(db, order, "number_verified", "Mobile number verified" + (" by the Dukaan Connect network, no OTP" if verify["method"] == "network" else ""),
               method=verify["method"], masked=mask_phone(phone))
-    # an existing Accel customer is recognised only after their number is verified, never from a typed number
+    # an existing Dukaan Connect customer is recognised only after their number is verified, never from a typed number
     known = existing_customer(phone) if verify["verified"] else None
     profile = {**(order.profile or {}), "placed_by": "staff" if body.placed_by == "staff" else "owner"}
     if known:
         profile["accel_account"] = known
-        add_event(db, order, "existing_customer", f"Welcome back: with Accel since {known['since']}", lines=len(known["lines"]))
+        add_event(db, order, "existing_customer", f"Welcome back: with Dukaan Connect since {known['since']}", lines=len(known["lines"]))
     order.profile = profile
     if body.placed_by == "staff":
         from .approvals import request_owner

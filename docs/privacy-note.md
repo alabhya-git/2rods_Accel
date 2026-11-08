@@ -1,6 +1,6 @@
 # Data privacy and security choices
 
-**Accel Business · Udyam Digital** — designed to the Digital Personal Data Protection Act, 2023 and the DPDP Rules, 2025 (notified 13 November 2025; most obligations apply from about May 2027). Data is synthetic, but treated as real.
+**Dukaan Connect** — designed to the Digital Personal Data Protection Act, 2023 and the DPDP Rules, 2025 (notified 13 November 2025; most obligations apply from about May 2027). Data is synthetic, but treated as real.
 
 **1. Collect only what each step needs.**
 

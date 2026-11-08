@@ -51,7 +51,7 @@ def call_lead(lead_id: str, db: Session = Depends(get_db), who: dict = Depends(p
     db.add(cb)
     db.add(AuditLog(actor=f"{who['role']}:{who['sub']}", action="masked_call", target=lead_id, purpose="order_updates", detail={"virtual": num}))
     db.commit()
-    return {"virtual_number": num, "valid_hours": 72, "note": "Bridged through Accel CPaaS; the customer's real number is never shown."}
+    return {"virtual_number": num, "valid_hours": 72, "note": "Bridged through Dukaan Connect CPaaS; the customer's real number is never shown."}
 
 
 @router.get("/orders")
